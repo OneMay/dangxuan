@@ -4,7 +4,7 @@
     <font color="#777777"><strong>视频名称：</strong></font>
     <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" value="">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
-	<button type="button"  id="addnew" @click="addVideo('videoAdd')"><span style="color:#005580">添加视频</span></button>
+	<span type="button"  class="btn btn-success" id="addnew" @click="addVideo('videoAdd')"><span style="color:#fff">添加视频</span></span>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
@@ -21,7 +21,7 @@
             <td>电影</td>
             <td><span style="color:#005580;cursor: pointer;" @click="addVideo('studentDetail')">小强</span></td>
             <td>2016.07.22</td>
-            <td> <button type="submit">预览</button> <button type="submit">修改</button></td>  
+            <td> <span  class="btn btn-success">预览</span> <span  class="btn btn-danger">修改</span></td>  
         </tr>
        </table>
   </div>

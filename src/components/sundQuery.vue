@@ -4,7 +4,7 @@
     <font color="#777777"><strong>广播名称：</strong></font>
     <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" value="">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
-	<button type="button"  id="addnew" @click="addVideo('sundListAdd')"><span style="color:#005580">添加栏目</span></button>
+	<span class="btn btn-success"  id="addnew" @click="addVideo('sundListAdd')"><span style="color:#fff">添加栏目</span></span>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
@@ -21,7 +21,7 @@
             <td>4</td>
             <td><span style="color:#005580;cursor: pointer;" @click="addVideo('studentDetail')">小强</span></td>
             <td>2016.07.22</td>
-            <td> <button type="submit">修改</button><button type="submit">删除</button></td>  
+            <td> <span class="btn btn-success">修改</span><span class="btn btn-danger">删除</span></td>  
         </tr>
        </table>
   </div>

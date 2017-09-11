@@ -114,9 +114,15 @@ export default {
   },
   methods:{
     returnItem(item){
+        //document.getElementById('right').style.overflowY= 'scroll';
        // this.$emit('choseItem',item)
     }
-  }
+  },
+   mounted(){
+      this.$nextTick(function(){
+           document.getElementById('right').style.overflowY= 'scroll';
+      })
+   }
 }
 </script>
 
@@ -228,6 +234,9 @@ form{
     padding-bottom: 4px;
 	line-height:50ppx;
 	
+}
+#right{
+    overflow-y:scroll;
 }
 .table2 th{
 	background-color:#eaeaea;
