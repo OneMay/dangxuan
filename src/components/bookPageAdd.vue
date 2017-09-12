@@ -30,7 +30,7 @@
             <tr>
                 <td class="tableleft"></td>
                 <td>
-                    <button style="margin-left:5px;" class="btn btn-primary" type="button"  >保存</button> &nbsp;&nbsp;<span class="btn btn-success" name="backid" id="backid" @click="returnItem('bookList')">返回列表</span>
+                    <span style="margin-left:5px;" class="btn btn-primary"  >保存</span> &nbsp;&nbsp;<span class="btn btn-success" name="backid" id="backid" @click="returnItem('bookList')">返回列表</span>
                 </td>
             </tr>
         </table>

@@ -15,7 +15,7 @@
             <td>关于第十一期杂志的问题</td>
             <td>2016.07.22</td>
             <td>未查看</td>              
-            <td> <button type="submit" @click="addVideo('feedbackDetail')">查看</button></td>
+            <td> <span class="btn btn-success" @click="addVideo('feedbackDetail')">查看</span></td>
                
         </tr>    
        </table>

@@ -15,14 +15,14 @@
             <td>One</td>
             <td :class="{message:isRead}">忘记密码</td></td>
             <td>文章发布</td>              
-            <td> <button type="submit">删除</button><button type="submit">修改</button><button type="submit">消息处理</button></td>
+            <td> <span class="btn btn-danger">删除</span><span class="btn btn-primary">修改</span><span class="btn btn-success">消息处理</span></td>
         </tr>  
          <tr>
             <td>2</td>
             <td>One</td>
             <td :class="{message:isRead2}">忘记密码</td></td>
             <td>文章发布</td>              
-            <td> <button type="submit">删除</button><button type="submit">修改</button><button type="submit">消息处理</button></td>
+            <td> <span class="btn btn-danger">删除</span><span class="btn btn-primary">修改</span><span class="btn btn-success">消息处理</span></td>
         </tr>   
        </table>
 

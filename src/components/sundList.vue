@@ -4,8 +4,8 @@
     <font color="#777777"><strong>请输入广播标题：</strong></font>
     <input type="text" class="abc input-default">&nbsp;&nbsp; 
     <span  class="btn btn-primary">查询</span>&nbsp;&nbsp; 
-    <button type="button"  id="addnew" @click="addVideo('sundPageAdd')"><span style="color:#005580">添加广播</span></button>
-    <button type="button"  id="addnew" @click="addVideo('sundJpgAdd')"><span style="color:#005580">首页轮播</span></button>
+    <span class="btn btn-success" id="addnew" @click="addVideo('sundPageAdd')"><span style="color:#fff">添加广播</span></span>
+    <span class="btn btn-danger"  id="addnew" @click="addVideo('sundJpgAdd')"><span style="color:#fff">首页轮播</span></span>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
@@ -26,7 +26,7 @@
             <td>周一</td>
             <td>光量子技术</td>
             <td>2016.07.22</td>               
-            <td> <button type="submit">删除</button><button type="submit">修改</button><button type="submit">预览</button></td>
+            <td> <span class="btn btn-danger">删除</span><span class="btn btn-primary">修改</span><span class="btn btn-success">预览</span></td>
                
         </tr>    
        </table>

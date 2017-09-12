@@ -22,7 +22,7 @@
             <td>复仇者联盟</td>
             <td>娱乐-电影</td>
             <td>2016.07.22</td>               
-            <td> <button type="submit">删除</button></a></td>
+            <td> <span  class="btn btn-danger">删除</span></td>
                
         </tr>
 		 <tr>
@@ -30,7 +30,7 @@
             <td>北大教授讲座</td>
             <td>学习</td>
             <td>2016.07.22</td>           
-            <td> <button type="submit">删除</button></td>            
+            <td> <span  class="btn btn-danger">删除</span></td>            
         </tr>      
        </table>
 
