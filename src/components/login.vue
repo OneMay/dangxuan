@@ -7,7 +7,7 @@
 					<input type="text" name="username" v-model="username" class="username" placeholder="Username" autocomplete="off"/>
 				</div>
                 <div>
-					<input type="password" name="password" v-model="password" class="password" placeholder="Password" oncontextmenu="return false" onpaste="return false" />
+					<input type="password" name="password" v-model="password" class="password" placeholder="Password" oncontextmenu="return false" onpaste="return false" @keyup.enter="login"/>
                 </div>
                 <div class="color" v-text="message"></div>
                 <button id="submit" type="button" @click="login">登录</button>
