@@ -103,7 +103,7 @@
 			scrolling="auto" marginheight="0" marginwidth="0" align="center"
 			style="border: 0px solid #CCC; margin: 0; padding: 0;"></iframe> -->
 	</div>
-
+    <div id="footer">技术支持：<a id="newthread" href="http://www.new-thread.com">中南民族大学新思路团队 </a></div>
   </div>
 </template>
 
@@ -314,6 +314,17 @@ export default {
 #admin:hover{
     color:red;
 }
+#footer{
+    position:absolute;
+    bottom:0;
+    height:30px;
+    text-align:center;
+    background-color:#1c1e1f;
+    color:#fff;
+    width:100%;
+    line-height:30px;
+    z-index:999;
+}
  body {
 	margin: 0;
 	font-family: 微软雅黑;
@@ -323,6 +334,12 @@ export default {
 	background-attachment: fixed;
 	background-color: #DDDDDD
 	
+}
+#newthread{
+    color:#fff;
+}
+#newthread:hover{
+    color:#16a4e8;
 }
 .container{
     width:100%;
@@ -375,7 +392,8 @@ export default {
 	left: 0px;
 	top: 97px;
 	width: 200px;
-	height: 85%;
+	/* height: 85%; */
+    bottom:0;
 	border-right: 1px solid #9370DB;
 	color: #000;
 	font-size: 20px;
@@ -387,13 +405,15 @@ export default {
 	position: absolute;
 	left: 200px;
 	top:97px;
-	width: 85.2%;
-	height: 85%;
+	/* width: 85.2%; */
+	/* height: 85%; */
 	border-top: 0px solid #484860;
 	font-size: 14px;
     text-align: center;
     background-color: #FFF;
      overflow-y: scroll;
+     bottom:30px;
+     right:0;
 }
 .div3 li:hover{
     background-color:#009688;
