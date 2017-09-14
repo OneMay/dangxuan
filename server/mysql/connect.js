@@ -21,5 +21,31 @@ function selectFun(client, username, password, callback){
     })
 }
 
+function insertVideoFun(client, id, post_url, url, title, time, note, callback){
+    client.query("INSERT INTO `t_television_program_content` (`television_program_id`, `thumbnails_url`, `video_url`, `video_introduction`, `video_introduction`, `video_timestamp`, `note`) VALUES ('"+id+"', '"+post_url+"', '"+url+"', '"+title+"', '"+time+"', '"+note+"')");
+}
+
+function deleteVideoFun(client, name, callback){
+    client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_id`='"+name+"')");
+}
+
+function findFun(client, name, callback){
+    client.query('select * from `t_television_program_content` where video_introduction="'+name+'"', function(err, result, fields){
+        if(err) throw err;
+
+        callback(results);
+    })
+}
+
+function findAllFun(client, callback){
+    client.query('select * from `t_television_program_content`', function(err, result, fields){
+        if(err) throw err;
+
+        callback(results);
+    })
+}
+
 exports.connect = connectServer;
 exports.select = selectFun;
+exports.insertVideoFun = insertVideoFun;
+exports.deleteVideoFun = deleteVideoFun;
