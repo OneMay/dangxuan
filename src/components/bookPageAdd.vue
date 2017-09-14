@@ -21,7 +21,17 @@
             <tr>
                 <td class="tableleft">文章内容</td>
                 <td class="tableleft" >
-                    <textarea id="inputProductM" rows="10" cols="50" class="form-control"></textarea>
+            
+                        <!-- <h1>完整demo</h1> -->
+                        <script id="editor" type="text/plain" style="width:1024px;height:400px;offsetWidth:0px"></script>
+                 
+                    <div id="btns">
+                        <div>
+                            <!-- <span class="btn btn-success" @click="createEditor()">获得整个html的内容</span >
+                            <span class="btn btn-success" @click="getContent()">获得内容</span >  -->
+                        </div>
+                    </div>
+                    <!-- <textarea id="inputProductM" rows="10" cols="50" class="form-control"></textarea> -->
                 </td>
         <!--         <td class="tableleft">图片预览</td> -->
         <!--         <td><img name="showimg" id="showimg" src="" style="display:none;" alt="预览图片" /> </td> -->
@@ -52,7 +62,33 @@ export default {
   methods:{
     returnItem(item){
         this.$emit('choseItem',item)
+    },
+    editor(){
+    //   var ue = UE.getEditor('editor');
+    //   this.createEditor();
+    },
+    getAllHtml(){
+        alert(UE.getEditor('editor').getAllHtml())
+    },
+    getContent(){
+         var arr = [];
+        arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+        arr.push("内容为：");
+        arr.push(UE.getEditor('editor').getContent());
+        alert(arr.join("\n"));
+    },
+    createEditor(){
+      UE.getEditor('editor')
+        
     }
+  },
+  mounted(){
+      this.$nextTick(()=>{
+           document.getElementById('right').style.overflowY= 'scroll';
+         UE.delEditor('editor');
+          this.createEditor();
+         
+      })
   }
 }
 </script>

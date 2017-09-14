@@ -6,16 +6,13 @@
                 <td width="10%" class="tableleft">类别</td>
                 <td>
                     <select name="bigTypeId">
-                    <option value="0">大类</option>
-                    <option value='1'>&nbsp;教育</option>
-                    <option value='7'>&nbsp;娱乐</option>
+                    <option value="0">校园多看点</option>
+                    <option value='1'>民族风韵</option>
+                    <option value='2'>我爱看电影</option>
+                    <option value='3'>我在民大</option>
+                    <option value='4'>白色文化</option>
                     </select>
                     
-                    <select name="smallTypeId">
-                    <option value="0">小类</option>
-                    <option value="2">&nbsp;电影</option>
-                    <option value="7">&nbsp;原创</option>        
-                    </select>
                 </td>
             </tr>
     
