@@ -12,7 +12,14 @@
             </tr>
             <tr>
                 <td class="tableleft">期数</td>
-                <td><input type="text" name="bookNum"/></td>
+                <td>
+                    <select name="bigTypeId">
+                        <option value="1">第一期</option>
+                        <option value="2">第二期</option>
+                        <option value="3">第三期</option>
+                        <option value="4">第四期</option>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td class="tableleft">文章标题</td>

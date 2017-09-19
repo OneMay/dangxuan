@@ -21,7 +21,7 @@
                 <td class="tableleft">视频名称</td>
                 <td><input type="text" name="videosName"/></td>
                 <td class="tableleft">视频大小</td>
-                <td><input type="text" name="videosNumber"/></td>
+                <td><input type="text" name="videosNumber"readonly="readonly"/></td>
             </tr>
             <tr>
                 <td class="tableleft">视频关键字</td>

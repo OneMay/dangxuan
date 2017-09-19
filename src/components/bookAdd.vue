@@ -30,7 +30,7 @@
             </tr>
             <tr>
                 <td class="tableleft">杂志封面大小</td>
-                <td><input type="text" name="bookJpgnumber"/></td>
+                <td><input type="text" name="bookJpgnumber"readonly="readonly"/></td>
             </tr>
             
             <tr>

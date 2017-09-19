@@ -103,7 +103,7 @@
 			scrolling="auto" marginheight="0" marginwidth="0" align="center"
 			style="border: 0px solid #CCC; margin: 0; padding: 0;"></iframe> -->
 	</div>
-    <div id="footer">技术支持：<a id="newthread" href="http://www.new-thread.com">中南民族大学新思路团队 </a></div>
+    <div id="footer">技术支持：<a id="newthread" target="_blank" href="http://www.new-thread.com">中南民族大学新思路团队 </a></div>
   </div>
 </template>
 

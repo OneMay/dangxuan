@@ -17,6 +17,9 @@
 </template>
 
 <script>
+import AXIOS from './../axios/axios';
+const Axios = new AXIOS();
+const url = 'http://localhost:8089/'
 export default {
   name: 'login',
   data () {
@@ -31,13 +34,37 @@ export default {
       var that = this;
       if(this.username==''||this.password==''){
         this.message='账号和密码不能为空！';
-      }else{
-        if(this.username!='admin'||this.password!='password'){
-          this.message='账号或者密码错误';
-        }else{
-          this.message='登录成功';
-          this.$store.dispatch('change','logined')
-        }
+      }else if(this.username=='admin'&&this.password=='password'){
+           this.message="登录成功";
+            this.$store.dispatch('change','logined') 
+      }
+      else{
+          let params={
+                api:url+'admin/login',
+                param:{
+                    username:this.username,
+                    password:this.password
+                }
+            }
+            Axios.post(params)
+            .then(res=>{
+                var data;
+                if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                    data=res.data;
+                }else{
+                    data=JSON.parse(res.data)
+                }
+                if(code>=1){
+                     this.message=data.message;
+                    this.$store.dispatch('change','logined') 
+                }else{
+                     this.message=data.messag;
+                }
+            })
+            .catch(err=>{
+                console.log(err)
+            })    
+        //this.$store.dispatch('change','logined') 
       }
     }
   }
