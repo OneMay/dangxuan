@@ -58,6 +58,10 @@ router.post('/admin/video/delete', function(req, res){
     db.deleteVideoFun(client, req.body.videoId, function(err){
         if(err){
             console.log("删除失败");
+            var message = {
+                code: 0,
+                message: '删除失败'
+            }
         }
         else{
             var message = {
@@ -69,14 +73,14 @@ router.post('/admin/video/delete', function(req, res){
     });
 })
 
-// //视频查找一条操作
-// router.post('/admin/video/find', function(req, res){
-//     if(req.cookie){
+//视频查找一条操作
+router.post('/admin/video/find', function(req, res){
+    if(req.cookie){
         
-//     }
-//     else{
-//         res.json({})
-//     }
-// })
+    }
+    else{
+        res.json({})
+    }
+})
 
 module.exports = router;
