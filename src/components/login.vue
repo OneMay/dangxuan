@@ -49,16 +49,19 @@ export default {
             Axios.post(params)
             .then(res=>{
                 var data;
+                var menu=[];
                 if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                     data=res.data;
                 }else{
                     data=JSON.parse(res.data)
                 }
-                if(code>=1){
+                if(data.code>=1){
                      this.message=data.message;
+                     menu=data.user_role;
+                     this.$store.dispatch('setMenu',menu) 
                     this.$store.dispatch('change','logined') 
                 }else{
-                     this.message=data.messag;
+                     this.message=data.message;
                 }
             })
             .catch(err=>{

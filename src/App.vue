@@ -2,7 +2,7 @@
   <div id="app">
     <router-view></router-view>
     {{getLogin}}
-    <login v-if="login=='islogin'"></login>
+    <login v-if="login=='islogin'" v-on:user="userInfo"></login>
     <index v-if="login=='logined'"></index>
   </div>
 </template>
@@ -14,16 +14,22 @@ export default {
   name: 'app',
   data(){
     return {
-      login:''
+      login:'',
+      name:"",
+      password:"",
+      menu:[]
     }
   },
   methods:{
-    isLogin(){
+    userInfo(msg){
+      this.name=msg.username;
+      this.password=msg.password;
     }
   },
   computed:{
     getLogin(){
       this.login=this.$store.getters.getLoginData;
+      this.menu=this.$store.getters.getMenuData;
     }
   },
    mounted() {

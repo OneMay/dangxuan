@@ -30,7 +30,7 @@
 				<div class="spgl"></div>
 				电视台
 			</div>
-			<div class="div3">
+			<div class="div3" id="videochild">
 				<li @click="choseItem('videoQuery')" >视频管理</li>
 				<li @click="choseItem('videoList')" >视频列表</li>
 			   
@@ -39,7 +39,7 @@
 				<div class="spgl"></div>
 			    微众杂志
 			</div>
-			<div class="div3">
+			<div class="div3" id="bookchild">
 				<li @click="choseItem('bookQuery')">杂志管理</li>
 				<li @click="choseItem('bookList')">文章列表</li>
 			   
@@ -49,7 +49,7 @@
 				<div class="yhgl"></div>
 				广播台
 			</div>
-			<div class="div3">
+			<div class="div3" id="sundchild">
 				<li @click="choseItem('sundQuery')">栏目管理</li>
 				<li @click="choseItem('sundList')">音频管理</li>
 			   
@@ -129,7 +129,8 @@ export default {
   name: 'index',
   data () {
     return {
-        showItem:'welcome'
+        showItem:'welcome',
+        adminMenu:[]
     }
   },
   methods:{
@@ -277,11 +278,43 @@ export default {
     },
     choseItem(item){
         this.showItem=item;
+    },
+    getMenu(){
+       this.adminMenu=this.$store.getters.getMenuData;
+    //this.adminMenu=['微众管理员']
+       if(this.adminMenu.length=1){
+           if(this.adminMenu[0]=='广播台管理员'){
+               //移除电视台
+               $("#video").remove();
+               $("#videochild").remove();
+               //移除微众
+               $("#book").remove();
+               $("#bookchild").remove();
+           }
+           if(this.adminMenu[0]=='电视台管理员'){
+               //移除广播台
+               $("#sund").remove();
+               $("#sundchild").remove();
+               //移除微众
+               $("#book").remove();
+               $("#bookchild").remove();
+           }
+           if(this.adminMenu[0]=='微众管理员'){
+               //移除广播台
+               $("#sund").remove();
+               $("#sundchild").remove();
+               //移除电视台
+               $("#video").remove();
+               $("#videochild").remove();
+           }
+       }
     }
   },
   mounted(){
       this.$nextTick(function(){
+         
           this.start();
+           this.getMenu();
       })
   },
   components:{
