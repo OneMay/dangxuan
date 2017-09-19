@@ -26,7 +26,11 @@ function insertVideoFun(client, id, post_url, url, title, time, note, callback){
 }
 
 function deleteVideoFun(client, name, callback){
-    client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_id`='"+name+"')");
+    client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_id`='"+name+"')", function(err){
+        if(err) throw err;
+        
+        callback(err);
+    });
 }
 
 function findFun(client, name, callback){

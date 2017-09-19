@@ -42,40 +42,32 @@ router.post('/admin/login', function(req, res, next){
 
 
 //视频添加
-// router.post('/admin/video/add', function(req, res){
-//     var form = new multiparty.Form();
-//     var video_path = req.files.video.path;
-//     var video_name = req.files.video.originalFilename;
-    
-//     fs.readFile(video_path, function(err, data){
-//         if(!data || err){
-//             return reply({code: 0, message: '视频上传失败，未选择文件'});
-//          }
-//         var newPath = path.join(__dirname, '../../', 'static/upload/' + video_name);
-//         fs.writeFile(newPath, data, function(){
-//             if(err){
-//                 return reply({code: 0, message: "视频上传失败，写问题"})
-//             }
-//             else{
-//                 return rely({code: 1, message: "视频上传成功"})
-//                 var client = db.connect();
-//                 db.insertVideoFun(client, req.body.videoId, )
-//             }
-//         })
-//     })
+router.post('/admin/video/add', function(req, res){
+    var form = new multiparty.Form();
+    console.log(form);
+    form.parse(req, function(err, fields, files){
+        res.write('已上传');
+        res.end(util.inspect({fields: fields, files: files}));
+    })
+    return;
+})
 
-// })
-
-// //视频删除操作
-// router.post('/admin/video/delete', function(req, res){
-//     if(req.cookie){
-//         var client = db.connect();
-//         db.deleteVideoFun(client, req.body.videoName);
-//     }
-//     else{
-//         res.json({code: 0, message: '身份验证失败'})
-//     }
-// })
+//视频删除操作
+router.post('/admin/video/delete', function(req, res){
+    var client = db.connect();
+    db.deleteVideoFun(client, req.body.videoId, function(err){
+        if(err){
+            console.log("删除失败");
+        }
+        else{
+            var message = {
+                code: 1,
+                message: '删除成功'
+            }
+            res.json(message);
+        }
+    });
+})
 
 // //视频查找一条操作
 // router.post('/admin/video/find', function(req, res){
