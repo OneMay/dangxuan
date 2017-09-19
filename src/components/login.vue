@@ -19,7 +19,7 @@
 <script>
 import AXIOS from './../axios/axios';
 const Axios = new AXIOS();
-const url = 'http://localhost:8089/'
+const url = 'http://localhost:3000/'
 export default {
   name: 'login',
   data () {

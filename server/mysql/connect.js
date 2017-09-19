@@ -14,10 +14,10 @@ function  connectServer(){
 }
 
 function selectFun(client, username, password, callback){
-    client.query('select * from User where username="'+username+'" and password="'+password+'"', function(err, result, fields){
+    client.query('select * from t_user where user_no="'+username+'" and password="'+password+'"', function(err, result, fields){
         if(err) throw err;
 
-        callback(results);
+        callback(result);
     })
 }
 

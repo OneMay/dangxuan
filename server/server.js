@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 var http = require('http');
 
 var app = express();
-var index = require('./routes/index');
+var index = require('./routes/index.js');
 var session = require('express-session');
 
 app.set('views', path.join(path.resolve(__dirname, '..'), 'dist'))
@@ -17,9 +17,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(cookieParser());
-app.use(session());
+// app.use(session());
 app.use('/', index);
-
 //路径未匹配
 app.use(function(req, res, next){
     var err = new Error('Not Found');
