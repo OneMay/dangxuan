@@ -9,7 +9,7 @@ function  connectServer(){
         password: config.password,
         database: config.database
     })
-
+    
     return client;
 }
 
