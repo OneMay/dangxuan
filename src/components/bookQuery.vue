@@ -21,7 +21,7 @@
             <td>第十八期</td>
             <td><span style="color:#005580;cursor: pointer;" @click="addVideo('studentDetail')">小强</span></td>
             <td>2016.07.22</td>
-            <td> <span class="btn btn-success">预览</span> <span class="btn btn-danger">修改</span></td>  
+            <td> <span class="btn btn-danger">修改</span></td>  
         </tr>
        </table>
   </div>
