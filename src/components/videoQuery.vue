@@ -40,7 +40,7 @@ const Axios = new AXIOS()
 export default {
   name: 'videoQuery',
   data () {
-    return {
+    return {  
       username:"",
       password:"",
       message:'',
