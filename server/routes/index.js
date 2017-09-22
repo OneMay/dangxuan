@@ -3,6 +3,7 @@ var router = express.Router();
 var fs = require('fs');
 var db = require('../mysql/connect')
 var multiparty = require('multiparty');
+var path = require('path');
 var Path = '../../dist/index.html';
 var fiter = require('../filter/filter');
 
@@ -45,7 +46,7 @@ router.post('/admin/login', function(req, res, next) {
 //视频添加
 router.post('/admin/video/add', function(req, res) {
     var form = new multiparty.Form();
-    console.log(form);
+    console.log
     form.parse(req, function(err, fields, files) {
         res.write('已上传');
         res.end(util.inspect({ fields: fields, files: files }));
@@ -77,13 +78,14 @@ router.post('/admin/video/delete', function(req, res) {
 //视频查找一条操作
 router.post('/admin/video/find', function(req, res){
         var client = db.connect();
-        db.findFun(client, req.body.videoName, function(result){
-            var message = {
-                videoName: result[0].video_introduction,
-                videoCategory: result[0].television_program_id,
-                videoTitle: result[0]
-            }
-        })
+        console.log(req.body);
+        // db.findFun(client, req.body.videoName, function(result){
+        //     var message = {
+        //         videoName: result[0].video_introduction,
+        //         videoCategory: result[0].television_program_id,
+        //         videoTitle: result[0]
+        //     }
+        // })
 })
 
 //视频全部查询
