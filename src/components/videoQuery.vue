@@ -2,7 +2,7 @@
     <div class="video">
      <form class="form-inline definewidth m20" action="#" method="get">
     <font color="#777777"><strong>视频名称：</strong></font>
-    <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" v-model="videoName ">&nbsp;&nbsp; 
+    <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" v-model="videoName">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
 	<span type="button"  class="btn btn-success" id="addnew" @click="addVideo('videoAdd')"><span style="color:#fff">添加视频</span></span>
 </form>
@@ -57,9 +57,12 @@ export default {
   methods:{
     search(){
         let params={
-                api:url+'admin/video/find'
+                api:url+'admin/video/find',
+                param:{
+                  videoName: this.videoName
+                }
             }
-        Axios.get(params)
+        Axios.post(params)
             .then(res=>{
                 var data;
                 if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
