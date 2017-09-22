@@ -41,7 +41,7 @@ export default {
     }
   },
   methods:{
-    search(){
+    search(){  
     },
     addVideo(item){
         this.$emit('choseItem',item);

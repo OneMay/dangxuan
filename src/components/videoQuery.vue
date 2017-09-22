@@ -2,7 +2,7 @@
     <div class="video">
      <form class="form-inline definewidth m20" action="#" method="get">
     <font color="#777777"><strong>视频名称：</strong></font>
-    <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" value="">&nbsp;&nbsp; 
+    <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" v-model="videoName ">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
 	<span type="button"  class="btn btn-success" id="addnew" @click="addVideo('videoAdd')"><span style="color:#fff">添加视频</span></span>
 </form>
@@ -35,8 +35,9 @@
 </template>
 
 <script>
-import AXIOS from './../axios/axios'
-const Axios = new AXIOS()
+import AXIOS from './../axios/axios';
+const Axios = new AXIOS();
+const url = 'http://localhost:3000/'
 export default {
   name: 'videoQuery',
   data () {
@@ -49,11 +50,36 @@ export default {
       count:null,
       currentPage:null,
       pages:null,
-      limit:null
+      limit:null,
+      videoName:''  //d
     }
   },
   methods:{
     search(){
+        let params={
+                api:url+'admin/video/find'
+            }
+        Axios.get(params)
+            .then(res=>{
+                var data;
+                if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                    data=res.data;
+                }else{
+                    data=JSON.parse(res.data)
+                }
+                if(data.code>=1){
+                     this.videoName=data.videoName;
+                     this.videoCategory = data.videoCategory;
+                     this.videoWords = data.videoWords;
+                     this.video_timestamp = data.video_timestamp;
+                     this.note = data.note;
+                }else{
+                     this.message=data.message;
+                }
+            })
+            .catch(res=>{
+                console.log(err);
+            })
     },
     getVideoList(num){
         if(num>this.currentPage){
