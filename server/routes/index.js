@@ -6,6 +6,8 @@ var multiparty = require('multiparty');
 var Path = '../../dist/index.html';
 var fiter = require('../filter/filter');
 
+const path_dev = path.join(path.resolve(__dirname, '..'), 'media')
+
 //登陆
 router.post('/admin/login', function(req, res, next){
     console.log(req.body);
@@ -75,12 +77,42 @@ router.post('/admin/video/delete', function(req, res){
 
 //视频查找一条操作
 router.post('/admin/video/find', function(req, res){
-    if(req.cookie){
-        
-    }
-    else{
-        res.json({})
-    }
+        var client = db.connect();
+        db.findFun(client, req.body.videoName, function(result){
+            var message = {
+                videoName: result[0].video_introduction,
+                videoCategory: result[0].television_program_id,
+                videoTitle: result[0]
+            }
+        })
 })
+
+//视频全部查询
+router.post('/admin/video/findAll', function(req, res){
+    var client = db.connect();
+    db.findAllFun(client, function(result){
+        var message = [];
+        for(var i=0; i<result.length; i++){
+            message.push({videoName: result[i]})
+        }
+    })
+})
+
+//视频修改
+router.post('/admin/video/amend', function(req, res){
+    var client = db.connect();
+    
+})
+
+
+//-------微众杂志--------
+router.post('/admin/magazine/addPeriods', function(req, res){
+    var client = db.connect();
+    db.addPeriod(req.body.magazine_journal_no, req.body.magazine_journal_title, path_dev, req.body.note)
+})
+
+
+
+
 
 module.exports = router;
