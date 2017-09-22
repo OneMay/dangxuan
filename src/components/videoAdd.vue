@@ -5,12 +5,12 @@
             <tr>
                 <td width="10%" class="tableleft">类别</td>
                 <td>
-                    <select name="bigTypeId">
-                    <option value="0">校园多看点</option>
-                    <option value='1'>民族风韵</option>
-                    <option value='2'>我爱看电影</option>
-                    <option value='3'>我在民大</option>
-                    <option value='4'>白色文化</option>
+                    <select name="bigTypeId" v-model="videoId">
+                    <option v-bind:value="{number: 0}">校园多看点</option>
+                    <option v-bind:value="{number: 1}">民族风韵</option>
+                    <option v-bind:value="{number: 2}">我爱看电影</option>
+                    <option v-bind:value="{number: 3}">我在民大</option>
+                    <option v-bind:value="{number: 4}">白色文化</option>
                     </select>
                     
                 </td>
@@ -19,32 +19,32 @@
    
             <tr>
                 <td class="tableleft">视频名称</td>
-                <td><input type="text" name="videosName"/></td>
+                <td><input type="text" v-model="videoName" name="videosName"/></td>
                 <td class="tableleft">视频大小</td>
                 <td><input type="text" name="videosNumber"readonly="readonly"/></td>
             </tr>
             <tr>
                 <td class="tableleft">视频关键字</td>
-                <td><input type="text" name="GoodsNormalPrice"/></td>
+                <td><input type="text" v-model="videoTitle" name="GoodsNormalPrice"/></td>
             </tr>
             <tr>
                 <td class="tableleft">视频海报</td>
-                <td class="tableleft" style="width: 196px; "><input type="file" name="GoodsPicture" id="GoodsPicture" multiple="multiple" /></td>
+                <td class="tableleft" style="width: 196px; "><input type="file" @change="getFile" name="GoodsPicture" id="GoodsPicture" multiple="multiple" /></td>
         <!--         <td class="tableleft">图片预览</td> -->
         <!--         <td><img name="showimg" id="showimg" src="" style="display:none;" alt="预览图片" /> </td> -->
             </tr>
             <tr>
                 <td class="tableleft">选择视频</td>
-                <td class="tableleft" style="width: 196px; "><input type="file" name="GoodsPicture" id="GoodsPicture" multiple="multiple" /></td>
+                <td class="tableleft" style="width: 196px; "><input type="file" @change="getVideo" name="GoodsPicture" id="GoodsPicture" multiple="multiple" /></td>
            </tr>
             <tr>
                 <td class="tableleft">视频简介</td>
-                <td><input type="text" name="GoodsIntroduce" style="height: 63px;"/></td>
+                <td><input type="text" v-model="videoWords" name="GoodsIntroduce" style="height: 63px;"/></td>
             </tr>
             <tr>
                 <td class="tableleft"></td>
                 <td>
-                    <span style="margin-left:5px;" class="btn btn-primary" >保存</span> &nbsp;&nbsp;<span class="btn btn-success" name="backid" id="backid" @click="returnItem('videoQuery')">返回列表</span>
+                    <span style="margin-left:5px;" class="btn btn-primary" @click="addVideo">保存</span> &nbsp;&nbsp;<span class="btn btn-success" name="backid" id="backid" @click="returnItem('videoQuery')">返回列表</span>
                 </td>
             </tr>
         </table>
@@ -54,18 +54,68 @@
 </template>
 
 <script>
+import AXIOS from './../axios/axios';
+const Axios = new AXIOS();
+const url = 'http://localhost:3000/'
 export default {
   name: 'videoAdd',
   data () {
     return {
       username:"",
       password:"",
-      message:''
+      message:'',
+      videoId:'',  //d
+      videoName:'',
+      videoTitle:'',
+      videoPoster:'',
+      video:'',
+      videoWords:'',
+      note:''    //(管理员id)
     }
   },
   methods:{
     returnItem(item){
         this.$emit('choseItem',item)
+    },
+    getFile(e){
+        this.videoPoster = e.target.files[0];
+        let formData = new FormData();
+            formData.append('videoPoster', this.videoPoster);
+        console.log(formData);
+        console.log(formData.get("name"))
+    },
+    getVideo(e){
+        this.video = e.target.files[0];
+        let formData = new FormData();
+            formData.append('video', this.video);
+    },
+    addVideo(){
+        var that = this;
+          let params={
+                api:url+'admin/video/add',
+                param:{
+                    videoId:this.videoId.number,
+                    videoName:this.videoName,
+                    videoTitle:this.videoTitle,
+                    videoPoster:this.videoPoster,
+                    video:this.video,
+                    videoWords:this.videoWords,
+                    note:this.note
+                }
+            }
+            Axios.post(params)
+            .then(res=>{
+                if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                    data=res.data;
+                }else{
+                    data=JSON.parse(res.data)
+                }
+                
+                console.log(res.data)
+            })
+            .catch(err=>{
+                console.log(err)
+            });     
     }
   }
 }

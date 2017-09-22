@@ -9,7 +9,7 @@ var fiter = require('../filter/filter');
 const path_dev = path.join(path.resolve(__dirname, '..'), 'media')
 
 //登陆
-router.post('/admin/login', function(req, res, next){
+router.post('/admin/login', function(req, res, next) {
     console.log(req.body);
     var username = req.body.username;
     var password = req.body.password;
@@ -17,10 +17,10 @@ router.post('/admin/login', function(req, res, next){
     var client = db.connect();
     var result = null;
     var message = {};
-    db.select(client, username, password, function(result){
+    db.select(client, username, password, function(result) {
         console.log(result);
         console.log('fuck');
-        if(result[0] === undefined){
+        if (result[0] === undefined) {
             message = {
                 code: 0,
                 user_role: null,
@@ -28,15 +28,14 @@ router.post('/admin/login', function(req, res, next){
                 username: null
             }
             res.json(message);
-        }
-        else{
+        } else {
             message = {
-                code: 1,
-                user_role: result[0].user_name,
-                message: '登陆成功',
-                username: req.body.username
-            }
-            // req.session.user_id = username;
+                    code: 1,
+                    user_role: [result[0].user_name],
+                    message: '登陆成功',
+                    username: req.body.username
+                }
+                // req.session.user_id = username;
             res.json(message);
         }
     })
@@ -44,21 +43,21 @@ router.post('/admin/login', function(req, res, next){
 
 
 //视频添加
-router.post('/admin/video/add', function(req, res){
+router.post('/admin/video/add', function(req, res) {
     var form = new multiparty.Form();
     console.log(form);
-    form.parse(req, function(err, fields, files){
+    form.parse(req, function(err, fields, files) {
         res.write('已上传');
-        res.end(util.inspect({fields: fields, files: files}));
+        res.end(util.inspect({ fields: fields, files: files }));
     })
     return;
 })
 
 //视频删除操作
-router.post('/admin/video/delete', function(req, res){
+router.post('/admin/video/delete', function(req, res) {
     var client = db.connect();
-    db.deleteVideoFun(client, req.body.videoId, function(err){
-        if(err){
+    db.deleteVideoFun(client, req.body.videoId, function(err) {
+        if (err) {
             console.log("删除失败");
             var message = {
                 code: 0,
