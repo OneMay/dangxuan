@@ -2,8 +2,8 @@
     <div class="video">
     <form class="form-inline definewidth m20">
     <font color="#777777"><strong>请输入用户名称：</strong></font>
-    <input type="text" class="abc input-default">&nbsp;&nbsp; 
-    <span  class="btn btn-primary">查询</span>&nbsp;&nbsp; 
+    <input type="text" class="abc input-default" v-model="username">&nbsp;&nbsp; 
+    <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
@@ -22,8 +22,7 @@
             <td>复仇者联盟</td>
             <td>娱乐-电影</td>
             <td>2016.07.22</td>               
-            <td> <span  class="btn btn-danger">删除</span></td>
-               
+            <td> <span  class="btn btn-danger" @click="delVideo">删除</span></td>    
         </tr>
 		 <tr>
             <td>2</td>
@@ -38,17 +37,39 @@
 </template>
 
 <script>
+import Axios from 'axios'
 export default {
   name: 'videoList',
   data () {
     return {
-      username:"",
+      username:"",  //d
       password:"",
       message:''
     }
   },
   methods:{
     search(){
+        Axios.post('/admin/video/findAll',{
+            username: this.username
+        })
+        .then(res=>{
+            console.log(res.data);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    },
+    delVideo(){
+        Axios.post('/admin/video/delete',{
+            videoId:'007',
+            videoName:'测试'
+        })
+        .then(res=>{
+            console.log(res.data);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     },
     addVideo(item){
         this.$emit('choseItem',item);

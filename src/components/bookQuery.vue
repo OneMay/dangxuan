@@ -21,13 +21,14 @@
             <td>第十八期</td>
             <td><span style="color:#005580;cursor: pointer;" @click="addVideo('studentDetail')">小强</span></td>
             <td>2016.07.22</td>
-            <td> <span class="btn btn-danger">修改</span></td>  
+            <td> <span class="btn btn-danger" @click="reMagazine">修改</span></td>  
         </tr>
        </table>
   </div>
 </template>
 
 <script>
+import Axios from 'axios'
 export default {
   name: 'bookQuery',
   data () {
@@ -39,6 +40,29 @@ export default {
   },
   methods:{
     search(){
+        Axios.post('/admin/magazine/findPeriods',{
+            magazine_journal_no:'单个查询'  //不是杂志名称？是期数？
+        })
+        .then(res=>{
+            console.log(res.data);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    },
+    reMagazine(){
+        Axios.post('/admin/magazine/amend',{
+            magazine_journal_no:'1',   //(期数)
+            magazine_journal_title:'测试', //(主题文字)
+            magazine_journal_picture:'form-data类型',
+            note:''
+        })
+        .then(res=>{
+            console.log(res.data);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     },
     addVideo(item){
 

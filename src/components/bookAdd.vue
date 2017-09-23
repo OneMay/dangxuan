@@ -36,7 +36,7 @@
             <tr>
                 <td class="tableleft"></td>
                 <td>
-                    <span style="margin-left:5px;" class="btn btn-primary"  >保存</span> &nbsp;&nbsp;<span class="btn btn-success" name="backid" id="backid" @click="returnItem('bookQuery')">返回列表</span>
+                    <span style="margin-left:5px;" class="btn btn-primary"  @click="addMagazine">保存</span> &nbsp;&nbsp;<span class="btn btn-success" name="backid" id="backid" @click="returnItem('bookQuery')">返回列表</span>
                 </td>
             </tr>
         </table>
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import Axios from 'axios'
 export default {
   name: 'bookAdd',
   data () {
@@ -58,6 +59,20 @@ export default {
   methods:{
     returnItem(item){
         this.$emit('choseItem',item)
+    },
+    addMagazine(){
+        Axios.post('/admin/magazine/addPeriods',{
+            magazine_journal_no:'2',//(期数)
+            magazine_journal_title:'添加',//(主题文字)
+            magazine_journal_picture:'form-data类型',
+            note:''
+        })
+        .then(res=>{
+            console.log(res.data);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     }
   }
 }

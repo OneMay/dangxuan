@@ -47,7 +47,7 @@
             <tr>
                 <td class="tableleft"></td>
                 <td>
-                    <span style="margin-left:5px;" class="btn btn-primary"  >保存</span> &nbsp;&nbsp;<span class="btn btn-success" name="backid" id="backid" @click="returnItem('bookList')">返回列表</span>
+                    <span style="margin-left:5px;" class="btn btn-primary" @click="addPage">保存</span> &nbsp;&nbsp;<span class="btn btn-success" name="backid" id="backid" @click="returnItem('bookList')">返回列表</span>
                 </td>
             </tr>
         </table>
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import Axios from 'axios'
 export default {
   name: 'bookPageAdd',
   data () {
@@ -87,6 +88,20 @@ export default {
     createEditor(){
       UE.getEditor('editor')
         
+    },
+    addPage(){
+        Axios.post('/admin/magazine/addArticle',{
+            magazine_journal_no:'1',//(期数)
+            list_title:'文章添加',//（文章标题）
+            list_content:'添加内容',//(文章内容)
+            list_writer:'作者'//(文章作者)
+        })
+        .then(res=>{
+            console.log(res.data);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     }
   },
   mounted(){

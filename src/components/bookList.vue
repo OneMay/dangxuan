@@ -3,7 +3,7 @@
     <form class="form-inline definewidth m20">
     <font color="#777777"><strong>请输入杂志名称：</strong></font>
     <input type="text" class="abc input-default">&nbsp;&nbsp; 
-    <span  class="btn btn-primary">查询</span>&nbsp;&nbsp; 
+    <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
     <span class="btn btn-success" id="addnew" @click="addVideo('bookPageAdd')"><span style="color:#fff">添加新文章</span></span>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
@@ -25,7 +25,7 @@
             <td>1</td>
             <td>光量子技术</td>
             <td>2016.07.22</td>               
-            <td> <span class="btn btn-danger">删除</span><span class="btn btn-success">修改</span><span class="btn btn-primary">预览</span></td>
+            <td> <span class="btn btn-danger" @click="delArticle">删除</span><span class="btn btn-success" @click="reArticle">修改</span><span class="btn btn-primary">预览</span></td>
                
         </tr>    
        </table>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+import Axios from 'axios'
 export default {
   name: 'videoList',
   data () {
@@ -45,6 +46,40 @@ export default {
   },
   methods:{
     search(){
+        Axios.post('/admin/magazine/findPeriods',{
+            magazine_journal_no:'单个查询'  //不是杂志名称？是期数？
+        })
+        .then(res=>{
+            console.log(res.data);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    },
+    delArticle(){
+        Axios.post('/admin/magazine/delPeriods',{
+            magazine_journal_no:'1'//(期数)
+        })
+        .then(res=>{
+            console.log(res.data);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    },
+    reArticle(){
+        Axios.post('/admin/magazine/amend',{
+            magazine_journal_no:'1',   //(期数)
+            magazine_journal_title:'测试', //(主题文字)
+            magazine_journal_picture:'form-data类型',
+            note:''
+        })
+        .then(res=>{
+            console.log(res.data);
+        })
+        .catch(err=>{
+            console.log(err);
+        })
     },
     addVideo(item){
         this.$emit('choseItem',item);
