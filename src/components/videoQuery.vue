@@ -35,9 +35,7 @@
 </template>
 
 <script>
-import AXIOS from './../axios/axios';
-const Axios = new AXIOS();
-const url = 'http://localhost:3000/'
+import Axios from 'axios'
 export default {
   name: 'videoQuery',
   data () {
@@ -56,13 +54,9 @@ export default {
   },
   methods:{
     search(){
-        let params={
-                api:url+'admin/video/find',
-                param:{
-                  videoName: this.videoName
-                }
-            }
-        Axios.post(params)
+        Axios.post('/admin/video/find',{
+                videoName: this.videoName
+            })
             .then(res=>{
                 var data;
                 if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
@@ -119,6 +113,9 @@ export default {
     },
     addVideo(item){
         this.$emit('choseItem',item);
+    },
+    getProducts(){
+
     }
   },
    mounted(){
