@@ -62,7 +62,7 @@ export default {
       username:"",
       password:"",
       message:'',
-      videoId:'',  //d
+      videoId:'',  
       videoName:'',
       videoTitle:'',
       videoPoster:'',
@@ -77,27 +77,30 @@ export default {
     },
     getFile(e){
         this.videoPoster = e.target.files[0];
-        let formData = new FormData();
-            formData.append('videoPoster', this.videoPoster);
-        console.log(formData);
-        console.log(formData.get("name"))
     },
     getVideo(e){
         this.video = e.target.files[0];
-        let formData = new FormData();
-            formData.append('video', this.video);
     },
-    addVideo(){
+    addVideo(e){
         var that = this;
-            Axios.post('/admin/video/add',{
-                videoId:this.videoId.number,
-                videoName:this.videoName,
-                videoTitle:this.videoTitle,
-                videoPoster:this.videoPoster,
-                video:this.video,
-                videoWords:this.videoWords,
-                note:this.note
-            })
+
+        e.preventDefault();
+        var formData = new FormData();
+            formData.append('videoPoster', this.videoPoster);
+            formData.append('video', this.video);
+            formData.append('videoId', this.videoId.number);
+            formData.append('videoName', this.videoName);
+            formData.append('videoTitle', this.videoTitle);
+            formData.append('videoWords', this.videoWords);
+            formData.append('note', this.note);
+
+            let config = {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            }
+
+            Axios.post('/admin/video/add', formData, config)
             .then(res=>{
                 if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                     data=res.data;
