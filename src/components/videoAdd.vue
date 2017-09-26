@@ -54,9 +54,7 @@
 </template>
 
 <script>
-import AXIOS from './../axios/axios';
-const Axios = new AXIOS();
-const url = 'http://localhost:3000/'
+import Axios from 'axios'
 export default {
   name: 'videoAdd',
   data () {
@@ -91,19 +89,15 @@ export default {
     },
     addVideo(){
         var that = this;
-          let params={
-                api:url+'admin/video/add',
-                param:{
-                    videoId:this.videoId.number,
-                    videoName:this.videoName,
-                    videoTitle:this.videoTitle,
-                    videoPoster:this.videoPoster,
-                    video:this.video,
-                    videoWords:this.videoWords,
-                    note:this.note
-                }
-            }
-            Axios.post(params)
+            Axios.post('/admin/video/add',{
+                videoId:this.videoId.number,
+                videoName:this.videoName,
+                videoTitle:this.videoTitle,
+                videoPoster:this.videoPoster,
+                video:this.video,
+                videoWords:this.videoWords,
+                note:this.note
+            })
             .then(res=>{
                 if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                     data=res.data;

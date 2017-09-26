@@ -1,7 +1,7 @@
 var mysql = require('mysql');
 var config = require('../config/config.js')
 
-
+//连接数据库
 function  connectServer(){
     var client = mysql.createConnection({
         host: config.host,
@@ -31,25 +31,31 @@ function insertVideoFun(client, id, post_url, url, title, time, note, callback){
 function deleteVideoFun(client, name, callback){
     client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_id`='"+name+"')", function(err){
         if(err) throw err;
-        
         callback(err);
     });
 }
 
-//查找一条视频
-function findFun(client, name, callback){
-    client.query('select * from `t_television_program_content` where video_introduction="'+name+'"', function(err, result, fields){
+//查找视频总数
+function findTo(client, name, callback){
+    client.query("select * FROM `t_television_program_content` WHERE video_introduction LIKE '%"+name+"%' ", function(err, result){
         if(err) throw err;
-
-        callback(results);
+        callback(result);
     })
 }
 
-//查找所有视频
-function findAllFun(client, callback){
-    client.query('select * from `t_television_program_content`', function(err, result, fields){
+//查找一条视频
+function findFun(client, name, str, callback){
+    client.query(str, function(err, result, fields){
         if(err) throw err;
+        callback(result);
+    })
+}
 
+
+//查找所有视频
+function findAllFun(client, str, callback){
+    client.query(str, function(err, result, fields){
+        if(err) throw err;
         callback(results);
     })
 }
@@ -68,6 +74,16 @@ function addPeriod(client, magazine_journal_no, magazine_journal_title, path, no
     client.query('INSERT INTO `t_magazine_program` (`magazine_journal_no`, `magazine_journal_title`, `magazine_journal_picture`, `note`) VALUES ('+ magazine_journal_no+', '+magazine_journal_title+', '+path+', '+note+')"')
 }
 
+//单个查询期数
+function findM(client, id, callback){
+    var str = "SELECT * FROM `t_magazine_program` WHERE id = "+id+""
+    client.query(str, function(err, result){
+        if(err) throw err;
+
+        callback(result);
+    })
+}
+
 exports.connect = connectServer;
 exports.select = selectFun;
 exports.insertVideoFun = insertVideoFun;
@@ -75,3 +91,5 @@ exports.deleteVideoFun = deleteVideoFun;
 exports.findFun = findFun;
 exports.update = update;
 exports.addPeriod = addPeriod;
+exports.findTo = findTo;
+exports.findM = findM;
