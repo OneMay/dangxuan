@@ -55,7 +55,8 @@ export default {
   methods:{
     search(){
         Axios.post('/admin/video/find',{
-                videoName: this.videoName
+                videoName: this.videoName,
+                page: this.page
             })
             .then(res=>{
                 var data;
@@ -70,6 +71,7 @@ export default {
                      this.videoWords = data.videoWords;
                      this.video_timestamp = data.video_timestamp;
                      this.note = data.note;
+                     this.page = data.page;
                 }else{
                      this.message=data.message;
                 }
