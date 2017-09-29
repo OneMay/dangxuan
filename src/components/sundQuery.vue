@@ -4,7 +4,7 @@
     <font color="#777777"><strong>广播名称：</strong></font>
     <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" value="">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
-	<span class="btn btn-success"  id="addnew" @click="addVideo('sundListAdd')"><span style="color:#fff">添加栏目</span></span>
+	<router-link class="btn btn-success"  id="addnew" to="/admin/sundListAdd">添加栏目</router-link>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>

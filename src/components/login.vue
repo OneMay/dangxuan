@@ -36,7 +36,8 @@ export default {
         this.message='账号和密码不能为空！';
       }else if(this.username=='admin'&&this.password=='password'){
            this.message="登录成功";
-            this.$store.dispatch('change','logined') 
+            this.$store.dispatch('change','logined') ;
+            window.location.href="/admin/index";
       }
       else{
           let params={
@@ -60,6 +61,7 @@ export default {
                      menu=data.user_role;
                      this.$store.dispatch('setMenu',menu) 
                     this.$store.dispatch('change','logined') 
+                    window.location.href="/admin/index";
                 }else{
                      this.message=data.message;
                 }

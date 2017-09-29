@@ -44,7 +44,7 @@
             <tr>
                 <td class="tableleft"></td>
                 <td>
-                    <span style="margin-left:5px;" class="btn btn-primary" @click="addVideo">保存</span> &nbsp;&nbsp;<span class="btn btn-success" name="backid" id="backid" @click="returnItem('videoQuery')">返回列表</span>
+                    <span style="margin-left:5px;" class="btn btn-primary" @click="addVideo">保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/videoQuery">返回列表</router-link>
                 </td>
             </tr>
         </table>

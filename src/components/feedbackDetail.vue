@@ -11,7 +11,7 @@
     </tr>
         <tr>   
             <td class="tableleft" width="10%"></td>           
-            <td><span class="btn btn-success" name="backid" id="backid" @click="returnItem('feedbackList')">返回列表</span></td>    
+            <td><router-link class="btn btn-success" name="backid" id="backid" to="/admin/feedbackList">返回列表</router-link></td>    
         </tr>   
          
        </table>
