@@ -56,6 +56,7 @@
 
 <script>
 import Axios from 'axios'
+const url='/getAdmin'
 export default {
   name: 'videoAdd',
   data () {
@@ -107,7 +108,7 @@ export default {
                 }
                 }
 
-                Axios.post('/admin/video/add', formData, config)
+                Axios.post(url+'/admin/video/add', formData, config)
                 .then(res=>{
                     if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                         data=res.data;
