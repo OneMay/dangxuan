@@ -4,7 +4,7 @@
     <font color="#777777"><strong>杂志名称：</strong></font>
     <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" value="">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
-	<span  id="addnew" @click="addVideo('bookAdd')"><span style="color:#fff" class="btn btn-success">添加期数</span></span>
+	<span  id="addnew" @click="addVideo('bookAdd')"><router-link style="color:#fff" class="btn btn-success" to="/admin/bookAdd">添加期数</router-link></span>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>

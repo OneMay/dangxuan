@@ -4,12 +4,12 @@
     <font color="#777777"><strong>请输入杂志名称：</strong></font>
     <input type="text" class="abc input-default">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
-    <span class="btn btn-success" id="addnew" @click="addVideo('bookPageAdd')"><span style="color:#fff">添加新文章</span></span>
+    <router-link  to="/admin/bookPageAdd" class="btn btn-success" id="addnew" >添加新文章</router-link>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#777777"><strong>用户名称：</strong></font>
- &nbsp;&nbsp;<span style="color:#005580;cursor: pointer;" @click="addVideo('studentDetail')">小强</span>
+ &nbsp;&nbsp;<span style="color:#005580;cursor: pointer;" >小强</span>
     <tr>
 	     <th>序号</th>
         <th>杂志名称</th>

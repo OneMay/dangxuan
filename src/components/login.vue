@@ -19,7 +19,7 @@
 <script>
 import AXIOS from './../axios/axios';
 const Axios = new AXIOS();
-const url = 'http://localhost:3000/'
+const url = '/admin/login'
 export default {
   name: 'login',
   data () {
@@ -36,11 +36,12 @@ export default {
         this.message='账号和密码不能为空！';
       }else if(this.username=='admin'&&this.password=='password'){
            this.message="登录成功";
-            this.$store.dispatch('change','logined') 
+            this.$store.dispatch('change','logined') ;
+            window.location.href="/admin/index";
       }
       else{
           let params={
-                api:url+'admin/login',
+                api:url,
                 param:{
                     username:this.username,
                     password:this.password
@@ -55,11 +56,13 @@ export default {
                 }else{
                     data=JSON.parse(res.data)
                 }
+                console.log(data)
                 if(data.code>=1){
                      this.message=data.message;
                      menu=data.user_role;
                      this.$store.dispatch('setMenu',menu) 
                     this.$store.dispatch('change','logined') 
+                    window.location.href="/admin/index";
                 }else{
                      this.message=data.message;
                 }

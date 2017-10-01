@@ -20,9 +20,9 @@ jQuery(function($) {
         // Components
         slide_links: 'blank', // Individual links for each slide (Options: false, 'num', 'name', 'blank')
         slides: [ // Slideshow Images
-            { image: './static/images/login1.jpg' },
-            { image: './static/images/login2.jpg' },
-            { image: './static/images/login3.jpg' }
+            { image: '/static/images/login1.jpg' },
+            { image: '/static/images/login2.jpg' },
+            { image: '/static/images/login3.jpg' }
         ]
 
     });

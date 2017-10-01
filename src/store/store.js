@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 Vue.use(Vuex)
-
+const LOCALSTORAGE_KEY = 'menu';
 export const store = new Vuex.Store({
     state: {
         login: 'islogin',
@@ -13,7 +13,7 @@ export const store = new Vuex.Store({
             return state.login;
         },
         getMenuData(state) {
-            return state.adminMenu;
+            return window.JSON.parse(window.localStorage.getItem(LOCALSTORAGE_KEY)) || [];
         }
     },
     mutations: {
@@ -22,7 +22,11 @@ export const store = new Vuex.Store({
             state.login = payload;
         },
         setMenuData(state, payload) {
-            state.adminMenu = payload;
+            // state.adminMenu = payload;
+            window.localStorage.setItem(LOCALSTORAGE_KEY, window.JSON.stringify(payload))
+        },
+        clearMenuData(state, payload) {
+            window.localStorage.removeItem(LOCALSTORAGE_KEY)
         }
     },
     actions: {
@@ -35,6 +39,11 @@ export const store = new Vuex.Store({
         setMenu(context, payload) {
             // setTimeout(function() {
             context.commit('setMenuData', payload)
+                // }, 1000)
+        },
+        clearMenu(context, payload) {
+            // setTimeout(function() {
+            context.commit('clearMenuData', payload)
                 // }, 1000)
         }
     }

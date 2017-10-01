@@ -1,117 +1,22 @@
 <template>
-    <div class="main">
-     <div class="top1">
-		<marquee scrollAmount=2 width=300>数据无价，请谨慎操作！</marquee>
-	</div>
-	<div class="top2">
-		<div class="logo">
-			<img src="./../../static/images/admin_logo.png" title="在哪儿" />
-		</div>
-		<div class="title" >
-			<h3>中南民族大学微信小程序后台管理系统</h3>
-		</div>
-        
-		<div class="fr top-link">
-            
-			<span id="admin" @click="choseItem('adminList')"><i
-				class="adminIcon"></i><span>管理员：admin</span></span> 
-		</div>
-	</div>
-
-	<div class="left" id="left">
-		<div class="div1">
-			<div class="left_top">
-				<img src="./../../static/images/bbb_01.jpg"><img src="./../../static/images/bbb_02.jpg"
-					id="2"><img src="./../../static/images/bbb_03.jpg"><img
-					src="./../../static/images/bbb_04.jpg">
-			</div>
-			
-           <div class="div2" id="video">
-				<div class="spgl"></div>
-				电视台
-			</div>
-			<div class="div3" id="videochild">
-				<li id="videoQuery"><router-link to="/admin/videoQuery">视频管理</router-link></li>
-				<li id="videoList"><router-link to="/admin/videoList">视频列表</router-link></li>
-			   
-			</div>
-			<div class="div2" id="book">
-				<div class="spgl"></div>
-			    微众杂志
-			</div>
-			<div class="div3" id="bookchild">
-				<li id="bookQuery"><router-link to="/admin/bookQuery">杂志管理</router-link></li>
-				<li id="bookList"><router-link to="/admin/bookList">文章列表</router-link></li>
-			   
-			</div>
-
-			<div class="div2" id="sund">
-				<div class="yhgl"></div>
-				广播台
-			</div>
-			<div class="div3" id="sundchild">
-				<li id="sundQuery"><router-link to="/admin/sundQuery">栏目管理</router-link></li>
-				<li id="sundList"><router-link to="/admin/sundList">音频管理</router-link></li>
-			   
-			</div>
-			<div class="div2" id="feedback">
-				<div class="gggl"></div>
-				反馈管理
-			</div>
-            <div class="div3">
-				<li id="feedbackList"><router-link to="/admin/feedbackList">反馈列表</router-link></li>	   
-			</div>
-
-			
-			<div class="a1" @click="logout"><div class="div2">
-					<div class="tcht"></div>
-					退出后台
-				</div></div>
-		</div>
-        
-	</div>
-
-	<div class="right" id="right">
-         <transition name="slide-fade" mode="out-in">
-             <!-- <div class="welcome" v-if='showItem=="welcome"' key="welcome">
-                 <div class="container demo-2">
-                    <div class="content">
-                        <div id="large-header" class="large-header">
-                            <canvas id="demo-canvas"></canvas>
-                            <h1 class="main-title">Welcome!</span></h1>
-                        </div>
+    <div class="welcomel">
+        <div class="welcome">
+            <div class="container demo-2">
+                <div class="content">
+                    <div id="large-header" class="large-header">
+                        <canvas id="demo-canvas"></canvas>
+                        <h1 class="main-title">Welcome!</span></h1>
                     </div>
                 </div>
-             </div> -->
-             <router-view></router-view>
-             <!-- <videoQuery v-if="showItem=='videoQuery'" key='videoQuery' v-on:choseItem="choseItem"></videoQuery>
-        <videoAdd v-if="showItem=='videoAdd'" key='videoAdd' v-on:choseItem="choseItem"></videoAdd>
-            <studentDetail v-if="showItem=='studentDetail'" key='studentDetail' v-on:choseItem="choseItem"></studentDetail>
-            <videoList v-if="showItem=='videoList'" key='videoList' v-on:choseItem="choseItem"></videoList>
-            <bookQuery  class="a" v-if="showItem=='bookQuery'" key='bookQuery' v-on:choseItem="choseItem"></bookQuery>
-            <bookAdd v-if="showItem=='bookAdd'" key='bookAdd' v-on:choseItem="choseItem"></bookAdd>
-            <bookList v-if="showItem=='bookList'" key='bookList' v-on:choseItem="choseItem"></bookList>
-            <bookPageAdd v-if="showItem=='bookPageAdd'" key="bookPageAdd" v-on:choseItem="choseItem"></bookPageAdd>
-            <sundQuery v-if="showItem=='sundQuery'" key='sundQuery' v-on:choseItem="choseItem"></sundQuery>
-            <sundListAdd v-if="showItem=='sundListAdd'" key='sundListAdd' v-on:choseItem="choseItem"></sundListAdd>
-            <sundList v-if="showItem=='sundList'" key='sundList' v-on:choseItem="choseItem"></sundList>
-            <sundPageAdd v-if="showItem=='sundPageAdd'" key='sundPageAdd' v-on:choseItem="choseItem"></sundPageAdd>
-            <sundJpgAdd v-if="showItem=='sundJpgAdd'" key='sundJpgAdd' v-on:choseItem="choseItem"></sundJpgAdd>
-            <feedbackList v-if="showItem=='feedbackList'" key='feedbackList' v-on:choseItem="choseItem"></feedbackList>
-            <feedbackDetail v-if="showItem=='feedbackDetail'" key='feedbackDetail' v-on:choseItem="choseItem"></feedbackDetail>
-            <adminList  v-if="showItem=='adminList'" key='adminList' v-on:choseItem="choseItem"></adminList> -->
-         </transition>
-		<!-- <iframe id="rightFrame" name="rightFrame" width="100%" height="100%"
-			scrolling="auto" marginheight="0" marginwidth="0" align="center"
-			style="border: 0px solid #CCC; margin: 0; padding: 0;"></iframe> -->
-	</div>
-    <div id="footer">技术支持：<a id="newthread" target="_blank" href="http://www.new-thread.com">中南民族大学新思路团队 </a></div>
-  </div>
+           </div>
+        </div>
+     </div>   
 </template>
 
 <script>
+
 export default {
-  name: 'index',
+  name: 'welcome',
   data () {
     return {
         showItem:'welcome',
@@ -120,139 +25,109 @@ export default {
   },
   methods:{
      start(){
-         document.getElementById('right').style.overflowY= 'unset';
-        
-         $(".div2").click(
-            function() {
-                $(this).next("div").slideToggle("slow").siblings(".div3:visible").slideUp("slow");
-                if(this.textContent.trim()=='电视台'){
-                    $(this).addClass("choosed");
-                    $('#book').removeClass('choosed');
-                    $('#sund').removeClass('choosed');
-                    $('#feedback').removeClass('choosed');
-                }
-                if(this.textContent.trim()=='微众杂志'){
-                    $(this).addClass("choosed");
-                    $('#video').removeClass('choosed');
-                    $('#sund').removeClass('choosed');
-                    $('#feedback').removeClass('choosed');
-                }
-                if(this.textContent.trim()=='广播台'){
-                    $(this).addClass("choosed");
-                    $('#book').removeClass('choosed');
-                    $('#video').removeClass('choosed');
-                    $('#feedback').removeClass('choosed');
-                }
-                if(this.textContent.trim()=='反馈管理'){
-                    $(this).addClass("choosed");
-                    $('#book').removeClass('choosed');
-                    $('#sund').removeClass('choosed');
-                    $('#video').removeClass('choosed');
-                }
-               // console.log(this.textContent.trim()=='电视台');
-                
-        });
-         $(".div3 li").click(
-            function() {
-                  $('.div3 li').removeClass('ischoose');
-                  $('.div3 li a').removeClass('ischoose');
-                $(this).addClass('ischoose');
-                $(this).children().addClass('ischoose');
+        (function() {
+           // var leftWidthNode = document.getElementById('left');
+           // var leftWidth=parseInt(window.getComputedStyle(leftWidthNode,null).width);
+           var leftWidth =201;
+    var width, height, largeHeader, canvas, ctx, circles, target, animateHeader = true;
 
-                $(this).children().siblings().removeClass('ischoose');
-                $(this).siblings().removeClass('ischoose');
-               // console.log(this.textContent.trim()=='电视台');
-                
-        });
-        var pathname=window.location.pathname;
-        var video=/\/admin\/video.+/g
-        var book=/\/admin\/book.+/g
-        var sund=/\/admin\/sund.+/g
-        var feedback=/\/admin\/feedback.+/g
-        if(pathname=='/admin/videoAdd'){
-            pathname='/admin/videoQuery'
+    // Main
+    initHeader();
+    addListeners();
+
+    function initHeader() {
+        width = window.innerWidth-leftWidth;
+        height = window.innerHeight-97;
+        target = { x: 0, y: height };
+
+        largeHeader = document.getElementById('large-header');
+        if (largeHeader) {
+            largeHeader.style.height = height + 'px';
         }
-        if(pathname=='/admin/bookAdd'){
-            pathname='/admin/bookQuery'
+  
+
+        canvas = document.getElementById('demo-canvas');
+        canvas.width = width;
+        canvas.height = height;
+        ctx = canvas.getContext('2d');
+
+        // create particles
+        circles = [];
+        for (var x = 0; x < width * 0.5; x++) {
+            var c = new Circle();
+            circles.push(c);
         }
-        if(pathname=='/admin/bookPageAdd'){
-            pathname='/admin/bookList'
+        animate();
+    }
+
+    // Event handling
+    function addListeners() {
+        window.addEventListener('scroll', scrollCheck);
+        window.addEventListener('resize', resize);
+    }
+
+    function scrollCheck() {
+        if (document.body.scrollTop > height) animateHeader = false;
+        else animateHeader = true;
+    }
+
+    function resize() {
+        width = window.innerWidth-leftWidth;
+       
+        height = window.innerHeight-97;
+        largeHeader.style.height = height + 'px';
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    function animate() {
+        if (animateHeader) {
+            ctx.clearRect(0, 0, width, height);
+            for (var i in circles) {
+                circles[i].draw();
+            }
         }
-        if(pathname=='/admin/sundListAdd'){
-            pathname='/admin/sundQuery'
+        requestAnimationFrame(animate);
+    }
+
+    // Canvas manipulation
+    function Circle() {
+        var _this = this;
+
+        // constructor
+        (function() {
+            _this.pos = {};
+            init();
+            //console.log(_this);
+        })();
+
+        function init() {
+            _this.pos.x = Math.random() * width;
+            _this.pos.y = height + Math.random() * 100;
+            _this.alpha = 0.1 + Math.random() * 0.3;
+            _this.scale = 0.1 + Math.random() * 0.3;
+            _this.velocity = Math.random();
         }
-        if(pathname=='/admin/sundPageAdd'||pathname=='/admin/sundJpgAdd'){
-            pathname='/admin/sundList'
-        }
-        if(pathname=='/admin/feedbackDetail'){
-            pathname='/admin/feedbackList'
-        }
-        var reg=/(\/admin\/)(.+)/g
-        if(video.test(pathname)){
-            var name='#'+reg.exec(pathname)[2];
-            $('#video').click()
-            $(name).click()
-        }
-        if(book.test(pathname)){
-            var name='#'+reg.exec(pathname)[2];
-            $('#book').click()
-            $(name).click()
-        }
-        if(sund.test(pathname)){
-            var name='#'+reg.exec(pathname)[2];
-            $('#sund').click()
-            $(name).click()
-        }
-        if(feedback.test(pathname)){
-            var name='#'+reg.exec(pathname)[2];
-            $('#feedback').click()
-            $(name).click()
-        }
-    },
-    logout(){
-        this.$store.dispatch('clearMenu',''); 
-        this.$store.dispatch('change','islogin');
-        window.location.href="/admin/login";
-    },
-    choseItem(item){
-        this.showItem=item;
-    },
-    getMenu(){
-       this.adminMenu=this.$store.getters.getMenuData;
-    //this.adminMenu=['微众管理员']
-       if(this.adminMenu.length=1){
-           if(this.adminMenu[0]=='广播台管理员'){
-               //移除电视台
-               $("#video").remove();
-               $("#videochild").remove();
-               //移除微众
-               $("#book").remove();
-               $("#bookchild").remove();
-           }
-           if(this.adminMenu[0]=='电视台管理员'){
-               //移除广播台
-               $("#sund").remove();
-               $("#sundchild").remove();
-               //移除微众
-               $("#book").remove();
-               $("#bookchild").remove();
-           }
-           if(this.adminMenu[0]=='微众管理员'){
-               //移除广播台
-               $("#sund").remove();
-               $("#sundchild").remove();
-               //移除电视台
-               $("#video").remove();
-               $("#videochild").remove();
-           }
-       }
+
+        this.draw = function() {
+            if (_this.alpha <= 0) {
+                init();
+            }
+            _this.pos.y -= _this.velocity;
+            _this.alpha -= 0.0005;
+            ctx.beginPath();
+            ctx.arc(_this.pos.x, _this.pos.y, _this.scale * 10, 0, 2 * Math.PI, false);
+            ctx.fillStyle = 'rgba(255,255,255,' + _this.alpha + ')';
+            ctx.fill();
+        };
+    }
+
+})();
     }
   },
   mounted(){
-      this.$nextTick(function(){
-         
+      this.$nextTick(function(){    
           this.start();
-           this.getMenu();
       })
   },
   components:{

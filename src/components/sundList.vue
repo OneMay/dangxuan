@@ -4,13 +4,13 @@
     <font color="#777777"><strong>请输入广播标题：</strong></font>
     <input type="text" class="abc input-default">&nbsp;&nbsp; 
     <span  class="btn btn-primary">查询</span>&nbsp;&nbsp; 
-    <span class="btn btn-success" id="addnew" @click="addVideo('sundPageAdd')"><span style="color:#fff">添加广播</span></span>
-    <span class="btn btn-danger"  id="addnew" @click="addVideo('sundJpgAdd')"><span style="color:#fff">首页轮播</span></span>
+    <router-link class="btn btn-success" id="addnew" to="/admin/sundPageAdd">添加广播</router-link>
+    <router-link class="btn btn-danger"  id="addnew" to="/admin/sundJpgAdd">首页轮播</router-link>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#777777"><strong>用户名称：</strong></font>
- &nbsp;&nbsp;<span style="color:#005580;cursor: pointer;" @click="addVideo('studentDetail')">小强</span>
+ &nbsp;&nbsp;<span style="color:#005580;cursor: pointer;" >小强</span>
     <tr>
 	     <th>序号</th>
         <th>栏目名称</th>
