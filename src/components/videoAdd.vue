@@ -6,11 +6,12 @@
                 <td width="10%" class="tableleft">类别</td>
                 <td>
                     <select name="bigTypeId" v-model="videoId">
-                    <option v-bind:value="{number: 0}">校园多看点</option>
-                    <option v-bind:value="{number: 1}">民族风韵</option>
-                    <option v-bind:value="{number: 2}">我爱看电影</option>
-                    <option v-bind:value="{number: 3}">我在民大</option>
-                    <option v-bind:value="{number: 4}">白色文化</option>
+                    <option v-bind:value="{number: 1}">校园多看点</option>
+                    <option v-bind:value="{number: 2}">民族风韵</option>
+                    <option v-bind:value="{number: 3}">我爱看电影</option>
+                    <option v-bind:value="{number: 4}">我在民大</option>
+                    <option v-bind:value="{number: 5}">白色文化</option>
+                    <option v-bind:value="{number: 6}">聆音品文</option>
                     </select>
                     
                 </td>
@@ -20,8 +21,7 @@
             <tr>
                 <td class="tableleft">视频名称</td>
                 <td><input type="text" v-model="videoName" name="videosName"/></td>
-                <td class="tableleft">视频大小</td>
-                <td><input type="text" name="videosNumber"readonly="readonly"/></td>
+                
             </tr>
             <tr>
                 <td class="tableleft">视频关键字</td>
@@ -29,22 +29,23 @@
             </tr>
             <tr>
                 <td class="tableleft">视频海报</td>
-                <td class="tableleft" style="width: 196px; "><input type="file" @change="getFile" name="GoodsPicture" id="GoodsPicture" multiple="multiple" /></td>
+                <td class="tableleft" style="width: 196px; "><input type="file" @change="getFile" name="GoodsPicture" id="GoodsPicture" multiple="multiple" accept=".jpg,.png"/></td>
         <!--         <td class="tableleft">图片预览</td> -->
         <!--         <td><img name="showimg" id="showimg" src="" style="display:none;" alt="预览图片" /> </td> -->
             </tr>
             <tr>
                 <td class="tableleft">选择视频</td>
-                <td class="tableleft" style="width: 196px; "><input type="file" @change="getVideo" name="GoodsPicture" id="GoodsPicture" multiple="multiple" /></td>
+                <td class="tableleft" style="width: 196px; "><input type="file" @change="getVideo" name="GoodsPicture" id="GoodsPicture" multiple="multiple" accept=".mp4" /></td>
            </tr>
             <tr>
                 <td class="tableleft">视频简介</td>
-                <td><input type="text" v-model="videoWords" name="GoodsIntroduce" style="height: 63px;"/></td>
+                <td><textarea type="text" v-model="videoWords" name="GoodsIntroduce"  rows="3" cols="20"></textarea></td>
             </tr>
             <tr>
                 <td class="tableleft"></td>
                 <td>
                     <span style="margin-left:5px;" class="btn btn-primary" @click="addVideo">保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/videoQuery">返回列表</router-link>
+                    <span v-text="message" class='message'></span>
                 </td>
             </tr>
         </table>
@@ -77,42 +78,55 @@ export default {
     },
     getFile(e){
         this.videoPoster = e.target.files[0];
+
     },
     getVideo(e){
         this.video = e.target.files[0];
     },
     addVideo(e){
-        var that = this;
+         var that = this;
 
-        e.preventDefault();
-        var formData = new FormData();
-            formData.append('videoPoster', this.videoPoster);
-            formData.append('video', this.video);
-            formData.append('videoId', this.videoId.number);
-            formData.append('videoName', this.videoName);
-            formData.append('videoTitle', this.videoTitle);
-            formData.append('videoWords', this.videoWords);
-            formData.append('note', this.note);
+       // e.preventDefault();
+        if(this.videoPoster&&this.video&&this.videoId.number&&this.videoName&&this.videoTitle&&this.videoWords){
+            var imgreg=/.+((\.jpg$)|(\.png$))/g;
+            var videoreg=/.+\.mp4$/g
+            if(imgreg.test(this.videoPoster.name)&&videoreg.test(this.video.name)){
+                this.message='正在上传...';
+                var formData = new FormData();
+                formData.append('videoPoster', this.videoPoster);
+                formData.append('video', this.video);
+                formData.append('videoId', this.videoId.number);
+                formData.append('videoName', this.videoName);
+                formData.append('videoTitle', this.videoTitle);
+                formData.append('videoWords', this.videoWords);
+                formData.append('note', this.note);
 
-            let config = {
-              headers: {
-                'Content-Type': 'multipart/form-data'
-              }
-            }
-
-            Axios.post('/admin/video/add', formData, config)
-            .then(res=>{
-                if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
-                    data=res.data;
-                }else{
-                    data=JSON.parse(res.data)
+                let config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
                 }
-                
-                console.log(res.data)
-            })
-            .catch(err=>{
-                console.log(err)
-            });     
+                }
+
+                Axios.post('/admin/video/add', formData, config)
+                .then(res=>{
+                    if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                        data=res.data;
+                    }else{
+                        data=JSON.parse(res.data)
+                    }
+                    this.message='上传成功';
+                    console.log(res.data)
+                })
+                .catch(err=>{
+                    this.message='上传失败';
+                    console.log(err)
+                }); 
+            }else{
+               this.message='文件格式错误' 
+            }
+        }else{
+            this.message='所有内容不能为空！'
+        }    
     }
   }
 }
@@ -127,7 +141,9 @@ body {font-size: 20px;
         .sidebar-nav {
             padding: 9px 0;
         }
-
+.message{
+    color:#ca7117;
+}
         @media (max-width: 980px) {
             /* Enable use of floated navbar text */
             .navbar-text.pull-right {
