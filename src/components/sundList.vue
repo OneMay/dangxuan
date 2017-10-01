@@ -15,7 +15,7 @@
 	     <th>序号</th>
         <th>栏目名称</th>
         <th>日期</th>
-        <th>广播标题</th>
+       
         <th>上传日期</th>
         <th>管理菜单</th>
     </tr>
@@ -24,7 +24,7 @@
             <td>1</td>
             <td>微众</td>
             <td>周一</td>
-            <td>光量子技术</td>
+            
             <td>2016.07.22</td>               
             <td> <span class="btn btn-danger">删除</span><span class="btn btn-primary">修改</span><span class="btn btn-success">预览</span></td>
                

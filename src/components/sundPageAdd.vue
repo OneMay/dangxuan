@@ -16,10 +16,9 @@
     
    
             <tr>
-                <td class="tableleft">广播标题</td>
-                <td><input type="text" name="videosName"/></td>
+                
                 <td class="tableleft">音频大小</td>
-                <td><input type="text" name="videosNumber"/></td>
+                <td><input type="text" name="videosNumber" readonly="readonly"/></td>
             </tr>
             <tr>
                 <td class="tableleft">广播海报</td>
