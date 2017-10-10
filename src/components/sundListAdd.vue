@@ -6,11 +6,24 @@
                 <td class="tableleft" width="10%">栏目名称</td>
                 <td><input type="text" name="videosName"/></td>
             </tr>
+
+             <tr>
+                <td class="tableleft">时间</td>
+                <td>
+                    <select name="bigTypeId">
+                        <option value="1">周一</option>
+                        <option value="2">周二</option>
+                        <option value="3">周三</option>
+                        <option value="4">周四</option>
+                        <option value="5">周五</option>
+                    </select>
+                </td>
+            </tr>
             
             <tr>
                 <td class="tableleft"></td>
                 <td>
-                    <span style="margin-left:5px;" class="btn btn-primary" >保存</span> &nbsp;&nbsp;<span class="btn btn-success" name="backid" id="backid" @click="returnItem('sundQuery')">返回列表</span>
+                    <span style="margin-left:5px;" class="btn btn-primary" >保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/sundQuery">返回列表</router-link>
                 </td>
             </tr>
         </table>

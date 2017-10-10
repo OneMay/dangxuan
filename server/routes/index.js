@@ -7,8 +7,6 @@ var Path = '../../dist/index.html';
 var moment = require('moment');
 var fiter = require('../filter/filter');
 
-const path_dev = path.resolve(__dirname, '../../media')
-
 //登陆
 router.post('/admin/login', function (req, res, next) {
     var username = req.body.username;
@@ -63,8 +61,7 @@ router.post('/admin/video/delete', function (req, res) {
                 code: 0,
                 message: '删除失败'
             }
-        }
-        else {
+        } else {
             var message = {
                 code: 1,
                 message: '删除成功'

@@ -18,6 +18,7 @@ export class AXIOS {
     post(param) {
         config.data.username = param.param.username;
         config.data.password = param.param.password;
+        config.data.page = param.param.page;
         config.data = Qs.parse(config.data);
         //console.log(config)
         return axios.post(param.api, {}, config);

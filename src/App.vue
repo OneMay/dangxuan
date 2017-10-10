@@ -2,8 +2,8 @@
   <div id="app">
     <router-view></router-view>
     {{getLogin}}
-    <login v-if="login=='islogin'" v-on:user="userInfo"></login>
-    <index v-if="login=='logined'"></index>
+    <!-- <login v-if="login=='islogin'" v-on:user="userInfo"></login>
+    <index v-if="login=='logined'"></index> -->
   </div>
 </template>
 

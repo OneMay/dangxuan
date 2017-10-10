@@ -7,6 +7,7 @@
         <th>反馈标题</th>
         <th>日期</th>
         <th>状态</th>
+        <th>用户名</th>
         <th>管理菜单</th>
     </tr>
     </thead>
@@ -15,7 +16,7 @@
             <td>关于第十一期杂志的问题</td>
             <td>2016.07.22</td>
             <td>未查看</td>              
-            <td> <span class="btn btn-success" @click="addVideo('feedbackDetail')">查看</span></td>
+            <td> <router-link class="btn btn-success" to="/admin/feedbackDetail">查看</router-link></td>
                
         </tr>    
        </table>

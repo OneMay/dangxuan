@@ -16,10 +16,9 @@
     
    
             <tr>
-                <td class="tableleft">广播标题</td>
-                <td><input type="text" name="videosName"/></td>
+                
                 <td class="tableleft">音频大小</td>
-                <td><input type="text" name="videosNumber"/></td>
+                <td><input type="text" name="videosNumber" readonly="readonly"/></td>
             </tr>
             <tr>
                 <td class="tableleft">广播海报</td>
@@ -38,7 +37,7 @@
             <tr>
                 <td class="tableleft"></td>
                 <td>
-                    <span style="margin-left:5px;" class="btn btn-primary"  >保存</span> &nbsp;&nbsp;<span class="btn btn-success" name="backid" id="backid" @click="returnItem('sundList')">返回列表</span>
+                    <span style="margin-left:5px;" class="btn btn-primary"  >保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/sundList">返回列表</router-link>
                 </td>
             </tr>
         </table>
