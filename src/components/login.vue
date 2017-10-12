@@ -19,7 +19,7 @@
 <script>
 import AXIOS from './../axios/axios';
 const Axios = new AXIOS();
-const url = 'http://localhost:3000/'
+const url = '/admin/login'
 export default {
   name: 'login',
   data () {
@@ -41,7 +41,7 @@ export default {
       }
       else{
           let params={
-                api:url+'admin/login',
+                api:url,
                 param:{
                     username:this.username,
                     password:this.password
@@ -56,6 +56,7 @@ export default {
                 }else{
                     data=JSON.parse(res.data)
                 }
+                console.log(data)
                 if(data.code>=1){
                      this.message=data.message;
                      menu=data.user_role;

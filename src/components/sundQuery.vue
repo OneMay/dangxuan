@@ -11,16 +11,14 @@
     <tr>
         <th>栏目名称</th>
         <th>音频个数</th>
-        <th>上传者</th>
-        <th>最近更新日期</th>
+        <th>时间</th>
         <th>管理菜单</th>
     </tr>
     </thead>
         <tr>
             <td>中国梦</td>
             <td>4</td>
-            <td><span style="color:#005580;cursor: pointer;" @click="addVideo('studentDetail')">小强</span></td>
-            <td>2016.07.22</td>
+            <td>周二</td>
             <td> <span class="btn btn-success">修改</span><span class="btn btn-danger">删除</span></td>  
         </tr>
        </table>

@@ -35,7 +35,10 @@
 </template>
 
 <script>
-import Axios from 'axios'
+import axios from 'axios';
+import AXIOS from './../axios/axios';
+const Axios = new AXIOS();
+const url ='http://localhost:8089/getAdmin'
 export default {
   name: 'videoQuery',
   data () {
@@ -54,7 +57,7 @@ export default {
   },
   methods:{
     search(){
-        Axios.post('/admin/video/find',{
+        axios.post(url+'/admin/video/find',{
                 videoName: this.videoName,
                 page: this.page
             })
@@ -90,12 +93,12 @@ export default {
             this.page=1;
         }
         let params={
-            api:'/admin/video/findAll'+'?page='+num,
+            api:'/admin/video/findAll',//+'?page='+num,
             param:{
-                page:this.page
-            }
+                    page:this.page
+                }
         }
-        Axios.get(params)
+        Axios.post(params)
         .then(res=>{
             var data;
             if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
@@ -122,7 +125,7 @@ export default {
   },
    mounted(){
         this.$nextTick(function(){
-            this.getProducts(this.page);
+            this.getVideoList(this.page);
         })
     }
 }

@@ -6,6 +6,19 @@
                 <td class="tableleft" width="10%">栏目名称</td>
                 <td><input type="text" name="videosName"/></td>
             </tr>
+
+             <tr>
+                <td class="tableleft">时间</td>
+                <td>
+                    <select name="bigTypeId">
+                        <option value="1">周一</option>
+                        <option value="2">周二</option>
+                        <option value="3">周三</option>
+                        <option value="4">周四</option>
+                        <option value="5">周五</option>
+                    </select>
+                </td>
+            </tr>
             
             <tr>
                 <td class="tableleft"></td>

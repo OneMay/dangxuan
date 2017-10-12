@@ -63,10 +63,10 @@
 			</div>
 
 			
-			<router-link class="a1" to="/admin/login"><div class="div2">
+			<div class="a1" @click="logout"><div class="div2">
 					<div class="tcht"></div>
 					退出后台
-				</div></router-link>
+				</div></div>
 		</div>
         
 	</div>
@@ -210,7 +210,9 @@ export default {
         }
     },
     logout(){
-        this.$store.dispatch('change','islogin')
+        this.$store.dispatch('clearMenu',''); 
+        this.$store.dispatch('change','islogin');
+        window.location.href="/admin/login";
     },
     choseItem(item){
         this.showItem=item;

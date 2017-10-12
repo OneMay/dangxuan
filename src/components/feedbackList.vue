@@ -7,6 +7,7 @@
         <th>反馈标题</th>
         <th>日期</th>
         <th>状态</th>
+        <th>用户名</th>
         <th>管理菜单</th>
     </tr>
     </thead>

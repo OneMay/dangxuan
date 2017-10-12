@@ -5,7 +5,7 @@ import Qs from 'qs'
 export default {
     url: '/get',
 
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:8089/getAdmin',
     method: 'POST' || 'GET',
 
     transformRequest: [
@@ -14,6 +14,7 @@ export default {
             data.strSQL = base64encode(data.strSQL);
             //由于使用的form-data传数据所以要格式化
             data = JSON.stringify(data);
+            //data = Qs.stringify(data);
             //console.log(data);
             return data;
         }
@@ -26,7 +27,7 @@ export default {
     ],
 
     headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json' //'application/x-www-form-urlencoded'
     },
 
     params: {
@@ -40,6 +41,7 @@ export default {
     data: {
         username: '',
         password: '',
+        page: 1,
         strSQL: ""
     },
 
