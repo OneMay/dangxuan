@@ -54,5 +54,5 @@ export default new Router({
     }, {
         path: '/',
         redirect: '/admin/login'
-    }, ]
+    }]
 })

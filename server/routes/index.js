@@ -5,7 +5,7 @@ var db = require('../mysql/connect')
 var multiparty = require('multiparty');
 var Path = '../../dist/index.html';
 var fiter = require('../filter/filter');
-
+var path = require('path');
 const path_dev = path.join(path.resolve(__dirname, '..'), 'media')
 
 //登陆
@@ -63,8 +63,7 @@ router.post('/admin/video/delete', function(req, res) {
                 code: 0,
                 message: '删除失败'
             }
-        }
-        else{
+        } else {
             var message = {
                 code: 1,
                 message: '删除成功'
@@ -75,37 +74,37 @@ router.post('/admin/video/delete', function(req, res) {
 })
 
 //视频查找一条操作
-router.post('/admin/video/find', function(req, res){
-        var client = db.connect();
-        db.findFun(client, req.body.videoName, function(result){
-            var message = {
-                videoName: result[0].video_introduction,
-                videoCategory: result[0].television_program_id,
-                videoTitle: result[0]
-            }
-        })
+router.post('/admin/video/find', function(req, res) {
+    var client = db.connect();
+    db.findFun(client, req.body.videoName, function(result) {
+        var message = {
+            videoName: result[0].video_introduction,
+            videoCategory: result[0].television_program_id,
+            videoTitle: result[0]
+        }
+    })
 })
 
 //视频全部查询
-router.post('/admin/video/findAll', function(req, res){
+router.post('/admin/video/findAll', function(req, res) {
     var client = db.connect();
-    db.findAllFun(client, function(result){
+    db.findAllFun(client, function(result) {
         var message = [];
-        for(var i=0; i<result.length; i++){
-            message.push({videoName: result[i]})
+        for (var i = 0; i < result.length; i++) {
+            message.push({ videoName: result[i] })
         }
     })
 })
 
 //视频修改
-router.post('/admin/video/amend', function(req, res){
+router.post('/admin/video/amend', function(req, res) {
     var client = db.connect();
-    
+
 })
 
 
 //-------微众杂志--------
-router.post('/admin/magazine/addPeriods', function(req, res){
+router.post('/admin/magazine/addPeriods', function(req, res) {
     var client = db.connect();
     db.addPeriod(req.body.magazine_journal_no, req.body.magazine_journal_title, path_dev, req.body.note)
 })
