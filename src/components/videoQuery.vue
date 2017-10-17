@@ -19,16 +19,17 @@
         <tr v-for="video in videoList">
             <td v-text="video.videoName"></td>
             <td v-text="video.videoCategory"></td>
-            <td v-text="video.note"><span style="color:#005580;cursor: pointer;" @click="addVideo('studentDetail')">小强</span></td>
+            <td v-text="video.note"><span style="color:#005580;"></span></td>
             <td v-text="video.video_timestamp"></td>
-            <td> <span  class="btn btn-success">预览</span> <span  class="btn btn-danger">修改</span></td>  
+            <td> <span  class="btn btn-success " @click="watch(video.videoName)">预览</span> <span  class="btn btn-danger" @click="update(video)">修改</span></td>  
         </tr>
        </table>
        <nav>
           <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{pages}}页</p>
+          <p v-text="message"></p>
           <ul class="pager">
-              <li class="previous"><span @click="getProducts(--page)">&larr;上一页</span></li>
-              <li class="next"><span @click="getProducts(++page)">下一页 &rarr;</span></li>
+              <li class="previous"><span @click="getVideoList(--page)">&larr;上一页</span></li>
+              <li class="next"><span @click="getVideoList(++page)">下一页 &rarr;</span></li>
           </ul>
       </nav>
   </div>
@@ -69,12 +70,11 @@ export default {
                     data=JSON.parse(res.data)
                 }
                 if(data.code>=1){
-                     this.videoName=data.videoName;
-                     this.videoCategory = data.videoCategory;
-                     this.videoWords = data.videoWords;
-                     this.video_timestamp = data.video_timestamp;
-                     this.note = data.note;
-                     this.page = data.page;
+                     this.limit=data.limit;
+                    this.count=data.count;
+                    this.currentPage=data.currentPage;
+                    this.pages=data.page;
+                    this.videoList=data.videoList;
                 }else{
                      this.message=data.message;
                 }
@@ -92,35 +92,36 @@ export default {
             num=1;
             this.page=1;
         }
-        let params={
-            api:'/admin/video/findAll',//+'?page='+num,
-            param:{
-                    page:this.page
+        axios.post(url+'/admin/video/findAll',{
+                videoName: this.videoName,
+                page: this.page
+            })
+            .then(res=>{
+                var data;
+                if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                    data=res.data;
+                }else{
+                    data=JSON.parse(res.data)
                 }
-        }
-        Axios.post(params)
-        .then(res=>{
-            var data;
-            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
-                data=res.data;
-            }else{
-                data=JSON.parse(res.data)
-            }
-            this.limit=data.limit;
-            this.count=data.count;
-            this.currentPage=data.currentPage;
-            this.pages=data.page;
-            this.videoList=data.videoList;
-        })
-        .catch(err => {
-            console.log(err);
-        });
+                if(data.code>=1){
+                     this.limit=data.limit;
+                    this.count=data.count;
+                    this.currentPage=data.currentPage;
+                    this.pages=data.page;
+                    this.videoList=data.videoList;
+                }else{
+                     this.message=data.message;
+                }
+            })
+            .catch(res=>{
+                console.log(err);
+            })
     },
     addVideo(item){
         this.$emit('choseItem',item);
     },
-    getProducts(){
-
+    update(item){
+        window.location.href='/admin/videoUpdate?videoName='+item.videoName;
     }
   },
    mounted(){
@@ -133,6 +134,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 body {font-size: 20px;
     font-size: 20px;
         padding-bottom: 40px;
@@ -273,4 +275,10 @@ form{
 .onCorrect{background-position:3px -247px;border-color:#40B3FF;}
 .onLamp{background-position:3px -200px}
 .onTime{background-position:3px -1356px}
+.previous,.next{
+    cursor: pointer;
+}
+.previous:hover,.next:hover{
+    color:red;
+}
 </style>
