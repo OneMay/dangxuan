@@ -68,7 +68,7 @@ export default {
                 }else{
                     data=JSON.parse(res.data)
                 }
-                if(data.code>=1){
+                if(data.code==1){
                      this.videoName=data.videoName;
                      this.videoCategory = data.videoCategory;
                      this.videoWords = data.videoWords;
@@ -109,7 +109,7 @@ export default {
             this.limit=data.limit;
             this.count=data.count;
             this.currentPage=data.currentPage;
-            this.pages=data.page;
+            this.page=data.page;
             this.videoList=data.videoList;
         })
         .catch(err => {

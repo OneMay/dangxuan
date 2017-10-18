@@ -10,29 +10,26 @@
                     </select>
                 </td>
             </tr>
-    
-   
             <tr>
                 <td class="tableleft">期数</td>
-                <td><input type="text" name="bookNum"/></td>
+                <td><input type="text" name="bookName" v-model="magazine_journal_no"/></td>
             </tr>
             <tr>
                 <td class="tableleft">主题文字</td>
-                <td><input type="text" name="words"/></td>
+                <td><input type="text" name="words" v-model="magazine_journal_title"/></td>
             </tr>
             <tr>
                 <td class="tableleft">封面</td>
                 <td class="tableleft" >
-                    <input type="file" name="GoodsPicture" id="GoodsPicture" multiple="multiple"/>
+                    <input type="file" name="GoodsPicture" id="GoodsPicture" @change="getFile" multiple="multiple"/>
                 </td>
         <!--         <td class="tableleft">图片预览</td> -->
         <!--         <td><img name="showimg" id="showimg" src="" style="display:none;" alt="预览图片" /> </td> -->
             </tr>
             <tr>
                 <td class="tableleft">杂志封面大小</td>
-                <td><input type="text" name="bookJpgnumber"readonly="readonly"/></td>
+                <td><input type="text" name="bookJpgnumber"readonly="readonly"/>小于10M</td>
             </tr>
-            
             <tr>
                 <td class="tableleft"></td>
                 <td>
@@ -41,7 +38,6 @@
             </tr>
         </table>
     </form>
-
   </div>
 </template>
 
@@ -53,26 +49,56 @@ export default {
     return {
       username:"",
       password:"",
-      message:''
+      message:'',
+      magazine_journal_no:'',
+      magazine_journal_title:'',
+      magazine_journal_picture:''
     }
   },
   methods:{
     returnItem(item){
         this.$emit('choseItem',item)
     },
+    getFile(e){
+        this.magazine_journal_picture = e.target.files[0];
+    }，
     addMagazine(){
-        Axios.post('/admin/magazine/addPeriods',{
-            magazine_journal_no:'2',//(期数)
-            magazine_journal_title:'添加',//(主题文字)
-            magazine_journal_picture:'form-data类型',
-            note:''
-        })
-        .then(res=>{
-            console.log(res.data);
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+       var that = this;
+
+       // e.preventDefault();
+        if(this.magazine_journal_picture&&this.magazine_journal_no&&this.magazine_journal_title){
+            var imgreg=/.+((\.jpg$)|(\.png$))/g;
+            if(imgreg.test(this.magazine_journal_picture.name)){
+                this.message='正在上传...';
+                var formData = new FormData();
+                formData.append('magazine_journal_picture', this.magazine_journal_picture);
+                formData.append('magazine_journal_no', this.magazine_journal_no);
+                formData.append('magazine_journal_title', this.magazine_journal_title);
+                let config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+                Axios.post('/admin/magazine/addPeriods', formData, config)
+                .then(res=>{
+                    if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                        data=res.data;
+                    }else{
+                        data=JSON.parse(res.data)
+                    }
+                    this.message='上传成功';
+                    console.log(res.data)
+                })
+                .catch(err=>{
+                    this.message='上传失败';
+                    console.log(err)
+                }); 
+            }else{
+               this.message='文件格式错误' 
+            }
+        }else{
+            this.message='所有内容不能为空！'
+        }
     }
   }
 }

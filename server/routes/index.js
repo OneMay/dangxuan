@@ -116,6 +116,7 @@ router.post('/admin/video/findAll', function(req, res) {
     if (req.body.page) {
         current_page = parseInt(req.body.page);
     }
+    console.log(req.body.page);
     var nun = (current_page - 1) * num;
     var str = "SELECT * FROM `t_television_program_content` limit " + num + " offset " + nun + " ";
     db.findAll(client, str, function(result) {
