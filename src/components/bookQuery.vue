@@ -4,7 +4,7 @@
     <font color="#777777"><strong>杂志名称：</strong></font>
     <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="第一期" v-model="magazine_journal_no">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
-	<span  id="addnew"><router-link style="color:#fff" class="btn btn-success" to="/admin/bookAdd">添加期数</router-link></span>
+	<span  id="addnew" ><router-link style="color:#fff" class="btn btn-success" to="/admin/bookAdd">添加期数</router-link></span>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
@@ -33,7 +33,8 @@
 </template>
 
 <script>
-import Axios from 'axios'
+import axios from 'axios'
+const url ='http://localhost:8089/getAdmin'
 export default {
   name: 'bookQuery',
   data () {
@@ -48,12 +49,13 @@ export default {
       pages:null,
       limit:null,
       magazine_journal_no:''
+      page:1
     }
   },
   methods:{
     search(){
         this.page=1;
-        Axios.post('/admin/magazine/findAllPeriods',{
+       axios.post('/admin/magazine/findAllPeriods',{
            page:this.page,
            magazine_journal_no:this.magazine_journal_no
         })
@@ -79,16 +81,29 @@ export default {
         })
     },
     reMagazine(){
-        Axios.post('/admin/magazine/amend',{
-            magazine_journal_no:'1',   //(期数)
-            magazine_journal_title:'测试', //(主题文字)
-            magazine_journal_picture:'form-data类型',
-            note:''
+        axios.get(url+'/admin/magazine/findAllPeriods',{
+           params: {
+               page: this.page
+           }
         })
         .then(res=>{
-            console.log(res.data);
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            // if(data.code>=1){
+            //     this.limit=data.limit;
+            //     this.count=data.count;
+            //     this.currentPage=data.currentPage;
+            //     this.pages=data.page;
+            //     this.videoList=data.videoList;
+            // }else{
+            //     this.message=data.message;
+            // }
         })
-        .catch(err=>{
+        .catch(res=>{
             console.log(err);
         })
     },
@@ -158,7 +173,6 @@ body {font-size: 20px;
         }
     }
 
-@charset "utf-8";
 body{
     font-size: 13px;
 }

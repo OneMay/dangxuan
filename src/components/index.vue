@@ -169,7 +169,7 @@ export default {
         var book=/\/admin\/book.+/g
         var sund=/\/admin\/sund.+/g
         var feedback=/\/admin\/feedback.+/g
-        if(pathname=='/admin/videoAdd'){
+        if(pathname=='/admin/videoAdd'||pathname=='/admin/videoUpdate'){
             pathname='/admin/videoQuery'
         }
         if(pathname=='/admin/bookAdd'){
