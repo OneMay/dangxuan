@@ -19,7 +19,6 @@ import sundPageAdd from '@/components/sundPageAdd'
 import sundJpgAdd from '@/components/sundJpgAdd'
 import feedbackDetail from '@/components/feedbackDetail'
 import adminList from '@/components/adminList'
-import adminList from '@/components/adminList'
 import bookPeriodsAmend from '@/components/bookPeriodsAmend'
 import bookPageAmend from '@/components/bookPageAmend'
 

@@ -63,7 +63,7 @@ export default {
     },
     getFile(e){
         this.magazine_journal_picture = e.target.files[0];
-    }，
+    },
     addMagazine(){
        var that = this;
 

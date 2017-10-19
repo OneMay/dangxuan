@@ -49,7 +49,6 @@ export default {
       pages:null,
       limit:null,
       magazine_journal_no:''
-      page:1
     }
   },
   methods:{
@@ -119,7 +118,7 @@ export default {
             num=1;
             this.page=1;
         }
-        Axios.post('/admin/magazine/findAllPeriods',{
+        axios.post('/admin/magazine/findAllPeriods',{
            page:this.page,
            magazine_journal_no:this.magazine_journal_no
         })
