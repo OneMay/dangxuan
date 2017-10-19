@@ -28,19 +28,21 @@
 </template>
 
 <script>
-import Axios from 'axios'
+import axios from 'axios'
+const url ='http://localhost:8089/getAdmin'
 export default {
   name: 'bookQuery',
   data () {
     return {
       username:"",
       password:"",
-      message:''
+      message:'',
+      page:1
     }
   },
   methods:{
     search(){
-        Axios.post('/admin/magazine/findPeriods',{
+        axios.post('/admin/magazine/findPeriods',{
             magazine_journal_no:'单个查询'  //不是杂志名称？是期数？
         })
         .then(res=>{
@@ -51,16 +53,30 @@ export default {
         })
     },
     reMagazine(){
-        Axios.post('/admin/magazine/amend',{
-            magazine_journal_no:'1',   //(期数)
-            magazine_journal_title:'测试', //(主题文字)
-            magazine_journal_picture:'form-data类型',
-            note:''
+        alert(55)
+        axios.get(url+'/admin/magazine/findAllPeriods',{
+           params: {
+               page: this.page
+           }
         })
         .then(res=>{
-            console.log(res.data);
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            // if(data.code>=1){
+            //     this.limit=data.limit;
+            //     this.count=data.count;
+            //     this.currentPage=data.currentPage;
+            //     this.pages=data.page;
+            //     this.videoList=data.videoList;
+            // }else{
+            //     this.message=data.message;
+            // }
         })
-        .catch(err=>{
+        .catch(res=>{
             console.log(err);
         })
     },
@@ -68,7 +84,12 @@ export default {
 
         this.$emit('choseItem',item);
     }
-  }
+  },
+  mounted(){
+        this.$nextTick(function(){
+            this.reMagazine();
+        })
+    }
 }
 </script>
 
@@ -92,7 +113,6 @@ body {font-size: 20px;
         }
     }
 
-@charset "utf-8";
 body{
     font-size: 13px;
 }
