@@ -2,16 +2,13 @@
     <div class="video">
     <form class="form-inline definewidth m20">
     <font color="#777777"><strong>请输入杂志名称：</strong></font>
-    <input type="text" class="abc input-default">&nbsp;&nbsp; 
+    <input type="text" class="abc input-default" v-model="list_title">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
     <router-link  to="/admin/bookPageAdd" class="btn btn-success" id="addnew" >添加新文章</router-link>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#777777"><strong>用户名称：</strong></font>
- &nbsp;&nbsp;<span style="color:#005580;cursor: pointer;" >小强</span>
     <tr>
-	     <th>序号</th>
         <th>杂志名称</th>
         <th>期数</th>
         <th>文章标题</th>
@@ -19,16 +16,21 @@
         <th>管理菜单</th>
     </tr>
     </thead>
-        <tr>
-            <td>1</td>
+        <tr v-for="item in articleList">
             <td>微众</td>
-            <td>1</td>
-            <td>光量子技术</td>
-            <td>2016.07.22</td>               
-            <td> <span class="btn btn-danger" @click="delArticle">删除</span><span class="btn btn-success" @click="reArticle">修改</span><span class="btn btn-primary">预览</span></td>
-               
-        </tr>    
-       </table>
+            <td v-text="item.magazine_journal_no"></td>
+            <td v-text="item.list_title"></td>
+            <td v-text="item.insert_time"></td>
+            <td><span class="btn btn-primary" @click="magazineAmend(item)">修改</span><span class="btn btn-success">预览</span><span class="btn btn-danger" @click="delArticle(item)">删除</span></td>  
+        </tr>
+    </table>
+       <nav>
+          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{pages}}页</p>
+          <ul class="pager">
+              <li class="previous"><span @click="getmagazineList(--page)">上一页</span></li>
+              <li class="next"><span @click="getmagazineList(++page)">下一页</span></li>
+          </ul>
+      </nav>
 
   </div>
 </template>
@@ -41,31 +43,58 @@ export default {
     return {
       username:"",
       password:"",
-      message:''
+      message:'',
+      articleList:[],
+      page:1,
+      count:null,
+      currentPage:null,
+      pages:null,
+      limit:null,
+      list_title:''
     }
   },
   methods:{
     search(){
-        Axios.post('/admin/magazine/findPeriods',{
-            magazine_journal_no:'单个查询'  //不是杂志名称？是期数？
+        this.page=1;
+         Axios.post('/admin/magazine/findAllArticle',{
+           page:this.page,
+           list_title:this.list_title
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.articleList=data.articleList;
+            }else{
+                this.message=data.message;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    },
+    delArticle(item){
+        Axios.post('/admin/magazine/delPeriods',{
+            list_title:item.list_title
         })
         .then(res=>{
             console.log(res.data);
+            this.getmagazineList(this.page);
         })
         .catch(err=>{
             console.log(err);
         })
     },
-    delArticle(){
-        Axios.post('/admin/magazine/delPeriods',{
-            magazine_journal_no:'1'//(期数)
-        })
-        .then(res=>{
-            console.log(res.data);
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+    magazineAmend(magazine){
+        window.location.href='/admin/bookPageAmend?list_title='+list_title;
     },
     reArticle(){
         Axios.post('/admin/magazine/amend',{
@@ -81,10 +110,46 @@ export default {
             console.log(err);
         })
     },
-    addVideo(item){
-        this.$emit('choseItem',item);
+    getmagazineList(num){
+        if(num>this.currentPage){
+            num=this.currentPage;
+            this.page=this.currentPage;
+        }
+        if(num<=1){
+            num=1;
+            this.page=1;
+        }
+        Axios.post('/admin/magazine/findAllArticle',{
+           page:this.page,
+           list_title:this.list_title
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.articleList=data.articleList;
+            }else{
+                this.message=data.message;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
-  }
+  },
+   mounted(){
+        this.$nextTick(function(){
+            this.getmagazineList(this.page);
+        })
+    }
 }
 </script>
 

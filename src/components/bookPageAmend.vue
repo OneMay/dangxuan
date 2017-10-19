@@ -20,7 +20,7 @@
             </tr>
             <tr>
                 <td class="tableleft">文章标题</td>
-                <td><input type="text" name="words" v-model="list_title"/></td>
+                <td><input type="text" name="words" v-model="list_title" v-text="list_title"/></td>
             </tr>
             <tr>
                 <td class="tableleft">文章内容</td>
@@ -80,14 +80,15 @@ export default {
     getAllHtml(){
         alert(UE.getEditor('editor').getAllHtml())
     },
+    setContent(isAppendTo) {
+        UE.getEditor('editor').setContent(isAppendTo);
+    },
     getContent(){
-        var arr = [];
-        arr.push(UE.getEditor('editor').getContent());
+        var arr = UE.getEditor('editor').getContent();
         this.list_content=arr;
     },
     createEditor(){
-      UE.getEditor('editor')
-        
+      UE.getEditor('editor') 
     },
     addPage(){
         this.getContent();
@@ -119,6 +120,34 @@ export default {
             if(data.code==1){
 
                 this.megazinePeriods=data.megazinePeriods;
+            }else{
+                this.message=data.message;
+            }
+            this.getOne();
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    },
+    getOne(){
+        var program=window.location.search;
+        var reg = /.+=(.+)/g;
+        var list_title=reg.exec(program)[1];
+        Axios.post('/admin/magazine/findArticle',{
+           list_title:list_title
+        })
+        .then(res=>{ 
+             var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.magazine_journal_no=data.magazine_journal_no;
+                this.list_title=data.list_title;
+                this.list_content=data.list_content;
+                this.setContent(this.list_content);
             }else{
                 this.message=data.message;
             }

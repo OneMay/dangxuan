@@ -2,7 +2,7 @@
     <div class="video">
      <form class="form-inline definewidth m20" action="#" method="get">
     <font color="#777777"><strong>杂志名称：</strong></font>
-    <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="第一期" v-model="periodsName">&nbsp;&nbsp; 
+    <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="第一期" v-model="magazine_journal_no">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
 	<span  id="addnew"><router-link style="color:#fff" class="btn btn-success" to="/admin/bookAdd">添加期数</router-link></span>
 </form>
@@ -19,7 +19,7 @@
             <td>微众</td>
             <td v-text="item.magazine_journal_no"></td>
             <td v-text="item.magazine_journal_title"></td>
-            <td><span class="btn btn-danger">修改</span></td>  
+            <td><span class="btn btn-danger" @click="periodsAmend(item)">修改</span></td>  
         </tr>
     </table>
        <nav>
@@ -47,7 +47,7 @@ export default {
       currentPage:null,
       pages:null,
       limit:null,
-      periodsName:''
+      magazine_journal_no:''
     }
   },
   methods:{
@@ -55,7 +55,7 @@ export default {
         this.page=1;
         Axios.post('/admin/magazine/findAllPeriods',{
            page:this.page,
-           periodsName:this.periodsName
+           magazine_journal_no:this.magazine_journal_no
         })
         .then(res=>{ 
              var data;
@@ -92,9 +92,8 @@ export default {
             console.log(err);
         })
     },
-    addVideo(item){
-
-        this.$emit('choseItem',item);
+    periodsAmend(periods){
+        window.location.href='/admin/bookPeriodsAmend?magazine_journal_no='+magazine_journal_no;
     },
      getPeriodsList(num){
         if(num>this.currentPage){
@@ -107,7 +106,7 @@ export default {
         }
         Axios.post('/admin/magazine/findAllPeriods',{
            page:this.page,
-           periodsName:this.periodsName
+           magazine_journal_no:this.magazine_journal_no
         })
         .then(res=>{
             var data;
