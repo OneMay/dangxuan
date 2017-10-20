@@ -13,8 +13,8 @@
             <tr>
                 <td class="tableleft">期数</td>
                 <td>
-                    <select name="bigTypeId" v-model="magazine_journal_no" v-for="item in megazinePeriods">
-                        <option v-text="item"></option>
+                    <select name="bigTypeId" v-model="magazine_journal_no">
+                        <option v-for="item of megazinePeriods" v-text="item"></option>
                     </select>
                 </td>
             </tr>
@@ -55,6 +55,7 @@
 
 <script>
 import Axios from 'axios'
+const url = '/getAdmin'
 export default {
   name: 'bookPageAdd',
   data () {
@@ -92,7 +93,7 @@ export default {
     },
     addPage(){
         this.getContent();
-        Axios.post('/admin/magazine/addArticle',{
+        Axios.post(url+'/admin/magazine/addArticle',{
             magazine_journal_no:this.magazine_journal_no,//(期数)
             list_title:this.list_title,//（文章标题）
             list_content:this.list_content//(文章内容)
@@ -106,7 +107,7 @@ export default {
         })
     },
     getmagazinePeriods(){
-         Axios.post('/admin/magazine/findAllPeriods',{
+         Axios.post(url+'/admin/magazine/findAllPeriods',{
            page:this.page,
            magazine_journal_no:''
         })
@@ -130,10 +131,10 @@ export default {
         })
     },
     getOne(){
-        var program=window.location.search;
+        var program= decodeURI(window.location.search.substring(1));
         var reg = /.+=(.+)/g;
         var list_title=reg.exec(program)[1];
-        Axios.post('/admin/magazine/findArticle',{
+        Axios.post(url+'/admin/magazine/findArticle',{
            list_title:list_title
         })
         .then(res=>{ 

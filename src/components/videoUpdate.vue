@@ -170,7 +170,7 @@ export default {
     },
     getVideo(){
        
-        var search=window.location.search;
+        var search=decodeURI(window.location.search.substring(1));
         var reg=/.+=(.+)/g;
         var videoname=reg.exec(search)[1];
          axios.post(url+'/admin/video/updatefind',{

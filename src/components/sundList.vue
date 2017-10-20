@@ -2,17 +2,14 @@
     <div class="video">
     <form class="form-inline definewidth m20">
     <font color="#777777"><strong>请输入广播标题：</strong></font>
-    <input type="text" class="abc input-default">&nbsp;&nbsp; 
-    <span  class="btn btn-primary">查询</span>&nbsp;&nbsp; 
+    <input type="text" class="abc input-default" v-model="program_name">&nbsp;&nbsp; 
+    <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
     <router-link class="btn btn-success" id="addnew" to="/admin/sundPageAdd">添加广播</router-link>
     <router-link class="btn btn-danger"  id="addnew" to="/admin/sundJpgAdd">首页轮播</router-link>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#777777"><strong>用户名称：</strong></font>
- &nbsp;&nbsp;<span style="color:#005580;cursor: pointer;" >小强</span>
     <tr>
-	     <th>序号</th>
         <th>栏目名称</th>
         <th>日期</th>
        
@@ -20,37 +17,135 @@
         <th>管理菜单</th>
     </tr>
     </thead>
-        <tr>
-            <td>1</td>
-            <td>微众</td>
-            <td>周一</td>
-            
-            <td>2016.07.22</td>               
-            <td> <span class="btn btn-danger">删除</span><span class="btn btn-primary">修改</span><span class="btn btn-success">预览</span></td>
+        <tr v-for="item in radioList">
+            <td v-text="item.program_name"></td>
+            <td v-text="item.program_date"></td>
+            <td v-text="item.program_timestamp"></td>               
+            <td> <span class="btn btn-danger" @click="radioDel(item)">删除</span><span class="btn btn-primary" @click="radioAmend(item)">修改</span><span class="btn btn-success">音频预览</span></td>
                
         </tr>    
        </table>
-
+       <nav>
+          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{page}}页</p>
+          <ul class="pager">
+              <li class="previous"><span @click="getradioList(--page)">上一页</span></li>
+              <li class="next"><span @click="getradioList(++page)">下一页</span></li>
+          </ul>
+      </nav>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+const url = '/getAdmin'
 export default {
   name: 'sundList',
   data () {
     return {
       username:"",
       password:"",
-      message:''
+      message:'',
+      radioList:[],
+      page:1,
+      count:null,
+      currentPage:null,
+      limit:null,
+      program_name:''
     }
   },
   methods:{
     search(){
+        this.page=1;
+         axios.post(url+'/admin/radio/FindAll',{
+           page:this.page,
+           program_name:this.program_name
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.radioList=data.radioList;
+            }else{
+                this.message=data.message;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
     },
-    addVideo(item){
-        this.$emit('choseItem',item);
+    radioDel(item){
+        axios.post(url+'/admin/radio/FindAll',{
+           program_content_id:item.program_content_id
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.getradioList(this.page);
+            }else{
+                this.message=data.message;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    },
+    radioAmend(item){
+        window.location.href='/admin/sundPageAmend?program_name='+item.program_name+'&program_content_id='+item.program_content_id;
+
+    },
+    getradioList(num){
+         if(num>this.currentPage){
+            num=this.currentPage;
+            this.page=this.currentPage;
+        }
+        if(num<=1){
+            num=1;
+            this.page=1;
+        }
+        axios.post(url+'/admin/radio/FindAll',{
+           page:this.page,
+           program_name:this.program_name
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.radioList=data.radioList;
+            }else{
+                this.message=data.message;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
-  }
+  },
+  mounted(){
+        this.$nextTick(function(){
+            this.getradioList(this.page);
+        })
+    }
 }
 </script>
 

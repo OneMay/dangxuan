@@ -39,7 +39,7 @@
 import axios from 'axios';
 import AXIOS from './../axios/axios';
 const Axios = new AXIOS();
-const url ='http://localhost:8089/getAdmin'
+const url ='/getAdmin'
 export default {
   name: 'videoQuery',
   data () {
@@ -105,11 +105,13 @@ export default {
             }else{
                 data=JSON.parse(res.data)
             }
-            this.limit=data.limit;
-            this.count=data.count;
-            this.currentPage=data.currentPage;
-            this.page=data.page;
-            this.videoList=data.videoList;
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.videoList=data.videoList;
+            }
         })
         .catch(err => {
             console.log(err);

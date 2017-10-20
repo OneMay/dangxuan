@@ -2,7 +2,7 @@
     <div class="video">
      <form class="form-inline definewidth m20" action="#" method="get">
     <font color="#777777"><strong>广播名称：</strong></font>
-    <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" value="">&nbsp;&nbsp; 
+    <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" v-model="program_name" >&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
 	<router-link class="btn btn-success"  id="addnew" to="/admin/sundListAdd">添加栏目</router-link>
 </form>
@@ -15,33 +15,134 @@
         <th>管理菜单</th>
     </tr>
     </thead>
-        <tr>
-            <td>中国梦</td>
-            <td>4</td>
-            <td>周二</td>
-            <td> <span class="btn btn-success">修改</span><span class="btn btn-danger">删除</span></td>  
+        <tr v-for="item in columnList">
+            <td v-text="item.program_name">微众</td>
+            <td v-text="item.program_number"></td>
+            <td v-text="item.program_date"></td>
+            <td><span class="btn btn-success" @click="columnAmend(item)">修改</span><span class="btn btn-danger" @click="columnDel(item)">删除</span></td>  
         </tr>
-       </table>
+    </table>
+       <nav>
+          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{page}}页</p>
+          <ul class="pager">
+              <li class="previous"><span @click="getcolumnList(--page)">上一页</span></li>
+              <li class="next"><span @click="getcolumnList(++page)">下一页</span></li>
+          </ul>
+      </nav>
   </div>
 </template>
 
 <script>
+import axios from "axios"
+const url = '/getAdmin'
 export default {
   name: 'sundQuery',
   data () {
     return {
       username:"",
       password:"",
-      message:''
+      message:'',
+      page:1,
+      count:null,
+      currentPage:null,
+      limit:null,
+      columnList:[],
+      program_name:''
     }
   },
   methods:{
     search(){
+         this.page=1;
+         axios.post(url+'/admin/radio/columnFindAll',{
+           page:this.page,
+           program_name:this.program_name
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.columnList=data.columnList;
+            }else{
+                this.message=data.message;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
     },
-    addVideo(item){
-        this.$emit('choseItem',item);
+    columnDel(item){
+        axios.post(url+'/admin/radio/columnFindAll',{
+           program_date:item.program_date,
+           program_name:item.program_name
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.getcolumnList(this.page);
+            }else{
+                this.message=data.message;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    },
+    columnAmend(item){
+        window.location.href='/admin/sundListAmend?program_date='+item.program_date+'&program_name='+item.program_name;
+    },
+     getcolumnList(num){
+        if(num>this.currentPage){
+            num=this.currentPage;
+            this.page=this.currentPage;
+        }
+        if(num<=1){
+            num=1;
+            this.page=1;
+        }
+        axios.post(url+'/admin/radio/columnFindAll',{
+           page:this.page,
+           program_name:this.program_name
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.columnList=data.columnList;
+            }else{
+                this.message=data.message;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
-  }
+  },
+  mounted(){
+        this.$nextTick(function(){
+            this.getcolumnList(this.page);
+        })
+    }
 }
 </script>
 
@@ -188,4 +289,10 @@ form{
 .onCorrect{background-position:3px -247px;border-color:#40B3FF;}
 .onLamp{background-position:3px -200px}
 .onTime{background-position:3px -1356px}
+.previous,.next{
+    cursor: pointer;
+}
+.previous:hover,.next:hover{
+    color:red;
+}
 </style>

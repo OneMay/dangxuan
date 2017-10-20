@@ -43,6 +43,7 @@
 
 <script>
 import Axios from 'axios'
+const url = '/getAdmin'
 export default {
   name: 'bookAdd',
   data () {
@@ -67,7 +68,7 @@ export default {
 
        // e.preventDefault();
         if(this.magazine_journal_picture&&this.magazine_journal_no&&this.magazine_journal_title){
-            var imgreg=/.+((\.jpg$)|(\.png$))/g;
+            var imgreg=/.+((\.jpg$)|(\.png$))/gi;
             if(imgreg.test(this.magazine_journal_picture.name)){
                 this.message='正在上传...';
                 var formData = new FormData();
@@ -79,7 +80,7 @@ export default {
                         'Content-Type': 'multipart/form-data'
                     }
                 }
-                Axios.post('/admin/magazine/addPeriods', formData, config)
+                Axios.post(url+'/admin/magazine/addPeriods', formData, config)
                 .then(res=>{
                     if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                         data=res.data;

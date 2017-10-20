@@ -21,7 +21,8 @@ import feedbackDetail from '@/components/feedbackDetail'
 import adminList from '@/components/adminList'
 import bookPeriodsAmend from '@/components/bookPeriodsAmend'
 import bookPageAmend from '@/components/bookPageAmend'
-
+import sundListAmend from '@/components/sundListAmend'
+import sundPageAmend from '@/components/sundPageAmend'
 Vue.use(Router)
 
 export default new Router({
@@ -54,7 +55,9 @@ export default new Router({
             { path: '/admin/adminList', component: adminList },
             { path: '/admin/videoUpdate', component: videoUpdate },
             { path: '/admin/bookPeriodsAmend', component: bookPeriodsAmend },
-            { path: '/admin/bookPageAmend', component: bookPageAmend }
+            { path: '/admin/bookPageAmend', component: bookPageAmend },
+            { path: '/admin/sundListAmend', component: sundListAmend },
+            { path: '/admin/sundPageAmend', component: sundPageAmend }
         ]
     }, {
         path: '/',

@@ -34,7 +34,7 @@
 
 <script>
 import axios from 'axios'
-const url ='http://localhost:8089/getAdmin'
+const url ='/getAdmin'
 export default {
   name: 'bookQuery',
   data () {
@@ -54,7 +54,7 @@ export default {
   methods:{
     search(){
         this.page=1;
-       axios.post('/admin/magazine/findAllPeriods',{
+       axios.post(url+'/admin/magazine/findAllPeriods',{
            page:this.page,
            magazine_journal_no:this.magazine_journal_no
         })
@@ -118,7 +118,7 @@ export default {
             num=1;
             this.page=1;
         }
-        axios.post('/admin/magazine/findAllPeriods',{
+        axios.post(url+'/admin/magazine/findAllPeriods',{
            page:this.page,
            magazine_journal_no:this.magazine_journal_no
         })

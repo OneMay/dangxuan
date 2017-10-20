@@ -37,6 +37,7 @@
 
 <script>
 import Axios from 'axios'
+const url ='/getAdmin'
 export default {
   name: 'videoList',
   data () {
@@ -56,7 +57,7 @@ export default {
   methods:{
     search(){
         this.page=1;
-         Axios.post('/admin/magazine/findAllArticle',{
+         Axios.post(url+'/admin/magazine/findAllArticle',{
            page:this.page,
            list_title:this.list_title
         })
@@ -82,7 +83,7 @@ export default {
         });
     },
     delArticle(item){
-        Axios.post('/admin/magazine/delPeriods',{
+        Axios.post(url+'/admin/magazine/delPeriods',{
             list_title:item.list_title
         })
         .then(res=>{
@@ -97,7 +98,7 @@ export default {
         window.location.href='/admin/bookPageAmend?list_title='+list_title;
     },
     reArticle(){
-        Axios.post('/admin/magazine/amend',{
+        Axios.post(url+'/admin/magazine/amend',{
             magazine_journal_no:'1',   //(期数)
             magazine_journal_title:'测试', //(主题文字)
             magazine_journal_picture:'form-data类型',
@@ -119,7 +120,7 @@ export default {
             num=1;
             this.page=1;
         }
-        Axios.post('/admin/magazine/findAllArticle',{
+        Axios.post(url+'/admin/magazine/findAllArticle',{
            page:this.page,
            list_title:this.list_title
         })

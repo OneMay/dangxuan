@@ -5,39 +5,47 @@
             <tr>
                 <td width="10%" class="tableleft">栏目</td>
                 <td>
-                    <select name="bigTypeId">
-                    <option value="0">中国梦</option>
-                    <option value='1'>&nbsp;教育</option>
-                    <option value='7'>&nbsp;娱乐</option>
+                    <select name="bigTypeId" v-model="program_name" >
+                        <option v-for="item of column_program_name" v-text="item"></option>
                     </select>
                     
                 </td>
             </tr>
-    
-   
             <tr>
-                
+                <td class="tableleft">时间</td>
+                <td>
+                    <select name="bigTypeId" v-model="program_date">
+                        <option value="1">周一</option>
+                        <option value="2">周二</option>
+                        <option value="3">周三</option>
+                        <option value="4">周四</option>
+                        <option value="5">周五</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td class="tableleft">音频大小</td>
-                <td><input type="text" name="videosNumber" readonly="readonly"/></td>
+                <td><input type="text" name="videosNumber" readonly="readonly"/>小于10M</td>
             </tr>
             <tr>
                 <td class="tableleft">广播海报</td>
-                <td class="tableleft" style="width: 196px; "><input type="file" name="GoodsPicture" id="GoodsPicture" multiple="multiple" /></td>
+                <td class="tableleft" style="width: 196px; "><input type="file" name="GoodsPicture" id="GoodsPicture" multiple="multiple" @change="getFile" accept=".jpg,.png"/></td>
         <!--         <td class="tableleft">图片预览</td> -->
         <!--         <td><img name="showimg" id="showimg" src="" style="display:none;" alt="预览图片" /> </td> -->
             </tr>
             <tr>
                 <td class="tableleft">选择音频</td>
-                <td class="tableleft" style="width: 196px; "><input type="file" name="GoodsPicture" id="GoodsPicture" multiple="multiple" /></td>
+                <td class="tableleft" style="width: 196px; "><input type="file" name="GoodsPicture" id="GoodsPicture" multiple="multiple"  @change="getSund" accept=".mp3,.mp4"/></td>
            </tr>
             <tr>
                 <td class="tableleft">广播简介</td>
-                <td><input type="text" name="GoodsIntroduce" style="height: 63px;"/></td>
+                <td><input type="text" name="GoodsIntroduce" style="height: 63px;" v-model="program_introduction"/></td>
             </tr>
             <tr>
                 <td class="tableleft"></td>
                 <td>
-                    <span style="margin-left:5px;" class="btn btn-primary"  >保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/sundList">返回列表</router-link>
+                    <span style="margin-left:5px;" class="btn btn-primary"  @click="radioAdd">保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/sundList">返回列表</router-link>
+                    <span v-text="message" class='message'></span>
                 </td>
             </tr>
         </table>
@@ -47,25 +55,111 @@
 </template>
 
 <script>
+import axios from 'axios'
+const url='/getAdmin'
 export default {
   name: 'sundPageAdd',
   data () {
     return {
       username:"",
       password:"",
-      message:''
+      message:'',
+      radioPoster:'',
+      radioInfo:'',
+      program_name:'',
+      program_introduction:'',
+      column_program_name:['hjuajd','ikhkhugy'],
+      program_date:''
     }
   },
   methods:{
-    returnItem(item){
-        this.$emit('choseItem',item)
+    getFile(e){
+        this.radioPoster = e.target.files[0];
+
+    },
+    getSund(e){
+        this.radioInfo = e.target.files[0];
+    },
+    radioAdd(item){
+         var that = this;
+
+       // e.preventDefault();
+        if(this.radioPoster&&this.radioInfo&&this.program_name&&this.program_introduction&&this.program_date){
+            var imgreg=/.+((\.jpg$)|(\.png$))/gi;
+            var videoreg=/.+((\.mp3$)|(\.mp4$))/gi;
+            if(imgreg.test(this.radioPoster.name)&&videoreg.test(this.radioInfo.name)){
+                this.message='正在上传...';
+                var formData = new FormData();
+                formData.append('radioPoster', this.radioPoster);
+                formData.append('radioInfo', this.radioInfo);
+                formData.append('program_name', this.program_name);
+                formData.append('program_introduction', this.program_introduction);
+                formData.append('program_date', this.program_date);
+                let config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+
+                axios.post(url+'/admin/video/add', formData, config)
+                .then(res=>{
+                    var data;
+                    if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                        data=res.data;
+                    }else{
+                        data=JSON.parse(res.data)
+                    }
+                    if(data.code==1){
+                        this.message='上传成功';
+                    }else{
+                        this.message='上传失败';
+                    }
+                })
+                .catch(err=>{
+                    this.message='上传失败';
+                    console.log(err)
+                }); 
+            }else{
+               this.message='文件格式错误' 
+            }
+        }else{
+            this.message='所有内容不能为空！'
+        }    
+    },
+    getcolumn(){
+        axios.post(url+'/admin/radio/columnFindAll',{
+            program_name:'',
+            page:1
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.column_program_name=data.column_program_name;
+            }
+        })
+        .catch(err=>{
+            console.log(err)
+        }); 
     }
-  }
+  },
+  mounted(){
+        this.$nextTick(function(){
+            this.getcolumn();
+        })
+    }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.message{
+    color:#ca7117;
+}
 body {font-size: 20px;
             padding-bottom: 40px;
             background-color:#e9e7ef;
