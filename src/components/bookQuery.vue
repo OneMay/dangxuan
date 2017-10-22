@@ -23,7 +23,7 @@
         </tr>
     </table>
        <nav>
-          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{pages}}页</p>
+          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{page}}页</p>
           <ul class="pager">
               <li class="previous"><span @click="getPeriodsList(--page)">上一页</span></li>
               <li class="next"><span @click="getPeriodsList(++page)">下一页</span></li>
@@ -46,7 +46,6 @@ export default {
       page:1,
       count:null,
       currentPage:null,
-      pages:null,
       limit:null,
       magazine_journal_no:''
     }
@@ -294,4 +293,10 @@ form{
 .onCorrect{background-position:3px -247px;border-color:#40B3FF;}
 .onLamp{background-position:3px -200px}
 .onTime{background-position:3px -1356px}
+.previous,.next{
+    cursor: pointer;
+}
+.previous:hover,.next:hover{
+    color:red;
+}
 </style>

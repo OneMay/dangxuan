@@ -39,7 +39,7 @@
         class-name="vertical-center-modal"
         @on-ok="ok"
         @on-cancel="cancel">
-       <audio  :src="sund.sources[0].src" controls="controls" style="width:100%;margin-top:20px;">
+       <audio v-if="play" :src="sund.sources[0].src" controls="controls" style="width:100%;margin-top:20px;">
         </audio>
     </Modal>
   </div>
@@ -52,11 +52,18 @@ export default {
   name: 'sundList',
   data () {
     return {
+      play:false,
       height:'-44.5px',
       username:"",
       password:"",
       message:'',
-      radioList:[],
+      radioList:[{
+                program_name:'ffsa',
+                program_date:'fadf',
+                program_timestamp:'ff',
+                program_introduction:'fvf',
+                program_content_id:1
+            }],
       page:1,
       count:null,
       currentPage:null,
@@ -66,7 +73,7 @@ export default {
       modal10: false,
       sund: {
             sources: [{
-                src: '',//http://localhost:8089/static/public/avatar/计算机科学及编程导论 第02集.mp4'
+                src: 'http://localhost:8089/static/public/avatar/计算机科学及编程导论 第02集.mp4',//http://localhost:8089/static/public/avatar/计算机科学及编程导论 第02集.mp4'
                 type: 'video/mp3'
             }],
             options: {
@@ -79,13 +86,16 @@ export default {
   },
   methods:{
       ok (e) {
+          this.play=false;
         this.$Message.info('');
     },
     cancel () {
+        this.play=false;
         this.$Message.info('');
     },
     watch(item){
         this.modal10= true;
+        this.play=true;
          axios.post(url+'/admin/radio/Preview',{
                 program_content_id: item,
             })
@@ -97,6 +107,7 @@ export default {
                 data=JSON.parse(res.data)
             }
             if(data.code==1){
+                this.play=true;
                 this.sund.sources=[{
                     src: data.program_audio_url,
                     type: 'video/mp3'
@@ -354,4 +365,10 @@ form{
 .onCorrect{background-position:3px -247px;border-color:#40B3FF;}
 .onLamp{background-position:3px -200px}
 .onTime{background-position:3px -1356px}
+.previous,.next{
+    cursor: pointer;
+}
+.previous:hover,.next:hover{
+    color:red;
+}
 </style>

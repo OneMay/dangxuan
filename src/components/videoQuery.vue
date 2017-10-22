@@ -25,7 +25,7 @@
         </tr>
        </table>
        <nav>
-          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{pages}}页</p>
+          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{page}}页</p>
           <p v-text="message"></p>
           <ul class="pager">
               <li class="previous"><span @click="getVideoList(--page)">&larr;上一页</span></li>
@@ -39,7 +39,7 @@
         class-name="vertical-center-modal"
         @on-ok="ok"
         @on-cancel="cancel">
-       <video  :src="video.sources[0].src" controls="controls" style="width:100%;margin-top:20px;">
+       <video v-if="play" :src="video.sources[0].src" controls="controls" style="width:100%;margin-top:20px;">
         </video>
     </Modal>
 
@@ -56,6 +56,7 @@ export default {
   name: 'videoQuery',
   data () {
     return { 
+      play:false,
       height:'-105.5px', 
       username:"",
       password:"",
@@ -64,7 +65,6 @@ export default {
       page:1,
       count:null,
       currentPage:null,
-      pages:null,
       limit:null,
       videoName:'',
       modal9: false,
@@ -84,13 +84,16 @@ export default {
   },
   methods:{
     ok (e) {
+        this.play=false;
         this.$Message.info('');
     },
     cancel () {
+        this.play=false;
         this.$Message.info('');
     },
     watch(item){
         this.modal10= true;
+        this.play=true;
          axios.post(url+'/admin/video/preview',{
                 videoName: item,
             })
@@ -102,6 +105,7 @@ export default {
                 data=JSON.parse(res.data)
             }
             if(data.code==1){
+                this.play=true;
                 this.video.sources=[{
                     src: data.video_url,
                     type: 'video/mp4'

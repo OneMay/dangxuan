@@ -18,7 +18,13 @@
             <td> <router-link class="btn btn-success" :to="'/admin/feedbackDetail?id='+item.id">查看</router-link></td>    
         </tr>    
        </table>
-
+       <nav>
+          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{page}}页</p>
+          <ul class="pager">
+              <li class="previous"><span @click="getfeedback(--page)">上一页</span></li>
+              <li class="next"><span @click="getfeedback(++page)">下一页</span></li>
+          </ul>
+      </nav>
   </div>
 </template>
 
@@ -219,4 +225,10 @@ form{
 .onCorrect{background-position:3px -247px;border-color:#40B3FF;}
 .onLamp{background-position:3px -200px}
 .onTime{background-position:3px -1356px}
+.previous,.next{
+    cursor: pointer;
+}
+.previous:hover,.next:hover{
+    color:red;
+}
 </style>
