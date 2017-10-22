@@ -32,6 +32,18 @@
               <li class="next"><span @click="getVideoList(++page)">下一页 &rarr;</span></li>
           </ul>
       </nav>
+    <Modal
+        v-model="modal10"
+        title=""
+        :styles="{top: '50%',marginTop:height}"
+        class-name="vertical-center-modal"
+        @on-ok="ok"
+        @on-cancel="cancel">
+       <video  :src="video.sources[0].src" controls="controls" style="width:100%;margin-top:20px;">
+        </video>
+    </Modal>
+
+
   </div>
 </template>
 
@@ -43,7 +55,8 @@ const url ='/getAdmin'
 export default {
   name: 'videoQuery',
   data () {
-    return {  
+    return { 
+      height:'-105.5px', 
       username:"",
       password:"",
       message:'',
@@ -53,13 +66,64 @@ export default {
       currentPage:null,
       pages:null,
       limit:null,
-      videoName:''  //d
+      videoName:'',
+      modal9: false,
+      modal10: false,
+       video: {
+            sources: [{
+                src: '',//http://localhost:8089/static/public/avatar/计算机科学及编程导论 第02集.mp4'
+                type: 'video/mp4'
+            }],
+            options: {
+                autoplay: true,
+                volume: 0.6,
+                poster: ''
+            }
+        }
     }
   },
   methods:{
+    ok (e) {
+        this.$Message.info('');
+    },
+    cancel () {
+        this.$Message.info('');
+    },
+    watch(item){
+        this.modal10= true;
+         axios.post(url+'/admin/video/preview',{
+                videoName: item,
+            })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.video.sources=[{
+                    src: data.video_url,
+                    type: 'video/mp4'
+                }]
+                setTimeout(function(){
+                    $('.container').removeClass('container');
+                    this.height='-' + $('.ivu-modal')[0].clientHeight/2 +'px';
+                },0)
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+        $('.ivu-modal-footer').remove();
+         setTimeout(function(){
+            this.height='-' + $('.ivu-modal')[0].clientHeight/2 +'px';
+        },0)
+    },
     search(){
         this.page =1;
-        axios.post(url+'/admin/video/find',{
+        axios.post(url+'/admin/video/findAll',{
                 videoName: this.videoName,
                 page: this.page
             })
@@ -128,13 +192,23 @@ export default {
         this.$nextTick(function(){
             this.getVideoList(this.page);
         })
+    },
+    components: {
     }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.ivu-modal-clos{
+    top:0 !important;
+}
+.container{
+    width:100% !important;
+}
+button{
+    width:66px !important;
+}
 body {font-size: 20px;
     font-size: 20px;
         padding-bottom: 40px;

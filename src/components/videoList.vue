@@ -1,56 +1,86 @@
 <template>
     <div class="video">
     <form class="form-inline definewidth m20">
-    <font color="#777777"><strong>请输入用户名称：</strong></font>
-    <input type="text" class="abc input-default" v-model="username">&nbsp;&nbsp; 
+    <font color="#777777"><strong>请输入视频名称：</strong></font>
+    <input type="text" class="abc input-default" v-model="videoName">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#777777"><strong>用户名称：</strong></font>
- &nbsp;&nbsp;<span style="color:#005580;cursor: pointer;" @click="addVideo('studentDetail')">小强</span>
     <tr>
-	     <th>序号</th>
         <th>视频名称</th>
         <th>分类</th>
         <th>上传日期</th>
         <th>管理菜单</th>
     </tr>
     </thead>
-        <tr>
-            <td>1</td>
-            <td>复仇者联盟</td>
-            <td>娱乐-电影</td>
-            <td>2016.07.22</td>               
-            <td> <span  class="btn btn-danger" @click="delVideo">删除</span></td>    
+        <tr v-for="video in videoList">
+            <td v-text="video.videoName"></td>
+            <td v-text="video.videoCategory"></td>
+            <td v-text="video.video_timestamp"></td>
+            <td><span  class="btn btn-danger" @click="delVideo(video)">删除</span></td>  
         </tr>
-		 <tr>
-            <td>2</td>
-            <td>北大教授讲座</td>
-            <td>学习</td>
-            <td>2016.07.22</td>           
-            <td> <span  class="btn btn-danger">删除</span></td>            
-        </tr>      
-       </table>
-
+    </table>
+       <nav>
+          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{pages}}页</p>
+          <p v-text="message"></p>
+          <ul class="pager">
+              <li class="previous"><span @click="getVideoList(--page)">&larr;上一页</span></li>
+              <li class="next"><span @click="getVideoList(++page)">下一页 &rarr;</span></li>
+          </ul>
+      </nav>
   </div>
 </template>
 
 <script>
 import Axios from 'axios'
+const url = '/getAdmin'
 export default {
   name: 'videoList',
   data () {
     return {
       username:"",  //d
       password:"",
-      message:''
+      message:'',
+      videoName:'',
+      page:1,
+      videoList:[],
+      count:null,
+      currentPage:null,
+      pages:null,
+      limit:null,
     }
   },
   methods:{
     search(){
-        Axios.post('/admin/video/findAll',{
-            username: this.username
+        this.page=1;
+        Axios.post(url+'/admin/video/findAll',{
+            videoName: this.videoName,
+            page:this.page
+        })
+        .then(res=>{
+             var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.videoList=data.videoList;
+            }
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    },
+    delVideo(item){
+        Axios.post(url+'/admin/video/delete',{
+            videoId:item.television_program_content_id,
+            videoName:item.videoName
         })
         .then(res=>{
             console.log(res.data);
@@ -59,22 +89,44 @@ export default {
             console.log(err);
         })
     },
-    delVideo(){
-        Axios.post('/admin/video/delete',{
-            videoId:'007',
-            videoName:'测试'
-        })
+     getVideoList(num){
+        if(num>this.currentPage){
+            num=this.currentPage;
+            this.page=this.currentPage;
+        }
+        if(num<=1){
+            num=1;
+            this.page=1;
+        }
+        Axios.post(url+'/admin/video/findAll',{
+                videoName: this.videoName,
+                page: this.page
+            })
         .then(res=>{
-            console.log(res.data);
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.videoList=data.videoList;
+            }
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err);
-        })
-    },
-    addVideo(item){
-        this.$emit('choseItem',item);
+        });
     }
-  }
+  },
+   mounted(){
+        this.$nextTick(function(){
+            this.getVideoList(this.page);
+        })
+    }
 }
 </script>
 
@@ -221,4 +273,10 @@ form{
 .onCorrect{background-position:3px -247px;border-color:#40B3FF;}
 .onLamp{background-position:3px -200px}
 .onTime{background-position:3px -1356px}
+.previous,.next{
+    cursor: pointer;
+}
+.previous:hover,.next:hover{
+    color:red;
+}
 </style>

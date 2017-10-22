@@ -21,7 +21,7 @@
             <td v-text="item.program_name"></td>
             <td v-text="item.program_date"></td>
             <td v-text="item.program_timestamp"></td>               
-            <td> <span class="btn btn-danger" @click="radioDel(item)">删除</span><span class="btn btn-primary" @click="radioAmend(item)">修改</span><span class="btn btn-success">音频预览</span></td>
+            <td> <span class="btn btn-danger" @click="radioDel(item)">删除</span><span class="btn btn-primary" @click="radioAmend(item)">修改</span><span class="btn btn-success"  @click="watch(item.program_content_id)">音频预览</span></td>
                
         </tr>    
        </table>
@@ -32,6 +32,16 @@
               <li class="next"><span @click="getradioList(++page)">下一页</span></li>
           </ul>
       </nav>
+      <Modal
+        v-model="modal10"
+        title=""
+        :styles="{top: '50%',marginTop:height}"
+        class-name="vertical-center-modal"
+        @on-ok="ok"
+        @on-cancel="cancel">
+       <audio  :src="sund.sources[0].src" controls="controls" style="width:100%;margin-top:20px;">
+        </audio>
+    </Modal>
   </div>
 </template>
 
@@ -42,6 +52,7 @@ export default {
   name: 'sundList',
   data () {
     return {
+      height:'-44.5px',
       username:"",
       password:"",
       message:'',
@@ -50,10 +61,61 @@ export default {
       count:null,
       currentPage:null,
       limit:null,
-      program_name:''
+      program_name:'',
+      modal9: false,
+      modal10: false,
+      sund: {
+            sources: [{
+                src: '',//http://localhost:8089/static/public/avatar/计算机科学及编程导论 第02集.mp4'
+                type: 'video/mp3'
+            }],
+            options: {
+                autoplay: true,
+                volume: 0.6,
+                poster: ''
+            }
+        }
     }
   },
   methods:{
+      ok (e) {
+        this.$Message.info('');
+    },
+    cancel () {
+        this.$Message.info('');
+    },
+    watch(item){
+        this.modal10= true;
+         axios.post(url+'/admin/radio/Preview',{
+                program_content_id: item,
+            })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.sund.sources=[{
+                    src: data.program_audio_url,
+                    type: 'video/mp3'
+                }]
+                setTimeout(function(){
+                    $('.container').removeClass('container');
+                    this.height='-' + $('.ivu-modal')[0].clientHeight/2 +'px';
+                },0)
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+        $('.ivu-modal-footer').remove();
+         setTimeout(function(){
+            this.height='-' + $('.ivu-modal')[0].clientHeight/2 +'px';
+        },0)
+    },
     search(){
         this.page=1;
          axios.post(url+'/admin/radio/FindAll',{
