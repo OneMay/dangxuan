@@ -46,9 +46,12 @@ function findTo(client, name, callback) {
 }
 
 //查找一条视频
-function findFun(client, name, str, callback){
+function findFun(client, str, callback){
     client.query(str, function(err, result, fields){
-        if(err) throw err;
+        if(err){
+            throw err;
+            res.json({code: 0, message: '操作失败'})
+        }
         callback(result);
     })
 }
@@ -176,6 +179,7 @@ exports.select = selectFun;
 exports.insertVideoFun = insertVideoFun;
 exports.deleteVideoFun = deleteVideoFun;
 exports.findFun = findFun;
+exports.findAllFun = findAllFun;
 exports.update = update;
 exports.addPeriod = addPeriod;
 exports.findTo = findTo;

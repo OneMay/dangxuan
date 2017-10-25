@@ -80,13 +80,13 @@ router.post('/admin/video/find', function(req, res) {
     var num_start = (page - 1) * num; //开始查询位置
     var message = {};
     var count = 0;
-    var str = "select * from `t_television_program_content` WHERE video_introduction LIKE '%" + req.body.videoName + "%' limit " + num_start + "," + num_end + " ";
+    
 
     //计算数据总数
     db.findTo(client, function(result) {
             count = result.length;
         })
-        //返回查询的内容
+    //返回查询的内容
     db.findFun(client, req.body.videoName, str, function(result) {
         if (result[0]) {
             message.code = 1;
@@ -113,31 +113,80 @@ router.post('/admin/video/findAll', function(req, res) {
     var current_page = 1; //当前页面
     var num = 5;
     var message = {};
+    var count;
     if (req.body.page) {
         current_page = parseInt(req.body.page);
     }
-    console.log(req.body.page);
     var nun = (current_page - 1) * num;
-    var str = "SELECT * FROM `t_television_program_content` limit " + num + " offset " + nun + " ";
-    db.findAll(client, str, function(result) {
-        if (result) {
-            message.code = 1;
-            message.count = result.length;
-            message.page = (result.length) % 5 + 1;
-            message.videoList = new Array();
-            for (var i = 0; i < result.length; i++) {
-                message.videoList.push({
-                    videoName: result[i].video_introduction,
-                    video_timestamp: result[i].video_timestamp,
-                    note: result[i].note
-                })
+    var str = "SELECT * FROM `t_television_program_content` limit " + num + " offset " + nun + " ;";
+
+    //无模糊查询
+    if(!req.body.videoName){
+        console.log('fc');
+        db.findAllFun(client, function(result) {
+            count = result.length;
+        })
+        db.findFun(client, str, function(result) {
+            console.log(result);
+            if (result) {
+                message.code = 1;
+                message.count = count;
+                message.limit = num;
+                message.page = req.body.page;
+                message.currentPage = count % 5 + 1;
+                message.videoList = new Array();
+                for (var i = 0; i < result.length; i++) {
+                    message.videoList.push({
+                        videoName: result[i].video_introduction,
+                        video_timestamp: result[i].video_timestamp,
+                        note: result[i].note
+                    })
+                }
+                message.message = '操作成功';
+            } else {
+                message.code = 0;
             }
-            message.message = '操作成功';
-        } else {
-            message.code = 0;
-        }
-        res.json(message);
-    })
+            res.json(message);
+        })
+    }
+
+    //存在模糊查询
+    else{
+        console.log('fn');
+        var num = 5; //一页最多显示的条数
+        var page = req.body.page; //当前页
+        var num_end = page * num; //结束查询位置
+        var num_start = (page - 1) * num; //开始查询位置
+        var message = {};
+        var count = 0;
+        var str = "select * from `t_television_program_content` WHERE video_introduction LIKE '%" + req.body.videoName + "%' limit " + num_start + "," + num_end + " ";
+        console.log(str);
+        db.findTo(client, req.body.videoName, function(result) {
+            console.log(result);
+            count = result.length;
+        })
+        db.findFun(client, str, function(result) {
+            if (result[0]) {
+                message.code = 1;
+                message.limit = num;
+                message.count = count;
+                message.videoList = new Array;
+                for (var i = 0; i < result.length; i++) {
+                    message.videoList.push({
+                        videoName: result[i].video_introduction,
+                        videoCategory: result[i].television_program_id,
+                        videoUrl: result[i].video_url,
+                        video_timestamp: result[i].video_timestamp,
+                        note: result[i].note
+                    })
+                }
+                res.json(message);
+            }
+            else{
+                res.json({code: 0, message: '操作失败'})
+            }
+        })
+    }
 })
 
 //视频预览
