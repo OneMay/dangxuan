@@ -90,8 +90,15 @@ export default {
             list_title:item.list_title
         })
         .then(res=>{
-            console.log(res.data);
-            this.getmagazineList(this.page);
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+              this.getmagazineList(this.page);
+            }
         })
         .catch(err=>{
             console.log(err);

@@ -78,11 +78,18 @@ export default {
     },
     delVideo(item){
         Axios.post(url+'/admin/video/delete',{
-            videoId:item.television_program_content_id,
             videoName:item.videoName
         })
         .then(res=>{
-            console.log(res.data);
+             var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+              this.getVideoList(this.page) 
+            }
         })
         .catch(err=>{
             console.log(err);
