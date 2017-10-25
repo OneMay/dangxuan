@@ -111,7 +111,7 @@ router.post('/admin/video/find', function(req, res) {
 router.post('/admin/video/findAll', function(req, res) {
     var client = db.connect();
     var current_page = 1; //当前页面
-    var num = 5;
+    var num = 2;
     var message = {};
     var count;
     if (req.body.page) {
