@@ -23,9 +23,9 @@ function selectFun(client, username, password, callback) {
 
 //插入新的视频
 function insertVideoFun(client, id, post_url, url, title, time, note, callback) {
-    console.log(id);
-    client.query("INSERT INTO `t_television_program_content` (`television_program_id`, `thumbnails_url`, `video_url`, `video_introduction`, `video_introduction`, `video_timestamp`, `note`) VALUES ('" + id + "', '" + post_url + "', '" + url + "', '" + title + "', '" + time + "', '" + note + "')", function(err) {
+    client.query("INSERT INTO `t_television_program_content` (`television_program_id`, `thumbnails_url`, `video_url`, `video_introduction`, `video_timestamp`, `note`) VALUES ('" + id + "', '" + post_url + "', '" + url + "', '" + title + "', '" + time + "', '" + note + "')", function(err, result) {
         if (err) throw err;
+        console.log(result)
         callback(err);
     });
 }

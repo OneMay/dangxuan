@@ -110,13 +110,17 @@ export default {
 
                 Axios.post(url+'/admin/video/add', formData, config)
                 .then(res=>{
+                    var data;
                     if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                         data=res.data;
                     }else{
                         data=JSON.parse(res.data)
                     }
-                    this.message='上传成功';
-                    console.log(res.data)
+                    if(data.code==1){
+                        this.message='上传成功';
+                    }
+                    
+                    console.log(data)
                 })
                 .catch(err=>{
                     this.message='上传失败';

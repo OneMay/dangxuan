@@ -41,14 +41,26 @@ router.post('/admin/login', function(req, res, next) {
 
 //视频添加
 router.post('/admin/video/add', function(req, res) {
-    var showUrl = common.upload(req);
-    var client = db.connect();
-    console.log(222)
-    db.insertVideoFun(client, req.body.videoId, req.body.videoName, showUrl, req.body.title, moment.format(), req.body.note);
-    res.json({
-        code: 1,
-        message: '成功'
-    })
+    var showUrl = common.upload(req, function(result, showUrl) {
+        var client = db.connect();
+        db.insertVideoFun(client, result.videoId, showUrl, '556', result.title, '2017-09-12T12:25:12.22', '55', function(err) {
+            if (err) {
+                console.log("失败");
+                var message = {
+                    code: 0,
+                    message: '失败'
+                }
+                res.json(message);
+            } else {
+                var message = {
+                    code: 1,
+                    message: '上传成功'
+                }
+                res.json(message);
+            }
+        });
+    });
+
 })
 
 
