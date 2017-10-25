@@ -1,7 +1,6 @@
 var mysql = require('mysql');
 var config = require('../config/config.js')
 
-//连接数据库
 function connectServer() {
     var client = mysql.createConnection({
         host: config.host,
@@ -23,17 +22,17 @@ function selectFun(client, username, password, callback) {
 }
 
 //插入新的视频
-function insertVideoFun(client, id, post_url, url, title, time, note, callback) {
-    client.query("INSERT INTO `t_television_program_content` (`television_program_id`, `thumbnails_url`, `video_url`, `video_introduction`, `video_introduction`, `video_timestamp`, `note`) VALUES ('" + id + "', '" + post_url + "', '" + url + "', '" + title + "', '" + time + "', '" + note + "')", function(err) {
-        if (err) throw err;
+function insertVideoFun(client, id, post_url, url, title, time, note, callback){
+    client.query("INSERT INTO `t_television_program_content` (`television_program_id`, `thumbnails_url`, `video_url`, `video_introduction`, `video_introduction`, `video_timestamp`, `note`) VALUES ('"+id+"', '"+post_url+"', '"+url+"', '"+title+"', '"+time+"', '"+note+"')", function(err){
+        if(err) throw err;
         callback(err);
     });
 }
 
 //删除视频
-function deleteVideoFun(client, name, callback) {
-    client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_id`='" + name + "')", function(err) {
-        if (err) throw err;
+function deleteVideoFun(client, name, callback){
+    client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_id`='"+name+"')", function(err){
+        if(err) throw err;
         callback(err);
     });
 }
@@ -47,20 +46,22 @@ function findTo(client, name, callback) {
 }
 
 //查找一条视频
-function findFun(client, name, str, callback) {
-    client.query(str, function(err, result, fields) {
-        if (err) throw err;
+function findFun(client, str, callback){
+    client.query(str, function(err, result, fields){
+        if(err){
+            throw err;
+            res.json({code: 0, message: '操作失败'})
+        }
         callback(result);
     })
 }
 
 
 //查找所有视频
-function findAllFun(client, str, callback) {
-    console.log(str)
-    client.query(str, function(err, result, fields) {
+function findAllFun(client, callback) {
+    client.query('select * from `t_television_program_content`', function(err, result, fields) {
         if (err) throw err;
-        console.log(result)
+
         callback(result);
     })
 }

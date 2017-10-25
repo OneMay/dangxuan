@@ -4,10 +4,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var http = require('http');
+var session = require('express-session');
 
 var app = express();
 var index = require('./routes/index.js');
-var session = require('express-session');
 
 app.set('views', path.join(path.resolve(__dirname, '..'), 'dist'))
 app.engine('html', require('ejs').renderFile);
@@ -17,19 +17,27 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-// app.use(session());
 app.use('/', index);
+app.use('/*', function(req, res){
+    if(!req.session.islogin){
+
+    }
+})
+
 //路径未匹配
 app.use(function(req, res, next) {
-        var err = new Error('Not Found');
-        err.status = 404;
-        next(err);
-    })
-    // app.all('*', function(req, res, next) {
-    //         res.header("Access-Control-Allow-Origin", "*");
-    //         next();
-    //     })
-    //路径匹配错误
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+})
+
+//配置用户验证
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    cookie: {maxAge: 60*1000*30} //设置过期时间
+}))
+
 app.use(function(err, req, res, next) {
     res.locals.messgae = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
