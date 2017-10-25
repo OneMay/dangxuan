@@ -78,6 +78,7 @@ export default {
     },
     delVideo(item){
         Axios.post(url+'/admin/video/delete',{
+            videoId:item.television_program_content_id,
             videoName:item.videoName
         })
         .then(res=>{

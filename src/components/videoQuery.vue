@@ -21,7 +21,7 @@
             <td v-text="video.videoCategory"></td>
             <td v-text="video.note"><span style="color:#005580;"></span></td>
             <td v-text="video.video_timestamp"></td>
-            <td> <span  class="btn btn-success " @click="watch(video.videoName)">预览</span> <span  class="btn btn-danger" @click="update(video)">修改</span></td>  
+            <td> <span  class="btn btn-success " @click="watch(video)">预览</span> <span  class="btn btn-danger" @click="update(video)">修改</span></td>  
         </tr>
        </table>
        <nav>
@@ -95,7 +95,8 @@ export default {
         this.modal10= true;
         this.play=true;
          axios.post(url+'/admin/video/preview',{
-                videoName: item,
+                videoName: item.videoName,
+                 videoId:item.television_program_content_id
             })
         .then(res=>{
             var data;
@@ -188,7 +189,7 @@ export default {
         this.$emit('choseItem',item);
     },
     update(item){
-        window.location.href='/admin/videoUpdate?videoName='+item.videoName;
+        window.location.href='/admin/videoUpdate?television_program_content_id='+item.television_program_content_id;
     }
   },
    mounted(){

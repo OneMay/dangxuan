@@ -73,6 +73,7 @@ export default {
       videoCategory:'',
       video:'',
       videoWords:'',
+      television_program_content_id:'',
       note:''    //(管理员id)
     }
   },
@@ -103,7 +104,7 @@ export default {
                 formData.append('videoName', this.videoName);
                 formData.append('videoTitle', this.videoTitle);
                 formData.append('videoWords', this.videoWords);
-                formData.append('note', this.note);
+                formData.append('television_program_content_id', this.television_program_content_id);
 
                 let config = {
                 headers: {
@@ -173,8 +174,9 @@ export default {
         var search=decodeURI(window.location.search.substring(1));
         var reg=/.+=(.+)/g;
         var videoname=reg.exec(search)[1];
+        this.television_program_content_id=videoname;
          axios.post(url+'/admin/video/find',{
-                videoName: videoname,
+                television_program_content_id: videoname
             })
             .then(res=>{
                 var data;
