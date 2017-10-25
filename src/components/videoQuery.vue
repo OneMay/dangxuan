@@ -139,13 +139,11 @@ export default {
                     data=JSON.parse(res.data)
                 }
                 if(data.code==1){
-                     this.videoList=data.videoList;
-                     this.videoName=data.videoName;
-                     this.videoCategory = data.videoCategory;
-                     this.videoWords = data.videoWords;
-                     this.video_timestamp = data.video_timestamp;
-                     this.note = data.note;
-                     this.page = data.page;
+                     this.limit=data.limit;
+                    this.count=data.count;
+                    this.currentPage=data.currentPage;
+                    this.page=data.page;
+                    this.videoList=data.videoList;
                 }else{
                      this.message=data.message;
                 }
