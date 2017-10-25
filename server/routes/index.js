@@ -43,6 +43,7 @@ router.post('/admin/login', function(req, res, next) {
 router.post('/admin/video/add', function(req, res) {
     var showUrl = common.upload(req);
     var client = db.connect();
+    console.log(222)
     db.insertVideoFun(client, req.body.videoId, req.body.videoName, showUrl, req.body.title, moment.format(), req.body.note);
     res.json({
         code: 1,

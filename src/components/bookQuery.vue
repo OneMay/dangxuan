@@ -106,7 +106,7 @@ export default {
         })
     },
     periodsAmend(periods){
-        window.location.href='/admin/bookPeriodsAmend?magazine_journal_no='+magazine_journal_no;
+        window.location.href='/admin/bookPeriodsAmend?magazine_journal_no='+periods.magazine_journal_no;
     },
      getPeriodsList(num){
         if(num>this.currentPage){
