@@ -173,7 +173,7 @@ export default {
         var search=decodeURI(window.location.search.substring(1));
         var reg=/.+=(.+)/g;
         var videoname=reg.exec(search)[1];
-         axios.post(url+'/admin/video/updatefind',{
+         axios.post(url+'/admin/video/find',{
                 videoName: videoname,
             })
             .then(res=>{
@@ -183,7 +183,7 @@ export default {
                 }else{
                     data=JSON.parse(res.data)
                 }
-                if(data.code>=1){
+                if(data.code==1){
                     this.videoCategory=data.videoList[0].videoCategory;
                     this.videoName=data.videoList[0].videoName;
                     this.videoTitle=data.videoList[0].videoTitle;

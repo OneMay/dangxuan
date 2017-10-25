@@ -45,6 +45,7 @@
                 <td class="tableleft"></td>
                 <td>
                     <span style="margin-left:5px;" class="btn btn-primary" @click="addPage">保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/bookList">返回列表</router-link>
+                    <span v-text="message" class='message'></span>
                 </td>
             </tr>
         </table>
@@ -67,7 +68,8 @@ export default {
       megazinePeriods:[],
       magazine_journal_no:'', 
       list_title:'',
-      list_content:''
+      list_content:'',
+      magazine_list_id:''
     }
   },
   methods:{
@@ -93,18 +95,29 @@ export default {
     },
     addPage(){
         this.getContent();
-        Axios.post(url+'/admin/magazine/addArticle',{
-            magazine_journal_no:this.magazine_journal_no,//(期数)
-            list_title:this.list_title,//（文章标题）
-            list_content:this.list_content//(文章内容)
-            //list_writer:'作者'//(文章作者)
-        })
-        .then(res=>{
-            console.log(res.data);
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+        if(this.magazine_journal_no&&this.list_title&&this.list_content){
+            Axios.post(url+'/admin/magazine/amendArticle',{
+                magazine_journal_no:this.magazine_journal_no,//(期数)
+                list_title:this.list_title,//（文章标题）
+                list_content:this.list_content,//(文章内容)
+                magazine_list_id:this.magazine_list_id
+                //list_writer:'作者'//(文章作者)
+            })
+            .then(res=>{
+                 var data;
+                if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                    data=res.data;
+                }else{
+                    data=JSON.parse(res.data)
+                }
+                this.message=data.message;
+            })
+            .catch(err=>{
+                console.log(err);
+            })
+        }else{
+            this.message="所有内容不能为空！"
+        }
     },
     getmagazinePeriods(){
          Axios.post(url+'/admin/magazine/findAllPeriods',{
@@ -145,9 +158,10 @@ export default {
                 data=JSON.parse(res.data)
             }
             if(data.code==1){
-                this.magazine_journal_no=data.magazine_journal_no;
-                this.list_title=data.list_title;
-                this.list_content=data.list_content;
+                this.magazine_journal_no=data.articleList[0].magazine_journal_no;
+                this.list_title=data.articleList[0].list_title;
+                this.list_content=data.articleList[0].list_content;
+                this.magazine_list_id=data.articleList[0].magazine_list_id
                 this.setContent(this.list_content);
             }else{
                 this.message=data.message;
@@ -178,7 +192,10 @@ body {font-size: 20px;
         .sidebar-nav {
             padding: 9px 0;
         }
-
+.message{
+    color:#ca7117;
+}
+   
         @media (max-width: 980px) {
             /* Enable use of floated navbar text */
             .navbar-text.pull-right {

@@ -23,6 +23,7 @@ import bookPeriodsAmend from '@/components/bookPeriodsAmend'
 import bookPageAmend from '@/components/bookPageAmend'
 import sundListAmend from '@/components/sundListAmend'
 import sundPageAmend from '@/components/sundPageAmend'
+import article from '@/components/article'
 Vue.use(Router)
 
 export default new Router({
@@ -62,5 +63,9 @@ export default new Router({
     }, {
         path: '/',
         redirect: '/admin/login'
+    }, {
+        path: '/admin/article',
+        name: 'article',
+        component: article
     }]
 })

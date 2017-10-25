@@ -101,7 +101,7 @@ export default {
                     }
                 }
 
-                axios.post(url+'/admin/video/add', formData, config)
+                axios.post(url+'/admin/radio/Add', formData, config)
                 .then(res=>{
                     var data;
                     if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){

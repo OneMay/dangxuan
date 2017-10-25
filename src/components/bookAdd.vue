@@ -34,6 +34,7 @@
                 <td class="tableleft"></td>
                 <td>
                     <span style="margin-left:5px;" class="btn btn-primary"  @click="addMagazine">保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/bookQuery">返回列表</router-link>
+                    <span v-text="message" class='message'></span>
                 </td>
             </tr>
         </table>
@@ -114,7 +115,9 @@ body {font-size: 20px;
         .sidebar-nav {
             padding: 9px 0;
         }
-
+.message{
+    color:#ca7117;
+}
         @media (max-width: 980px) {
             /* Enable use of floated navbar text */
             .navbar-text.pull-right {

@@ -91,7 +91,9 @@ body {font-size: 20px;
         .sidebar-nav {
             padding: 9px 0;
         }
-
+.message{
+    color:#ca7117;
+}
         @media (max-width: 980px) {
             /* Enable use of floated navbar text */
             .navbar-text.pull-right {

@@ -45,31 +45,38 @@ export default {
       message:'',
       program_name:'',
       program_date:'',
-      columnList:[]
+      columnList:[],
+      program_id:null
     }
   },
   methods:{
     columnAdd(){
-        axios.post(url+'/admin/radio/columnAdd',{
-           program_name:this.program_name,
-           program_date:this.program_date
-        })
-        .then(res=>{
-            var data;
-            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
-                data=res.data;
-            }else{
-                data=JSON.parse(res.data)
-            }
-            if(data.code==1){
-                this.message='更新成功';
-            }else{
-                this.message=data.message;
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
+        if(this.program_name&&this.program_date){
+            axios.post(url+'/admin/radio/columnAmend',{
+                program_id:this.program_id,
+                program_name:this.program_name,
+                program_date:this.program_date
+            })
+            .then(res=>{
+                var data;
+                if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                    data=res.data;
+                }else{
+                    data=JSON.parse(res.data)
+                }
+                if(data.code==1){
+                    this.message='更新成功';
+                }else{
+                    this.message=data.message;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }else{
+            this.message="所有内容不能为空！"
+        }
+        
     },
     getcolumn(){
         var getcolumn=decodeURI(window.location.search.substring(1));
@@ -88,6 +95,7 @@ export default {
             }
             if(data.code==1){
                 this.columnList=data.columnList;
+                this.program_id=this.this.columnList[0].program_id;
                 this.program_name=this.columnList[0].program_name;
                 this.program_date=this.columnList[0].program_date;
             }
@@ -118,7 +126,9 @@ body {font-size: 20px;
         .sidebar-nav {
             padding: 9px 0;
         }
-
+.message{
+    color:#ca7117;
+}
         @media (max-width: 980px) {
             /* Enable use of floated navbar text */
             .navbar-text.pull-right {

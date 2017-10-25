@@ -57,13 +57,7 @@ export default {
       username:"",
       password:"",
       message:'',
-      radioList:[{
-                program_name:'ffsa',
-                program_date:'fadf',
-                program_timestamp:'ff',
-                program_introduction:'fvf',
-                program_content_id:1
-            }],
+      radioList:[],
       page:1,
       count:null,
       currentPage:null,
@@ -73,7 +67,7 @@ export default {
       modal10: false,
       sund: {
             sources: [{
-                src: 'http://localhost:8089/static/public/avatar/计算机科学及编程导论 第02集.mp4',//http://localhost:8089/static/public/avatar/计算机科学及编程导论 第02集.mp4'
+                src: '',//http://localhost:8089/static/public/avatar/计算机科学及编程导论 第02集.mp4'
                 type: 'video/mp3'
             }],
             options: {

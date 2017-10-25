@@ -49,26 +49,30 @@ export default {
   },
   methods:{
     columnAdd(){
-        axios.post(url+'/admin/radio/columnAdd',{
-           program_name:this.program_name,
-           program_date:this.program_date
-        })
-        .then(res=>{
-            var data;
-            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
-                data=res.data;
-            }else{
-                data=JSON.parse(res.data)
-            }
-            if(data.code==1){
-                this.message='操作成功';
-            }else{
-                this.message=data.message;
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
+        if(this.program_name&&this.program_date){
+            axios.post(url+'/admin/radio/columnAdd',{
+                program_name:this.program_name,
+                program_date:this.program_date
+            })
+            .then(res=>{
+                var data;
+                if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                    data=res.data;
+                }else{
+                    data=JSON.parse(res.data)
+                }
+                if(data.code==1){
+                    this.message='操作成功';
+                }else{
+                    this.message=data.message;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }else{
+            this.message='所有内容不能为空！'
+        }
     }
   }
 }
@@ -86,7 +90,9 @@ body {font-size: 20px;
         .sidebar-nav {
             padding: 9px 0;
         }
-
+.message{
+    color:#ca7117;
+}
         @media (max-width: 980px) {
             /* Enable use of floated navbar text */
             .navbar-text.pull-right {

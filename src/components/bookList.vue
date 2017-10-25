@@ -21,7 +21,7 @@
             <td v-text="item.magazine_journal_no"></td>
             <td v-text="item.list_title"></td>
             <td v-text="item.insert_time"></td>
-            <td><span class="btn btn-primary" @click="magazineAmend(item)">修改</span><span class="btn btn-success">预览</span><span class="btn btn-danger" @click="delArticle(item)">删除</span></td>  
+            <td><span class="btn btn-primary" @click="magazineAmend(item)">修改</span><span class="btn btn-success" @click="previewArticle(item)">预览</span><span class="btn btn-danger" @click="delArticle(item)">删除</span></td>  
         </tr>
     </table>
        <nav>
@@ -82,6 +82,9 @@ export default {
             console.log(err);
         });
     },
+    previewArticle(item){
+        window.open('/admin/article?list_title='+item.list_title);
+    },
     delArticle(item){
         Axios.post(url+'/admin/magazine/delPeriods',{
             list_title:item.list_title
@@ -95,7 +98,7 @@ export default {
         })
     },
     magazineAmend(magazine){
-        window.location.href='/admin/bookPageAmend?list_title='+list_title;
+        window.location.href='/admin/bookPageAmend?list_title='+magazine.list_title;
     },
     reArticle(){
         Axios.post(url+'/admin/magazine/amend',{
