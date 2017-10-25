@@ -3,7 +3,6 @@
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
     <tr>
-	     <th>序号</th>
         <th>反馈标题</th>
         <th>日期</th>
         <th>状态</th>
@@ -11,36 +10,75 @@
         <th>管理菜单</th>
     </tr>
     </thead>
-        <tr>
-            <td>1</td>
-            <td>关于第十一期杂志的问题</td>
-            <td>2016.07.22</td>
-            <td>未查看</td>              
-            <td> <router-link class="btn btn-success" to="/admin/feedbackDetail">查看</router-link></td>
-               
+        <tr v-for="item in feedbackList">
+            <td v-text="item.FeedbackTitle"></td>
+            <td v-text="item.Feedback_timestamp"></td>
+            <td v-text="item.Feedback_state"></td>
+            <td v-text="item.UserName"></td>            
+            <td> <router-link class="btn btn-success" :to="'/admin/feedbackDetail?id='+item.id">查看</router-link></td>    
         </tr>    
        </table>
-
+       <nav>
+          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{page}}页</p>
+          <ul class="pager">
+              <li class="previous"><span @click="getfeedback(--page)">上一页</span></li>
+              <li class="next"><span @click="getfeedback(++page)">下一页</span></li>
+          </ul>
+      </nav>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+const url = '/getAdmin'
 export default {
   name: 'feedbackList',
   data () {
     return {
       username:"",
       password:"",
-      message:''
+      message:'',
+      feedbackList:[],
+      page:1,
+      count:null,
+      currentPage:null,
+      limit:null,
     }
   },
   methods:{
     search(){
     },
-    addVideo(item){
-        this.$emit('choseItem',item);
+    getfeedback(){
+         axios.post(url+'/admin/feedback/findAll',{
+                page:this.page
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.feedbackList=data.feedbackList;
+            }else{
+                this.message=data.message;
+            }
+        })
+        .catch(err=>{
+            console.log(err)
+        });
     }
-  }
+  },
+  mounted(){
+        this.$nextTick(function(){
+            this.getfeedback();
+        })
+    }
 }
 </script>
 
@@ -187,4 +225,10 @@ form{
 .onCorrect{background-position:3px -247px;border-color:#40B3FF;}
 .onLamp{background-position:3px -200px}
 .onTime{background-position:3px -1356px}
+.previous,.next{
+    cursor: pointer;
+}
+.previous:hover,.next:hover{
+    color:red;
+}
 </style>

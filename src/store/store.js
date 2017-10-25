@@ -6,7 +6,8 @@ const LOCALSTORAGE_KEY = 'menu';
 export const store = new Vuex.Store({
     state: {
         login: 'islogin',
-        adminMenu: []
+        adminMenu: [],
+        updateMenu: ''
     },
     getters: {
         getLoginData(state) {
@@ -14,6 +15,9 @@ export const store = new Vuex.Store({
         },
         getMenuData(state) {
             return window.JSON.parse(window.localStorage.getItem(LOCALSTORAGE_KEY)) || [];
+        },
+        getVideo() {
+            return window.JSON.parse(window.localStorage.getItem(state.updateMenu)) || [];
         }
     },
     mutations: {

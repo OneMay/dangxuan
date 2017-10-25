@@ -3,15 +3,27 @@
         <form action="#" method="post" class="definewidth m20" enctype="multipart/form-data">
         <table class="table table-bordered table-hover m10" style="margin-left:10px;margin-top:3px;">
             <tr>
-                <td class="tableleft" width="15%">首页轮播（5张）</td>
-                <td class="tableleft" style="width: 196px; "><input type="file" name="GoodsPicture" id="GoodsPicture" multiple="multiple" @change="getFile" accept=".jpg,.png"/></td>
-        <!--         <td class="tableleft">图片预览</td> -->
-        <!--         <td><img name="showimg" id="showimg" src="" style="display:none;" alt="预览图片" /> </td> -->
+                <td class="tableleft" width="10%">栏目名称</td>
+                <td><input type="text" name="program_name" v-model="program_name" v-text="program_name"/></td>
             </tr>
+
+             <tr>
+                <td class="tableleft">时间</td>
+                <td>
+                    <select name="bigTypeId" v-model="program_date">
+                        <option value="1">周一</option>
+                        <option value="2">周二</option>
+                        <option value="3">周三</option>
+                        <option value="4">周四</option>
+                        <option value="5">周五</option>
+                    </select>
+                </td>
+            </tr>
+            
             <tr>
                 <td class="tableleft"></td>
                 <td>
-                    <span style="margin-left:5px;" class="btn btn-primary" @click="carouselAdd">保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/sundList">返回列表</router-link>
+                    <span style="margin-left:5px;" class="btn btn-primary" @click="columnAdd">保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/sundQuery">返回列表</router-link>
                     <span v-text="message" class='message'></span>
                 </td>
             </tr>
@@ -22,60 +34,83 @@
 </template>
 
 <script>
-import Axios from 'axios'
-const url = '/getAdmin'
+import axios from 'axios'
+const url='/getAdmin'
 export default {
-  name: 'sundJpgAdd',
+  name: 'sundListAmend',
   data () {
     return {
       username:"",
       password:"",
       message:'',
-      pictureInfo:''
+      program_name:'',
+      program_date:'',
+      columnList:[],
+      program_id:null
     }
   },
   methods:{
-      getFile(e){
-        this.pictureInfo = e.target.files[0];
-    },
-    carouselAdd(){
-        var that = this;
-
-       // e.preventDefault();
-        if(this.pictureInfo){
-            var imgreg=/.+((\.jpg$)|(\.png$))/gi;
-            if(imgreg.test(this.pictureInfo.name)){
-                this.message='正在上传...';
-                var formData = new FormData();
-                formData.append('magazine_journal_picture', this.pictureInfo);
-                let config = {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
+    columnAdd(){
+        if(this.program_name&&this.program_date){
+            axios.post(url+'/admin/radio/columnAmend',{
+                program_id:this.program_id,
+                program_name:this.program_name,
+                program_date:this.program_date
+            })
+            .then(res=>{
+                var data;
+                if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                    data=res.data;
+                }else{
+                    data=JSON.parse(res.data)
                 }
-                Axios.post(url+'/admin/radio/carouselAdd', formData, config)
-                .then(res=>{
-                    var data;
-                    if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
-                        data=res.data;
-                    }else{
-                        data=JSON.parse(res.data)
-                    }
-                    this.message='上传成功';
-                    console.log(res.data)
-                })
-                .catch(err=>{
-                    this.message='上传失败';
-                    console.log(err)
-                }); 
-            }else{
-               this.message='文件格式错误' 
-            }
+                if(data.code==1){
+                    this.message='更新成功';
+                }else{
+                    this.message=data.message;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
         }else{
-            this.message='所有内容不能为空！'
+            this.message="所有内容不能为空！"
         }
+        
+    },
+    getcolumn(){
+        var getcolumn=decodeURI(window.location.search.substring(1));
+        var reg = /.+=(.+)&.+=(.+)/g;
+        var column = reg.exec(getcolumn);
+        axios.post(url+'/admin/radio/columnFind',{
+           program_name:column[2],
+           program_date:column[1]
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.columnList=data.columnList;
+                this.program_id=this.this.columnList[0].program_id;
+                this.program_name=this.columnList[0].program_name;
+                this.program_date=this.columnList[0].program_date;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
     }
-  }
+  },
+  mounted(){
+        this.$nextTick(function(){
+            this.getcolumn();
+        })
+    }
 }
 </script>
 
@@ -159,7 +194,7 @@ form{
 	background-color:#eaeaea;
 }
 .tableleft{
-	text-align:left;
+	text-align:right;
 	padding-left:5px;
 	background-color:#f5f5f5;
 

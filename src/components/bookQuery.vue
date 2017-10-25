@@ -2,73 +2,152 @@
     <div class="video">
      <form class="form-inline definewidth m20" action="#" method="get">
     <font color="#777777"><strong>杂志名称：</strong></font>
-    <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" value="">&nbsp;&nbsp; 
+    <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="第一期" v-model="magazine_journal_no">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
-	<span  id="addnew" @click="addVideo('bookAdd')"><router-link style="color:#fff" class="btn btn-success" to="/admin/bookAdd">添加期数</router-link></span>
+	<span  id="addnew" ><router-link style="color:#fff" class="btn btn-success" to="/admin/bookAdd">添加期数</router-link></span>
 </form>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
     <tr>
         <th>杂志名称</th>
         <th>期数</th>
-        <th>上传者</th>
-        <th>上传日期</th>
+        <th>主题文字</th>
         <th>管理菜单</th>
     </tr>
     </thead>
-        <tr>
+       <tr v-for="item in megazinePeriods">
             <td>微众</td>
-            <td>第十八期</td>
-            <td><span style="color:#005580;cursor: pointer;" @click="addVideo('studentDetail')">小强</span></td>
-            <td>2016.07.22</td>
-            <td> <span class="btn btn-danger" @click="reMagazine">修改</span></td>  
+            <td v-text="item.magazine_journal_no"></td>
+            <td v-text="item.magazine_journal_title"></td>
+            <td><span class="btn btn-danger" @click="periodsAmend(item)">修改</span></td>  
         </tr>
-       </table>
+    </table>
+       <nav>
+          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{page}}页</p>
+          <ul class="pager">
+              <li class="previous"><span @click="getPeriodsList(--page)">上一页</span></li>
+              <li class="next"><span @click="getPeriodsList(++page)">下一页</span></li>
+          </ul>
+      </nav>
   </div>
 </template>
 
 <script>
-import Axios from 'axios'
+import axios from 'axios'
+const url ='/getAdmin'
 export default {
   name: 'bookQuery',
   data () {
     return {
       username:"",
       password:"",
-      message:''
+      message:'',
+      megazinePeriods:[],
+      page:1,
+      count:null,
+      currentPage:null,
+      limit:null,
+      magazine_journal_no:''
     }
   },
   methods:{
     search(){
-        Axios.post('/admin/magazine/findPeriods',{
-            magazine_journal_no:'单个查询'  //不是杂志名称？是期数？
+        this.page=1;
+       axios.post(url+'/admin/magazine/findAllPeriods',{
+           page:this.page,
+           magazine_journal_no:this.magazine_journal_no
         })
-        .then(res=>{
-            console.log(res.data);
+        .then(res=>{ 
+             var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.megazinePeriods=data.megazineList;
+            }else{
+                this.message=data.message;
+            }
         })
         .catch(err=>{
             console.log(err);
         })
     },
     reMagazine(){
-        Axios.post('/admin/magazine/amend',{
-            magazine_journal_no:'1',   //(期数)
-            magazine_journal_title:'测试', //(主题文字)
-            magazine_journal_picture:'form-data类型',
-            note:''
+        axios.get(url+'/admin/magazine/findAllPeriods',{
+           params: {
+               page: this.page
+           }
         })
         .then(res=>{
-            console.log(res.data);
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            // if(data.code>=1){
+            //     this.limit=data.limit;
+            //     this.count=data.count;
+            //     this.currentPage=data.currentPage;
+            //     this.pages=data.page;
+            //     this.videoList=data.videoList;
+            // }else{
+            //     this.message=data.message;
+            // }
         })
-        .catch(err=>{
+        .catch(res=>{
             console.log(err);
         })
     },
-    addVideo(item){
-
-        this.$emit('choseItem',item);
+    periodsAmend(periods){
+        window.location.href='/admin/bookPeriodsAmend?magazine_journal_no='+magazine_journal_no;
+    },
+     getPeriodsList(num){
+        if(num>this.currentPage){
+            num=this.currentPage;
+            this.page=this.currentPage;
+        }
+        if(num<=1){
+            num=1;
+            this.page=1;
+        }
+        axios.post(url+'/admin/magazine/findAllPeriods',{
+           page:this.page,
+           magazine_journal_no:this.magazine_journal_no
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.megazinePeriods=data.megazineList;
+            }else{
+                this.message=data.message;
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
-  }
+  },
+  mounted(){
+        this.$nextTick(function(){
+            this.getPeriodsList(this.page);
+        })
+    }
 }
 </script>
 
@@ -92,7 +171,6 @@ body {font-size: 20px;
         }
     }
 
-@charset "utf-8";
 body{
     font-size: 13px;
 }
@@ -215,4 +293,10 @@ form{
 .onCorrect{background-position:3px -247px;border-color:#40B3FF;}
 .onLamp{background-position:3px -200px}
 .onTime{background-position:3px -1356px}
+.previous,.next{
+    cursor: pointer;
+}
+.previous:hover,.next:hover{
+    color:red;
+}
 </style>

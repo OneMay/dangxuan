@@ -5,7 +5,7 @@
             <tr>
                 <td width="10%" class="tableleft">栏目</td>
                 <td>
-                    <select name="bigTypeId" v-model="program_name" >
+                    <select name="bigTypeId" v-model="program_name">
                         <option v-for="item of column_program_name" v-text="item"></option>
                     </select>
                     
@@ -39,7 +39,7 @@
            </tr>
             <tr>
                 <td class="tableleft">广播简介</td>
-                <td><input type="text" name="GoodsIntroduce" style="height: 63px;" v-model="program_introduction"/></td>
+                <td><input type="text" name="GoodsIntroduce" style="height: 63px;" v-model="program_introduction" v-text="program_introduction"/></td>
             </tr>
             <tr>
                 <td class="tableleft"></td>
@@ -58,7 +58,7 @@
 import axios from 'axios'
 const url='/getAdmin'
 export default {
-  name: 'sundPageAdd',
+  name: 'sundPageAmend',
   data () {
     return {
       username:"",
@@ -68,8 +68,10 @@ export default {
       radioInfo:'',
       program_name:'',
       program_introduction:'',
-      column_program_name:['hjuajd','ikhkhugy'],
-      program_date:''
+      column_program_name:[],
+      program_date:'',
+      radioList:[],
+      program_content_id:null
     }
   },
   methods:{
@@ -84,7 +86,7 @@ export default {
          var that = this;
 
        // e.preventDefault();
-        if(this.radioPoster&&this.radioInfo&&this.program_name&&this.program_introduction&&this.program_date){
+        if(this.program_name&&this.program_introduction&&this.program_date){
             var imgreg=/.+((\.jpg$)|(\.png$))/gi;
             var videoreg=/.+((\.mp3$)|(\.mp4$))/gi;
             if(imgreg.test(this.radioPoster.name)&&videoreg.test(this.radioInfo.name)){
@@ -101,7 +103,7 @@ export default {
                     }
                 }
 
-                axios.post(url+'/admin/radio/Add', formData, config)
+                axios.post(url+'/admin/radio/Amend', formData, config)
                 .then(res=>{
                     var data;
                     if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
@@ -140,6 +142,34 @@ export default {
             }
             if(data.code==1){
                 this.column_program_name=data.column_program_name;
+                this.getItemSund();
+            }
+        })
+        .catch(err=>{
+            console.log(err)
+        }); 
+    },
+    getItemSund(){
+        var itemRadio=decodeURI(window.location.search.substring(1));
+        var reg = /.+=(.+)&.+=()/g; 
+        var radio = reg.exec(itemRadio);
+        axios.post(url+'/admin/radio/Find',{
+            program_name:radio[1],
+            program_content_id:radio[2]
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.radioList=data.radioList;
+                this.program_name=this.radioList[0].program_name;
+                this.program_date=this.radioList[0].program_date;
+                this.program_introduction=this.radioList[0].program_introduction;
+                this.program_content_id=this.radioList[0].program_content_id;
             }
         })
         .catch(err=>{

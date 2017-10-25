@@ -169,19 +169,19 @@ export default {
         var book=/\/admin\/book.+/g
         var sund=/\/admin\/sund.+/g
         var feedback=/\/admin\/feedback.+/g
-        if(pathname=='/admin/videoAdd'){
+        if(pathname=='/admin/videoAdd'||pathname=='/admin/videoUpdate'){
             pathname='/admin/videoQuery'
         }
-        if(pathname=='/admin/bookAdd'){
+        if(pathname=='/admin/bookAdd'||pathname=='/admin/bookPeriodsAmend'){
             pathname='/admin/bookQuery'
         }
-        if(pathname=='/admin/bookPageAdd'){
+        if(pathname=='/admin/bookPageAdd'||pathname=='/admin/bookPageAmend'){
             pathname='/admin/bookList'
         }
-        if(pathname=='/admin/sundListAdd'){
+        if(pathname=='/admin/sundListAdd'||pathname=='/admin/sundListAmend'){
             pathname='/admin/sundQuery'
         }
-        if(pathname=='/admin/sundPageAdd'||pathname=='/admin/sundJpgAdd'){
+        if(pathname=='/admin/sundPageAdd'||pathname=='/admin/sundJpgAdd'||pathname=='/admin/sundPageAmend'){
             pathname='/admin/sundList'
         }
         if(pathname=='/admin/feedbackDetail'){

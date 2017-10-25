@@ -4,13 +4,13 @@
         <table class="table table-bordered table-hover m10" style="margin-left:10px;margin-top:3px;">
             <tr>
                 <td class="tableleft" width="10%">栏目名称</td>
-                <td><input type="text" name="videosName"/></td>
+                <td><input type="text" name="program_name" v-model="program_name"/></td>
             </tr>
 
              <tr>
                 <td class="tableleft">时间</td>
                 <td>
-                    <select name="bigTypeId">
+                    <select name="bigTypeId" v-model="program_date">
                         <option value="1">周一</option>
                         <option value="2">周二</option>
                         <option value="3">周三</option>
@@ -23,7 +23,8 @@
             <tr>
                 <td class="tableleft"></td>
                 <td>
-                    <span style="margin-left:5px;" class="btn btn-primary" >保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/sundQuery">返回列表</router-link>
+                    <span style="margin-left:5px;" class="btn btn-primary" @click="columnAdd">保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/sundQuery">返回列表</router-link>
+                    <span v-text="message" class='message'></span>
                 </td>
             </tr>
         </table>
@@ -33,18 +34,45 @@
 </template>
 
 <script>
+import axios from 'axios'
+const url = '/getAdmin'
 export default {
   name: 'sundListAdd',
   data () {
     return {
       username:"",
       password:"",
-      message:''
+      message:'',
+      program_name:'',
+      program_date:''
     }
   },
   methods:{
-    returnItem(item){
-        this.$emit('choseItem',item)
+    columnAdd(){
+        if(this.program_name&&this.program_date){
+            axios.post(url+'/admin/radio/columnAdd',{
+                program_name:this.program_name,
+                program_date:this.program_date
+            })
+            .then(res=>{
+                var data;
+                if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                    data=res.data;
+                }else{
+                    data=JSON.parse(res.data)
+                }
+                if(data.code==1){
+                    this.message='操作成功';
+                }else{
+                    this.message=data.message;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        }else{
+            this.message='所有内容不能为空！'
+        }
     }
   }
 }
@@ -52,6 +80,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.message{
+    color:#ca7117;
+}
 body {font-size: 20px;
             padding-bottom: 40px;
             background-color:#e9e7ef;
@@ -59,7 +90,9 @@ body {font-size: 20px;
         .sidebar-nav {
             padding: 9px 0;
         }
-
+.message{
+    color:#ca7117;
+}
         @media (max-width: 980px) {
             /* Enable use of floated navbar text */
             .navbar-text.pull-right {

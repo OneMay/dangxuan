@@ -3,11 +3,11 @@
 <table class="table table-bordered table-hover definewidth m10">
     <tr>
 	     <td class="tableleft" width="10%">反馈标题</td>
-         <td>关于第十一期杂志的问题</td>
+         <td v-text="FeedbackTitle"></td>
     </tr>
     <tr>
         <td class="tableleft" width="10%">反馈内容</td>
-         <td>关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题关于第十一期杂志的问题</td>
+         <td v-text="FeedbackContent"></td>
     </tr>
         <tr>   
             <td class="tableleft" width="10%"></td>           
@@ -20,22 +20,50 @@
 </template>
 
 <script>
+import axios from 'axios'
+const url = '/getAdmin'
 export default {
   name: 'feedbackDetail',
   data () {
     return {
       username:"",
       password:"",
-      message:''
+      message:'',
+      FeedbackTitle:'',
+      FeedbackContent:'',
+      feedbackList:[]
     }
   },
   methods:{
-    search(){
-    },
-    returnItem(item){
-        this.$emit('choseItem',item);
+    getItemfeedback(){
+        var item = window.location.search;
+        var reg = /.+=(.+)/g;
+        var feed = reg.exec(item)[1];
+        axios.post(url+'/admin/feedback/detail',{
+            id:feed
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.feedbackList=data.feedbackList;
+                this.FeedbackTitle=this.feedbackList[0].FeedbackTitle;
+                 this.FeedbackContent=this.feedbackList[0].FeedbackContent;
+            }else{
+                this.message=data.message;
+            }
+        })
     }
-  }
+  },
+  mounted(){
+        this.$nextTick(function(){
+            this.getItemfeedback();
+        })
+    }
 }
 </script>
 

@@ -19,18 +19,31 @@
         <tr v-for="video in videoList">
             <td v-text="video.videoName"></td>
             <td v-text="video.videoCategory"></td>
-            <td v-text="video.note"><span style="color:#005580;cursor: pointer;" @click="addVideo('studentDetail')">小强</span></td>
+            <td v-text="video.note"><span style="color:#005580;"></span></td>
             <td v-text="video.video_timestamp"></td>
-            <td> <span  class="btn btn-success">预览</span> <span  class="btn btn-danger">修改</span></td>  
+            <td> <span  class="btn btn-success " @click="watch(video.videoName)">预览</span> <span  class="btn btn-danger" @click="update(video)">修改</span></td>  
         </tr>
        </table>
        <nav>
-          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{pages}}页</p>
+          <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{page}}页</p>
+          <p v-text="message"></p>
           <ul class="pager">
-              <li class="previous"><span @click="getProducts(--page)">&larr;上一页</span></li>
-              <li class="next"><span @click="getProducts(++page)">下一页 &rarr;</span></li>
+              <li class="previous"><span @click="getVideoList(--page)">&larr;上一页</span></li>
+              <li class="next"><span @click="getVideoList(++page)">下一页 &rarr;</span></li>
           </ul>
       </nav>
+    <Modal
+        v-model="modal10"
+        title=""
+        :styles="{top: '50%',marginTop:height}"
+        class-name="vertical-center-modal"
+        @on-ok="ok"
+        @on-cancel="cancel">
+       <video v-if="play" :src="video.sources[0].src" controls="controls" style="width:100%;margin-top:20px;">
+        </video>
+    </Modal>
+
+
   </div>
 </template>
 
@@ -38,11 +51,13 @@
 import axios from 'axios';
 import AXIOS from './../axios/axios';
 const Axios = new AXIOS();
-const url ='http://localhost:8089/getAdmin'
+const url ='/getAdmin'
 export default {
   name: 'videoQuery',
   data () {
-    return {  
+    return { 
+      play:false,
+      height:'-105.5px', 
       username:"",
       password:"",
       message:'',
@@ -50,14 +65,69 @@ export default {
       page:1,
       count:null,
       currentPage:null,
-      pages:null,
       limit:null,
-      videoName:''  //d
+      videoName:'',
+      modal9: false,
+      modal10: false,
+       video: {
+            sources: [{
+                src: '',//http://localhost:8089/static/public/avatar/计算机科学及编程导论 第02集.mp4'
+                type: 'video/mp4'
+            }],
+            options: {
+                autoplay: true,
+                volume: 0.6,
+                poster: ''
+            }
+        }
     }
   },
   methods:{
+    ok (e) {
+        this.play=false;
+        this.$Message.info('');
+    },
+    cancel () {
+        this.play=false;
+        this.$Message.info('');
+    },
+    watch(item){
+        this.modal10= true;
+        this.play=true;
+         axios.post(url+'/admin/video/preview',{
+                videoName: item,
+            })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.play=true;
+                this.video.sources=[{
+                    src: data.video_url,
+                    type: 'video/mp4'
+                }]
+                setTimeout(function(){
+                    $('.container').removeClass('container');
+                    this.height='-' + $('.ivu-modal')[0].clientHeight/2 +'px';
+                },0)
+            }
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+        $('.ivu-modal-footer').remove();
+         setTimeout(function(){
+            this.height='-' + $('.ivu-modal')[0].clientHeight/2 +'px';
+        },0)
+    },
     search(){
-        axios.post(url+'/admin/video/find',{
+        this.page =1;
+        axios.post(url+'/admin/video/findAll',{
                 videoName: this.videoName,
                 page: this.page
             })
@@ -68,7 +138,7 @@ export default {
                 }else{
                     data=JSON.parse(res.data)
                 }
-                if(data.code>=1){
+                if(data.code==1){
                      this.videoName=data.videoName;
                      this.videoCategory = data.videoCategory;
                      this.videoWords = data.videoWords;
@@ -92,13 +162,10 @@ export default {
             num=1;
             this.page=1;
         }
-        let params={
-            api:'/admin/video/findAll',//+'?page='+num,
-            param:{
-                    page:this.page
-                }
-        }
-        Axios.post(params)
+        axios.post(url+'/admin/video/findAll',{
+                videoName: this.videoName,
+                page: this.page
+            })
         .then(res=>{
             var data;
             if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
@@ -106,11 +173,13 @@ export default {
             }else{
                 data=JSON.parse(res.data)
             }
-            this.limit=data.limit;
-            this.count=data.count;
-            this.currentPage=data.currentPage;
-            this.pages=data.page;
-            this.videoList=data.videoList;
+            if(data.code==1){
+                this.limit=data.limit;
+                this.count=data.count;
+                this.currentPage=data.currentPage;
+                this.page=data.page;
+                this.videoList=data.videoList;
+            }
         })
         .catch(err => {
             console.log(err);
@@ -119,20 +188,31 @@ export default {
     addVideo(item){
         this.$emit('choseItem',item);
     },
-    getProducts(){
-
+    update(item){
+        window.location.href='/admin/videoUpdate?videoName='+item.videoName;
     }
   },
    mounted(){
         this.$nextTick(function(){
             this.getVideoList(this.page);
         })
+    },
+    components: {
     }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.ivu-modal-clos{
+    top:0 !important;
+}
+.container{
+    width:100% !important;
+}
+button{
+    width:66px !important;
+}
 body {font-size: 20px;
     font-size: 20px;
         padding-bottom: 40px;
@@ -273,4 +353,10 @@ form{
 .onCorrect{background-position:3px -247px;border-color:#40B3FF;}
 .onLamp{background-position:3px -200px}
 .onTime{background-position:3px -1356px}
+.previous,.next{
+    cursor: pointer;
+}
+.previous:hover,.next:hover{
+    color:red;
+}
 </style>

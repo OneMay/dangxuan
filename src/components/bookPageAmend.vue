@@ -20,7 +20,7 @@
             </tr>
             <tr>
                 <td class="tableleft">文章标题</td>
-                <td><input type="text" name="words" v-model="list_title"/></td>
+                <td><input type="text" name="words" v-model="list_title" v-text="list_title"/></td>
             </tr>
             <tr>
                 <td class="tableleft">文章内容</td>
@@ -68,7 +68,8 @@ export default {
       megazinePeriods:[],
       magazine_journal_no:'', 
       list_title:'',
-      list_content:''
+      list_content:'',
+      magazine_list_id:''
     }
   },
   methods:{
@@ -82,21 +83,24 @@ export default {
     getAllHtml(){
         alert(UE.getEditor('editor').getAllHtml())
     },
+    setContent(isAppendTo) {
+        UE.getEditor('editor').setContent(isAppendTo);
+    },
     getContent(){
         var arr = UE.getEditor('editor').getContent();
         this.list_content=arr;
     },
     createEditor(){
-      UE.getEditor('editor')
-        
+      UE.getEditor('editor') 
     },
     addPage(){
         this.getContent();
         if(this.magazine_journal_no&&this.list_title&&this.list_content){
-             Axios.post(url+'/admin/magazine/addArticle',{
+            Axios.post(url+'/admin/magazine/amendArticle',{
                 magazine_journal_no:this.magazine_journal_no,//(期数)
                 list_title:this.list_title,//（文章标题）
-                list_content:this.list_content//(文章内容)
+                list_content:this.list_content,//(文章内容)
+                magazine_list_id:this.magazine_list_id
                 //list_writer:'作者'//(文章作者)
             })
             .then(res=>{
@@ -112,9 +116,8 @@ export default {
                 console.log(err);
             })
         }else{
-            this.message='所有内容不能为空！'
+            this.message="所有内容不能为空！"
         }
-       
     },
     getmagazinePeriods(){
          Axios.post(url+'/admin/magazine/findAllPeriods',{
@@ -131,6 +134,35 @@ export default {
             if(data.code==1){
 
                 this.megazinePeriods=data.megazinePeriods;
+            }else{
+                this.message=data.message;
+            }
+            this.getOne();
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    },
+    getOne(){
+        var program= decodeURI(window.location.search.substring(1));
+        var reg = /.+=(.+)/g;
+        var list_title=reg.exec(program)[1];
+        Axios.post(url+'/admin/magazine/findArticle',{
+           list_title:list_title
+        })
+        .then(res=>{ 
+             var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+                this.magazine_journal_no=data.articleList[0].magazine_journal_no;
+                this.list_title=data.articleList[0].list_title;
+                this.list_content=data.articleList[0].list_content;
+                this.magazine_list_id=data.articleList[0].magazine_list_id
+                this.setContent(this.list_content);
             }else{
                 this.message=data.message;
             }
@@ -163,6 +195,7 @@ body {font-size: 20px;
 .message{
     color:#ca7117;
 }
+   
         @media (max-width: 980px) {
             /* Enable use of floated navbar text */
             .navbar-text.pull-right {

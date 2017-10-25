@@ -8,14 +8,14 @@ var moment = require('moment');
 var fiter = require('../filter/filter');
 
 //登陆
-router.post('/admin/login', function (req, res, next) {
+router.post('/admin/login', function(req, res, next) {
     var username = req.body.username;
     var password = req.body.password;
 
     var client = db.connect();
     var result = null;
     var message = {};
-    db.select(client, username, password, function (result) {
+    db.select(client, username, password, function(result) {
         if (result[0] === undefined) {
             message = {
                 code: 0,
@@ -26,12 +26,12 @@ router.post('/admin/login', function (req, res, next) {
             res.json(message);
         } else {
             message = {
-                code: 1,
-                user_role: [result[0].user_name],
-                message: '登陆成功',
-                username: req.body.username
-            }
-            // req.session.user_id = username;
+                    code: 1,
+                    user_role: [result[0].user_name],
+                    message: '登陆成功',
+                    username: req.body.username
+                }
+                // req.session.user_id = username;
             res.json(message);
         }
     })
@@ -40,7 +40,7 @@ router.post('/admin/login', function (req, res, next) {
 //-------------视频操作--------------------
 
 //视频添加
-router.post('/admin/video/add', function (req, res) {
+router.post('/admin/video/add', function(req, res) {
     var showUrl = common.upload(req);
     var client = db.connect();
     db.insertVideoFun(client, req.body.videoId, req.body.videoName, showUrl, req.body.title, moment.format(), req.body.note);
@@ -52,9 +52,9 @@ router.post('/admin/video/add', function (req, res) {
 
 
 //视频删除操作
-router.post('/admin/video/delete', function (req, res) {
+router.post('/admin/video/delete', function(req, res) {
     var client = db.connect();
-    db.deleteVideoFun(client, req.body.videoId, function (err) {
+    db.deleteVideoFun(client, req.body.videoId, function(err) {
         if (err) {
             console.log("删除失败");
             var message = {
@@ -72,7 +72,7 @@ router.post('/admin/video/delete', function (req, res) {
 })
 
 //视频查找一条操作
-router.post('/admin/video/find', function (req, res) {
+router.post('/admin/video/find', function(req, res) {
     var client = db.connect();
     var num = 5; //一页最多显示的条数
     var page = 1; //当前页
@@ -83,11 +83,11 @@ router.post('/admin/video/find', function (req, res) {
     var str = "select * from `t_television_program_content` WHERE video_introduction LIKE '%" + req.body.videoName + "%' limit " + num_start + "," + num_end + " ";
 
     //计算数据总数
-    db.findTo(client, function (result) {
-        count = result.length;
-    })
-    //返回查询的内容
-    db.findFun(client, req.body.videoName, str, function (result) {
+    db.findTo(client, function(result) {
+            count = result.length;
+        })
+        //返回查询的内容
+    db.findFun(client, req.body.videoName, str, function(result) {
         if (result[0]) {
             message.code = 1;
             message.limit = num;
@@ -108,7 +108,7 @@ router.post('/admin/video/find', function (req, res) {
 })
 
 //视频全部查询
-router.post('/admin/video/findAll', function (req, res) {
+router.post('/admin/video/findAll', function(req, res) {
     var client = db.connect();
     var current_page = 1; //当前页面
     var num = 5;
@@ -116,9 +116,10 @@ router.post('/admin/video/findAll', function (req, res) {
     if (req.body.page) {
         current_page = parseInt(req.body.page);
     }
+    console.log(req.body.page);
     var nun = (current_page - 1) * num;
     var str = "SELECT * FROM `t_television_program_content` limit " + num + " offset " + nun + " ";
-    db.findAll(client, str, function (result) {
+    db.findAll(client, str, function(result) {
         if (result) {
             message.code = 1;
             message.count = result.length;
@@ -132,8 +133,7 @@ router.post('/admin/video/findAll', function (req, res) {
                 })
             }
             message.message = '操作成功';
-        }
-        else {
+        } else {
             message.code = 0;
         }
         res.json(message);
@@ -141,11 +141,11 @@ router.post('/admin/video/findAll', function (req, res) {
 })
 
 //视频预览
-router.post('/admin/video/preview', function (req, res) {
+router.post('/admin/video/preview', function(req, res) {
     var str = "SELECT * FROM `t_television_program_content` WHERE video_introduction = " + req.body.videoName + " ";
     var client = db.connect();
     var message = {};
-    db.findFun(client, str, function (result) {
+    db.findFun(client, str, function(result) {
         if (result) {
             message.code = 1;
             message.video_url = new Array();
@@ -153,8 +153,7 @@ router.post('/admin/video/preview', function (req, res) {
                 message.video_url.push(result[i].video_url);
             }
             message.message = '操作成功';
-        }
-        else {
+        } else {
             message.code = 0;
             message.message = '操作失败';
         }
@@ -164,7 +163,7 @@ router.post('/admin/video/preview', function (req, res) {
 
 
 //视频修改
-router.post('/admin/video/amend', function (req, res) {
+router.post('/admin/video/amend', function(req, res) {
     var client = db.connect();
 })
 
@@ -172,20 +171,20 @@ router.post('/admin/video/amend', function (req, res) {
 //-------微众杂志--------
 
 //添加期数
-router.post('/admin/magazine/addPeriods', function (req, res) {
+router.post('/admin/magazine/addPeriods', function(req, res) {
     var showUrl = common.upload(req);
     var client = db.connect();
-    db.addPeriod(client, req.body.magazine_journal_no, req.body.magazine_journal_title, showUrl, req.body.note, function () {
+    db.addPeriod(client, req.body.magazine_journal_no, req.body.magazine_journal_title, showUrl, req.body.note, function() {
         res.json({ code: 1, message: '操作成功' })
     });
 })
 
 //查询单个期数
-router.post('/admin/magazine/findPeriods', function (req, res) {
+router.post('/admin/magazine/findPeriods', function(req, res) {
 
 
     var client = db.connect();
-    db.findM(client, req.body.magazine_journal_no, function (result) {
+    db.findM(client, req.body.magazine_journal_no, function(result) {
         if (!result) {
             res.json({ code: 0, message: '查询失败' })
             return;
@@ -204,7 +203,7 @@ router.post('/admin/magazine/findPeriods', function (req, res) {
 })
 
 //查询全部期数
-router.get('/admin/magazine/findAllPeriods', function (req, res) {
+router.get('/admin/magazine/findAllPeriods', function(req, res) {
     var current_page = 1; //当前页面
     var num = 5;
     var message = {};
@@ -213,7 +212,7 @@ router.get('/admin/magazine/findAllPeriods', function (req, res) {
     }
     var nun = (current_page - 1) * num;
     var str = "SELECT * FROM `t_magazine_program` limit " + num + " offset " + nun + " ";
-    db.findAll(client, str, function (result) {
+    db.findAll(client, str, function(result) {
         if (result) {
             var message = {};
             message.code = 1;
@@ -237,22 +236,22 @@ router.get('/admin/magazine/findAllPeriods', function (req, res) {
 })
 
 //期数删除
-router.post('/admin/magazine/delPeriods', function (req, res) {
+router.post('/admin/magazine/delPeriods', function(req, res) {
     var client = db.connect();
     db.deleteM(client, req.body.magazine_journal_no);
 })
 
 
 //文章添加
-router.post('/admin/magazine/addArticle', function (req, res) { })
+router.post('/admin/magazine/addArticle', function(req, res) {})
 
 
 //--------------广播台----------------
 
 //栏目添加
-router.post('/admin/radio/columnAdd', function (req, res) {
+router.post('/admin/radio/columnAdd', function(req, res) {
     var client = db.connect();
-    db.addC(client, req.body.program_name, req.body.program_date, function () {
+    db.addC(client, req.body.program_name, req.body.program_date, function() {
         res.json({
             code: 1,
             message: '操作成功'
@@ -261,7 +260,7 @@ router.post('/admin/radio/columnAdd', function (req, res) {
 })
 
 //栏目查询
-router.post('/admin/radio/columnFind', function (req, res) {
+router.post('/admin/radio/columnFind', function(req, res) {
     var client = db.connect();
     var num = 5; //一页最多显示的条数
     var page = 1; //当前页
@@ -270,17 +269,16 @@ router.post('/admin/radio/columnFind', function (req, res) {
     var message = {};
     var count = 0;
     var str = "select * from `t_radio_program` WHERE program_name LIKE '%" + req.body.program_name + "%' limit " + num_start + "," + num_end + " ";
-    db.findL(client, function (result) {
+    db.findL(client, function(result) {
         count = result.length;
     })
 
-    db.findFun(client, str, function (result) {
+    db.findFun(client, str, function(result) {
         if (result) {
             message.code = 1;
             message.count = count;
             message.message = '操作成功';
-        }
-        else {
+        } else {
             message.code = 0;
             message.message = '操作失败';
         }
@@ -288,17 +286,17 @@ router.post('/admin/radio/columnFind', function (req, res) {
 })
 
 //栏目修改
-router.post('/admin/radio/columnAmend', function(req, res){
+router.post('/admin/radio/columnAmend', function(req, res) {
     var client = db.connect();
-    db.updateL(client, req.body.program_id, req.body.program_name, req.body.program_date, function(){
-        res.json({code: 1, message: '操作成功'})
+    db.updateL(client, req.body.program_id, req.body.program_name, req.body.program_date, function() {
+        res.json({ code: 1, message: '操作成功' })
     })
 })
 
 //栏目删除
-router.post('/admin/radio/columnDel', function(req, res){
+router.post('/admin/radio/columnDel', function(req, res) {
     var client = db.connect();
-    db.deleteL(client, req.body.program_name, req.body.program_date, function(){
+    db.deleteL(client, req.body.program_name, req.body.program_date, function() {
         res.json({
             code: 1,
             message: '操作成功'
@@ -307,10 +305,10 @@ router.post('/admin/radio/columnDel', function(req, res){
 })
 
 //首页轮播添加
-router.post('/admin/radio/carouselAdd', function(req, res){
+router.post('/admin/radio/carouselAdd', function(req, res) {
     var showUrl = common.upload(req);
     var client = db.connect();
-    db.addP(client, showUrl, function(){
+    db.addP(client, showUrl, function() {
         res.json({
             code: 1,
             message: '操作成功'
@@ -319,10 +317,10 @@ router.post('/admin/radio/carouselAdd', function(req, res){
 })
 
 //广播添加
-router.post('/admin/radio/Add', function(req, res){
+router.post('/admin/radio/Add', function(req, res) {
     var showUrl = common.upload(req);
     var client = db.connect();
-    db.addV(client, showUrl, url, req.body.program_introduction, function(){
+    db.addV(client, showUrl, url, req.body.program_introduction, function() {
         res.json({
             code: 1,
             message: '操作成功'
@@ -331,14 +329,14 @@ router.post('/admin/radio/Add', function(req, res){
 })
 
 //广播查询
-router.post('/admin/radio/Find', function(req, res){
+router.post('/admin/radio/Find', function(req, res) {
     var client = db.connect();
-    
+
 })
 
 
 //-----------反馈栏目管理------------
-router.post('/admin/feedback/findAll', function(req, res){
+router.post('/admin/feedback/findAll', function(req, res) {
     var current_page = 1; //当前页面
     var num = 5;
     var message = {};
@@ -347,7 +345,7 @@ router.post('/admin/feedback/findAll', function(req, res){
     }
     var nun = (current_page - 1) * num;
     var str = "SELECT * FROM `feedbackinfo` limit " + num + " offset " + nun + " ";
-    db.findAll(client, str, function (result) {
+    db.findAll(client, str, function(result) {
         if (result) {
             var message = {};
             message.code = 1;
@@ -372,9 +370,9 @@ router.post('/admin/feedback/findAll', function(req, res){
 
 
 //单个反馈查询
-router.post('/admin/feedback/detail', function(req, res){
+router.post('/admin/feedback/detail', function(req, res) {
     var client = db.connect();
-    db.feedback(client, req.body.id, function(result){
+    db.feedback(client, req.body.id, function(result) {
         res.json({
             code: 1,
             feedbackList: [{
