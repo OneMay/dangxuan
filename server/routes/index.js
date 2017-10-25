@@ -111,7 +111,7 @@ router.post('/admin/video/find', function(req, res) {
 router.post('/admin/video/findAll', function(req, res) {
     var client = db.connect();
     var current_page = 1; //当前页面
-    var num = 5;
+    var num = 2;
     var message = {};
     if (req.body.page) {
         current_page = parseInt(req.body.page);
@@ -119,7 +119,7 @@ router.post('/admin/video/findAll', function(req, res) {
     console.log(req.body.page);
     var nun = (current_page - 1) * num;
     var str = "SELECT * FROM `t_television_program_content` limit " + num + " offset " + nun + " ";
-    db.findAll(client, str, function(result) {
+    db.findAllFun(client, str, function(result) {
         if (result) {
             message.code = 1;
             message.count = result.length;

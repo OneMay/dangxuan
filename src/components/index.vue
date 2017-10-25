@@ -269,6 +269,9 @@ export default {
 #admin:hover{
     color:red;
 }
+#left a {
+    padding: 7px 72px;
+}
 #footer{
     position:absolute;
     bottom:0;
