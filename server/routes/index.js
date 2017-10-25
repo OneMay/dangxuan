@@ -80,13 +80,13 @@ router.post('/admin/video/find', function(req, res) {
     var num_start = (page - 1) * num; //开始查询位置
     var message = {};
     var count = 0;
-    
+
 
     //计算数据总数
     db.findTo(client, function(result) {
             count = result.length;
         })
-    //返回查询的内容
+        //返回查询的内容
     db.findFun(client, req.body.videoName, str, function(result) {
         if (result[0]) {
             message.code = 1;
@@ -111,7 +111,7 @@ router.post('/admin/video/find', function(req, res) {
 router.post('/admin/video/findAll', function(req, res) {
     var client = db.connect();
     var current_page = 1; //当前页面
-    var num = 2;
+    var num = 5;
     var message = {};
     var count;
     if (req.body.page) {
@@ -121,7 +121,7 @@ router.post('/admin/video/findAll', function(req, res) {
     var str = "SELECT * FROM `t_television_program_content` limit " + num + " offset " + nun + " ;";
 
     //无模糊查询
-    if(!req.body.videoName){
+    if (!req.body.videoName) {
         console.log('fc');
         db.findAllFun(client, function(result) {
             count = result.length;
@@ -151,7 +151,7 @@ router.post('/admin/video/findAll', function(req, res) {
     }
 
     //存在模糊查询
-    else{
+    else {
         console.log('fn');
         var num = 5; //一页最多显示的条数
         var page = req.body.page; //当前页
@@ -181,9 +181,8 @@ router.post('/admin/video/findAll', function(req, res) {
                     })
                 }
                 res.json(message);
-            }
-            else{
-                res.json({code: 0, message: '操作失败'})
+            } else {
+                res.json({ code: 0, message: '操作失败' })
             }
         })
     }

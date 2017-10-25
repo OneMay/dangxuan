@@ -89,8 +89,8 @@ export default {
 
        // e.preventDefault();
         if(this.videoPoster&&this.video&&this.videoId.number&&this.videoName&&this.videoTitle&&this.videoWords){
-            var imgreg=/.+((\.jpg$)|(\.png$))/g;
-            var videoreg=/.+\.mp4$/g
+            var imgreg=/.+((\.jpg$)|(\.png$))/gi;
+            var videoreg=/.+\.mp4$/gi;
             if(imgreg.test(this.videoPoster.name)&&videoreg.test(this.video.name)){
                 this.message='正在上传...';
                 var formData = new FormData();
