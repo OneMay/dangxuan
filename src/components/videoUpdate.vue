@@ -112,7 +112,7 @@ export default {
                 }
                 }
 
-                Axios.post(url+'/admin/video/amend', formData, config)
+                axios.post(url+'/admin/video/amend', formData, config)
                 .then(res=>{
                     if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                         data=res.data;
@@ -133,7 +133,7 @@ export default {
             this.message='所有内容不能为空！'
         }
         
-        if(!this.videoPoster&&!this.video&&this.videoId.number&&this.videoName&&this.videoTitle&&this.videoWords){
+        if(!this.videoPoster||!this.video&&this.videoId.number&&this.videoName&&this.videoTitle&&this.videoWords){
 
                 this.message='正在上传...';
                 var formData = new FormData();
@@ -151,7 +151,7 @@ export default {
                 }
                 }
 
-                Axios.post(url+'/admin/video/amend', formData, config)
+                axios.post(url+'/admin/video/amend', formData, config)
                 .then(res=>{
                     if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                         data=res.data;

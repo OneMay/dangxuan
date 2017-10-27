@@ -12,7 +12,7 @@ function connectServer() {
     return client;
 }
 
-//查找视频
+//登陆
 function selectFun(client, username, password, callback) {
     client.query('select * from t_user where user_no="' + username + '" and password="' + password + '"', function(err, result, fields) {
         if (err) throw err;
@@ -44,13 +44,21 @@ function findTo(client, name, callback) {
     })
 }
 
-//查找一条视频
+//查找
 function findFun(client, str, callback) {
     client.query(str, function(err, result, fields) {
         if (err) {
             throw err;
             res.json({ code: 0, message: '操作失败' })
         }
+        callback(result);
+    })
+}
+
+//查找一条视频
+function findO(client, id, callback){
+    client.query("SELECT * FROM `t_television_program_content` WHERE television_program_content_id = "+id+"", function(err, result){
+        if(err) throw err;
         callback(result);
     })
 }
@@ -242,3 +250,4 @@ exports.addP = addP;
 exports.addV = addV;
 exports.feedback = feedback;
 exports.findF = findF;
+exports.findO = findO;

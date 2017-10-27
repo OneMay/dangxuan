@@ -75,24 +75,11 @@ router.post('/admin/video/delete', function(req, res) {
 //视频查找一条操作
 router.post('/admin/video/find', function(req, res) {
     var client = db.connect();
-    var num = 5; //一页最多显示的条数
-    var page = 1; //当前页
-    var num_end = page * num; //结束查询位置
-    var num_start = (page - 1) * num; //开始查询位置
     var message = {};
-    var count = 0;
-
-
-    //计算数据总数
-    db.findTo(client, function(result) {
-            count = result.length;
-        })
-        //返回查询的内容
-    db.findFun(client, req.body.videoName, str, function(result) {
+    //返回查询的内容
+    db.findO(client, req.body.television_program_content_id, function(result) {
         if (result[0]) {
             message.code = 1;
-            message.limit = num;
-            message.count = count;
             message.videoList = new Array;
             for (var i = 0; i < result.length; i++) {
                 message.videoList.push({
@@ -105,6 +92,7 @@ router.post('/admin/video/find', function(req, res) {
                 })
             }
         }
+        res.json(message);
     })
 
 })
