@@ -42,6 +42,7 @@ router.post('/admin/login', function(req, res, next) {
 //视频添加
 router.post('/admin/video/add', function(req, res) {
     var showUrl = common.upload(req);
+    console.log('dsadas');
     var client = db.connect();
     db.insertVideoFun(client, req.body.videoId, req.body.videoName, showUrl, req.body.title, moment.format(), req.body.note);
     res.json({
@@ -99,6 +100,7 @@ router.post('/admin/video/find', function(req, res) {
                     videoCategory: result[i].television_program_id,
                     videoUrl: result[i].video_url,
                     video_timestamp: result[i].video_timestamp,
+                    television_program_content_id: result[i].television_program_content_id,
                     note: result[i].note
                 })
             }
@@ -111,7 +113,7 @@ router.post('/admin/video/find', function(req, res) {
 router.post('/admin/video/findAll', function(req, res) {
     var client = db.connect();
     var current_page = 1; //当前页面
-    var num = 2;
+    var num = 5;
     var message = {};
     var count;
     if (req.body.page) {
@@ -133,12 +135,13 @@ router.post('/admin/video/findAll', function(req, res) {
                 message.count = count;
                 message.limit = num;
                 message.page = req.body.page;
-                message.currentPage = count % 5 + 1;
+                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
                 message.videoList = new Array();
                 for (var i = 0; i < result.length; i++) {
                     message.videoList.push({
                         videoName: result[i].video_introduction,
                         video_timestamp: result[i].video_timestamp,
+                        television_program_content_id: result[i].television_program_content_id,
                         note: result[i].note
                     })
                 }
@@ -170,6 +173,8 @@ router.post('/admin/video/findAll', function(req, res) {
                 message.code = 1;
                 message.limit = num;
                 message.count = count;
+                message.page = page;
+                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
                 message.videoList = new Array;
                 for (var i = 0; i < result.length; i++) {
                     message.videoList.push({
@@ -177,6 +182,7 @@ router.post('/admin/video/findAll', function(req, res) {
                         videoCategory: result[i].television_program_id,
                         videoUrl: result[i].video_url,
                         video_timestamp: result[i].video_timestamp,
+                        television_program_content_id: result[i].television_program_content_id,
                         note: result[i].note
                     })
                 }
@@ -252,36 +258,88 @@ router.post('/admin/magazine/findPeriods', function(req, res) {
 })
 
 //查询全部期数
-router.get('/admin/magazine/findAllPeriods', function(req, res) {
+router.post('/admin/magazine/findAllPeriods', function(req, res) {
+    var client = db.connect();
     var current_page = 1; //当前页面
     var num = 5;
     var message = {};
+    var count;
     if (req.body.page) {
         current_page = parseInt(req.body.page);
     }
-    var nun = (current_page - 1) * num;
-    var str = "SELECT * FROM `t_magazine_program` limit " + num + " offset " + nun + " ";
-    db.findAll(client, str, function(result) {
-        if (result) {
-            var message = {};
-            message.code = 1;
-            message.limit = 5;
-            message.count = result.length;
-            message.page = (result.length) % 5 + 1;
-            message.megazineList = new Array();
-            for (var i = 0; i < result.length; i++) {
-                message.megazineList.push({
-                    magazine_journal_no: result[i].magazine_journal_no,
-                    magazine_journal_title: result[i].magazine_journal_title,
-                    magazine_journal_timestamp: moment.format(),
-                    magazine_program_id: result[i].magazine_program_id,
-                    note: result[i].note
-                })
+
+    //没有关键字查询
+    if(!req.body.magazine_journal_no){
+        var nun = (current_page - 1) * num;
+        var str = "SELECT * FROM `t_magazine_program` limit " + num + " offset " + nun + " ";
+        db.findY(client, function(result){
+            count = result.length;
+        })
+        db.findFun(client, str, function(result) {
+            if (result) {
+                var message = {};
+                message.code = 1;
+                message.limit = 5;
+                message.count = count;
+                message.page = req.body.page;
+                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
+                message.megazineList = new Array();
+                for (var i = 0; i < result.length; i++) {
+                    message.megazineList.push({
+                        magazine_journal_no: result[i].magazine_journal_no,
+                        magazine_journal_title: result[i].magazine_journal_title,
+                        magazine_journal_timestamp: result[i].magazine_journal_timestamp,
+                        magazine_program_id: result[i].magazine_program_id,
+                        note: result[i].note
+                    })
+                }
+                message.message = '操作成功';
+                res.json(message);
             }
-            message.message = '操作成功';
-            res.json(message);
-        }
-    })
+            else{
+                res.json({code: 1, megazineList: null});
+            }
+        })
+    }
+
+    //模糊查询
+    else{
+        console.log('kk');
+        var num = 5; //一页最多显示的条数
+        var page = req.body.page; //当前页
+        var num_end = page * num; //结束查询位置
+        var num_start = (page - 1) * num; //开始查询位置
+        var message = {};
+        var count = 0;
+        var str = "select * from `t_magazine_program` WHERE magazine_journal_no LIKE '%" + req.body.magazine_journal_no + "%' limit " + num_start + "," + num_end + " ";
+        db.findMA(client, req.body.magazine_journal_no, function(result) {
+            console.log(result);
+            count = result.length;
+        })
+        db.findFun(client, str, function(result) {
+            if (result[0]) {
+                message.code = 1;
+                message.limit = num;
+                message.count = count;
+                message.page = req.body.page;
+                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
+                message.megazineList = new Array;
+                for (var i = 0; i < result.length; i++) {
+                    message.megazineList.push({
+                        magazine_journal_no: result[i].magazine_journal_no,
+                        magazine_journal_title: result[i].magazine_journal_title,
+                        magazine_journal_timestamp: result[i].magazine_journal_timestamp,
+                        magazine_program_id: result[i].magazine_program_id,
+                        note: result[i].note
+                    })
+                }
+                res.json(message);
+            }
+            else{
+                res.json({code: 1, megazineList: null})
+            }
+        })
+    }
 })
 
 //期数删除
@@ -293,6 +351,96 @@ router.post('/admin/magazine/delPeriods', function(req, res) {
 
 //文章添加
 router.post('/admin/magazine/addArticle', function(req, res) {})
+
+//查找所有文章
+router.post('/admin/magazine/findAllArticle', function(req, res){
+    var client = db.connect();
+    var current_page = 1; //当前页面
+    var num = 5;
+    var message = {};
+    var count;
+    if (req.body.page) {
+        current_page = parseInt(req.body.page);
+    }
+
+    //没有关键字查询
+    if(!req.body.magazine_journal_no){
+        var nun = (current_page - 1) * num;
+        var str = "SELECT * FROM `t_magazine_list` limit " + num + " offset " + nun + " ";
+        db.findAA(client, function(result){
+            count = result.length;
+        })
+        db.findFun(client, str, function(result) {
+            if (result) {
+                var message = {};
+                message.code = 1;
+                message.limit = 5;
+                message.count = count;
+                message.page = req.body.page;
+                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
+                message.articleList = new Array();
+                for (var i = 0; i < result.length; i++) {
+                    message.articleList.push({
+                        list_title: result[i].list_title,
+                        insert_time: result[i].insert_time,
+                        list_writer: result[i].list_writer,
+                        magazine_list_id: result[i].magazine_list_id,
+                        magazine_program_id: result[i].magazine_program_id
+                    })
+                }
+                console.log('fuck ass');
+                message.articleList.forEach(function(value, index, array) {
+                    array[index].magazine_journal_no = db.findQ(client, array[index].magazine_program_id);
+                    // console.log(db.findQ(client, array[index].magazine_program_id));
+                });
+                message.message = '操作成功';
+                res.json(message);
+            }
+            else{
+                res.json({code: 1, megazineList: null});
+            }
+        })
+    }
+
+    //模糊查询
+    else{
+        console.log('kk');
+        var num = 5; //一页最多显示的条数
+        var page = req.body.page; //当前页
+        var num_end = page * num; //结束查询位置
+        var num_start = (page - 1) * num; //开始查询位置
+        var message = {};
+        var count = 0;
+        var str = "select * from `t_magazine_program` WHERE magazine_journal_no LIKE '%" + req.body.list_title + "%' limit " + num_start + "," + num_end + " ";
+        db.findMA(client, req.body.magazine_journal_no, function(result) {
+            console.log(result);
+            count = result.length;
+        })
+        db.findFun(client, str, function(result) {
+            if (result[0]) {
+                message.code = 1;
+                message.limit = num;
+                message.count = count;
+                message.page = req.body.page;
+                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
+                message.megazineList = new Array;
+                for (var i = 0; i < result.length; i++) {
+                    message.megazineList.push({
+                        magazine_journal_no: result[i].magazine_journal_no,
+                        magazine_journal_title: result[i].magazine_journal_title,
+                        magazine_journal_timestamp: result[i].magazine_journal_timestamp,
+                        magazine_program_id: result[i].magazine_program_id,
+                        note: result[i].note
+                    })
+                }
+                res.json(message);
+            }
+            else{
+                res.json({code: 1, megazineList: null})
+            }
+        })
+    }
+})
 
 
 //--------------广播台----------------
@@ -309,29 +457,93 @@ router.post('/admin/radio/columnAdd', function(req, res) {
 })
 
 //栏目查询
-router.post('/admin/radio/columnFind', function(req, res) {
+router.post('/admin/radio/columnFindAll', function(req, res) {
     var client = db.connect();
-    var num = 5; //一页最多显示的条数
-    var page = 1; //当前页
-    var num_end = page * num; //结束查询位置
-    var num_start = (page - 1) * num; //开始查询位置
+    var current_page = 1; //当前页面
+    var num = 5;
     var message = {};
-    var count = 0;
-    var str = "select * from `t_radio_program` WHERE program_name LIKE '%" + req.body.program_name + "%' limit " + num_start + "," + num_end + " ";
-    db.findL(client, function(result) {
-        count = result.length;
-    })
+    var count;
+    if (req.body.page) {
+        current_page = parseInt(req.body.page);
+    }
 
-    db.findFun(client, str, function(result) {
-        if (result) {
-            message.code = 1;
-            message.count = count;
-            message.message = '操作成功';
-        } else {
-            message.code = 0;
-            message.message = '操作失败';
-        }
-    })
+    //没有关键字查询
+    if(!req.body.magazine_journal_no){
+        var nun = (current_page - 1) * num;
+        var str = "SELECT * FROM `t_magazine_list` limit " + num + " offset " + nun + " ";
+        db.findAA(client, function(result){
+            count = result.length;
+        })
+        db.findFun(client, str, function(result) {
+            if (result) {
+                var message = {};
+                message.code = 1;
+                message.limit = 5;
+                message.count = count;
+                message.page = req.body.page;
+                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
+                message.articleList = new Array();
+                for (var i = 0; i < result.length; i++) {
+                    message.articleList.push({
+                        list_title: result[i].list_title,
+                        insert_time: result[i].insert_time,
+                        list_writer: result[i].list_writer,
+                        magazine_list_id: result[i].magazine_list_id,
+                        magazine_program_id: result[i].magazine_program_id
+                    })
+                }
+                console.log('fuck ass');
+                message.articleList.forEach(function(value, index, array) {
+                    array[index].magazine_journal_no = db.findQ(client, array[index].magazine_program_id);
+                    // console.log(db.findQ(client, array[index].magazine_program_id));
+                });
+                message.message = '操作成功';
+                res.json(message);
+            }
+            else{
+                res.json({code: 1, megazineList: null});
+            }
+        })
+    }
+
+    //模糊查询
+    else{
+        console.log('kk');
+        var num = 5; //一页最多显示的条数
+        var page = req.body.page; //当前页
+        var num_end = page * num; //结束查询位置
+        var num_start = (page - 1) * num; //开始查询位置
+        var message = {};
+        var count = 0;
+        var str = "select * from `t_magazine_program` WHERE magazine_journal_no LIKE '%" + req.body.list_title + "%' limit " + num_start + "," + num_end + " ";
+        db.findMA(client, req.body.magazine_journal_no, function(result) {
+            console.log(result);
+            count = result.length;
+        })
+        db.findFun(client, str, function(result) {
+            if (result[0]) {
+                message.code = 1;
+                message.limit = num;
+                message.count = count;
+                message.page = req.body.page;
+                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
+                message.megazineList = new Array;
+                for (var i = 0; i < result.length; i++) {
+                    message.megazineList.push({
+                        magazine_journal_no: result[i].magazine_journal_no,
+                        magazine_journal_title: result[i].magazine_journal_title,
+                        magazine_journal_timestamp: result[i].magazine_journal_timestamp,
+                        magazine_program_id: result[i].magazine_program_id,
+                        note: result[i].note
+                    })
+                }
+                res.json(message);
+            }
+            else{
+                res.json({code: 1, megazineList: null})
+            }
+        })
+    }
 })
 
 //栏目修改
@@ -386,29 +598,37 @@ router.post('/admin/radio/Find', function(req, res) {
 
 //-----------反馈栏目管理------------
 router.post('/admin/feedback/findAll', function(req, res) {
+    var client = db.connect(); 
     var current_page = 1; //当前页面
     var num = 5;
     var message = {};
+    var count;
     if (req.body.page) {
         current_page = parseInt(req.body.page);
     }
     var nun = (current_page - 1) * num;
+    console.log('se');
+    db.findF(client, function(result){
+        count = result.length;
+    })
+    console.log('ss');
     var str = "SELECT * FROM `feedbackinfo` limit " + num + " offset " + nun + " ";
-    db.findAll(client, str, function(result) {
+    db.findFun(client, str, function(result) {
         if (result) {
             var message = {};
             message.code = 1;
             message.limit = 5;
-            message.count = result.length;
-            message.page = (result.length) % 5 + 1;
+            message.count = count;
+            message.page = req.body.page;
+            message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
             message.feedbackList = new Array();
             for (var i = 0; i < result.length; i++) {
                 message.feedbackList.push({
                     FeedbackTitle: result[i].FeedbackTitle,
-                    Feedback_timestamp: result[i].Feedback_timestamp,
+                    Feedback_timestamp: result[i].feedback_timestamp,
                     UserName: result[i].UserName,
                     Feedback_state: result[i].Feedback_state,
-                    id: result[i].id
+                    id: result[i].Id
                 })
             }
             message.message = '操作成功';
@@ -425,8 +645,8 @@ router.post('/admin/feedback/detail', function(req, res) {
         res.json({
             code: 1,
             feedbackList: [{
-                FeedbackTitle: result.FeedbackTitle,
-                FeedbackContent: result.FeedbackContent
+                FeedbackTitle: result[0].FeedbackTitle,
+                FeedbackContent: result[0].FeedbackContent
             }],
             message: '操作成功'
         })

@@ -42,12 +42,8 @@ function upload(req){
         var showUrl = domain + AVATAR_UPLOAD_FOLDER + avatarName;
         fs.renameSync(files.videoPoster.path, newPath);
     })
-
+    console.log('shit');
     return showUrl;
-}
-
-function filter(){
-    
 }
 
 exports.upload = upload;

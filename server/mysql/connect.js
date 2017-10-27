@@ -31,7 +31,7 @@ function insertVideoFun(client, id, post_url, url, title, time, note, callback){
 
 //删除视频
 function deleteVideoFun(client, name, callback){
-    client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_id`='"+name+"')", function(err){
+    client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_content_id`='"+name+"')", function(err){
         if(err) throw err;
         callback(err);
     });
@@ -75,6 +75,15 @@ function update(client, id, videoName, callback) {
     })
 }
 
+//------------------微众杂志----------------------
+function findY(client, callback){
+    client.query("SELECT * FROM `t_magazine_program`", function(err, result, fields){
+        if(err) throw err;
+
+        callback(result);
+    })
+}
+
 //添加期数
 function addPeriod(client, magazine_journal_no, magazine_journal_title, path, note) {
     client.query('INSERT INTO `t_magazine_program` (`magazine_journal_no`, `magazine_journal_title`, `magazine_journal_picture`, `note`) VALUES (' + magazine_journal_no + ', ' + magazine_journal_title + ', ' + path + ', ' + note + ')"')
@@ -92,7 +101,7 @@ function findM(client, id, callback) {
 
 //全部期数查询
 function findMA(client, id, callback) {
-    client.query("select * FROM `t_television_program_content` WHERE video_introduction LIKE '%" + name + "%' ", function(err, result) {
+    client.query("select * FROM `t_magazine_program` WHERE magazine_journal_no LIKE '%" + id + "%' ", function(err, result) {
         if (err) throw err;
         callback(result);
     })
@@ -111,6 +120,30 @@ function deleteM(client, id, callback) {
 //文章添加
 function addA(client, id, title, content, author) {
     client.query("INSERT INTO `t_television_program_content` (`television_program_id`, `thumbnails_url`, `video_url`, `video_introduction`, `video_introduction`, `video_timestamp`, `note`) VALUES ('" + id + "', '" + post_url + "', '" + url + "', '" + title + "', '" + time + "', '" + note + "')")
+}
+
+//查询所有文章
+function findAA(client, callback){
+    client.query("SELECT * FROM `t_magazine_list`", function(err, result){
+        if(err) throw err;
+        callback(result);
+    })
+}
+
+//查询期数
+function findQ(client, id){
+    client.query("SELECT * FROM `t_magazine_program` WHERE magazine_program_id = "+id+" ", function(err, result){
+        console.log(result);
+        return result[0].magazine_journal_no;
+    })
+}
+
+//模糊查询文章
+function findAR(client, id, callback) {
+    client.query("select * FROM `t_magazine_list` WHERE list_title LIKE '%" + id + "%' ", function(err, result) {
+        if (err) throw err;
+        callback(result);
+    })
 }
 
 
@@ -167,10 +200,23 @@ function findV(client, name) {
 
 //--------反馈管理-----------
 
+//全部反馈查询
+function findF(client, callback){
+    client.query("SELECT * FROM `feedbackinfo`", function(err, result){
+        if(err){
+            throw err;
+        }
+        callback(result);
+    })
+}
+
 //单个反馈查询
-function feedback(client, id) {
-    client.query("SELECT * FROM `feedbackinfo` WHERE id = " + id + "", function(err) {
-        throw err;
+function feedback(client, id, callback) {
+    client.query("SELECT * FROM `feedbackinfo` WHERE id = " + id + "", function(err, result) {
+        if(err){
+            throw err;
+        }
+        callback(result);
     });
 }
 
@@ -182,8 +228,12 @@ exports.findFun = findFun;
 exports.findAllFun = findAllFun;
 exports.update = update;
 exports.addPeriod = addPeriod;
+exports.findAA = findAA;
+exports.findQ = findQ;
 exports.findTo = findTo;
 exports.findM = findM;
+exports.findMA = findMA;
+exports.findY = findY;
 exports.deleteM = deleteM;
 exports.addC = addC;
 exports.findL = findL;
@@ -192,3 +242,4 @@ exports.deleteL = deleteL;
 exports.addP = addP;
 exports.addV = addV;
 exports.feedback = feedback;
+exports.findF = findF;
