@@ -26,7 +26,6 @@
        </table>
        <nav>
           <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{page}}页</p>
-          <p v-text="message"></p>
           <ul class="pager">
               <li class="previous"><span @click="getVideoList(--page)">&larr;上一页</span></li>
               <li class="next"><span @click="getVideoList(++page)">下一页 &rarr;</span></li>

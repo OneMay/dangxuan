@@ -160,7 +160,7 @@ export default {
                 data=JSON.parse(res.data)
             }
             if(data.code==1){
-                this.getradioList(this.page);
+                this.getradioList(1);
             }else{
                 this.message=data.message;
             }

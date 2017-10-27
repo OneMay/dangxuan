@@ -117,7 +117,7 @@ export default {
                 data=JSON.parse(res.data)
             }
             if(data.code==1){
-              this.getPeriodsList(this.page);
+              this.getPeriodsList(1);
             }
         })
         .catch(err=>{

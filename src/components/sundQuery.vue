@@ -91,7 +91,7 @@ export default {
                 data=JSON.parse(res.data)
             }
             if(data.code==1){
-                this.getcolumnList(this.page);
+                this.getcolumnList(1);
             }else{
                 this.message=data.message;
             }

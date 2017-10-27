@@ -95,7 +95,7 @@ export default {
                 data=JSON.parse(res.data)
             }
             if(data.code==1){
-              this.getVideoList(this.page) 
+              this.getVideoList(1) 
             }
         })
         .catch(err=>{

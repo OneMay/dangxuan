@@ -97,7 +97,7 @@ export default {
                 data=JSON.parse(res.data)
             }
             if(data.code==1){
-              this.getmagazineList(this.page);
+              this.getmagazineList(1);
             }
         })
         .catch(err=>{
