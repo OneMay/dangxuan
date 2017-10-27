@@ -31,15 +31,9 @@ function insertVideoFun(client, id, post_url, url, title, time, note, callback) 
 }
 
 //删除视频
-<<<<<<< HEAD
-function deleteVideoFun(client, name, callback){
-    client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_content_id`='"+name+"')", function(err){
-        if(err) throw err;
-=======
 function deleteVideoFun(client, name, callback) {
     client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_id`='" + name + "')", function(err) {
         if (err) throw err;
->>>>>>> b096c056b024dee43166ecce70c94e1c9f56ef6e
         callback(err);
     });
 }
@@ -83,9 +77,9 @@ function update(client, id, videoName, callback) {
 }
 
 //------------------微众杂志----------------------
-function findY(client, callback){
-    client.query("SELECT * FROM `t_magazine_program`", function(err, result, fields){
-        if(err) throw err;
+function findY(client, callback) {
+    client.query("SELECT * FROM `t_magazine_program`", function(err, result, fields) {
+        if (err) throw err;
 
         callback(result);
     })
@@ -130,16 +124,16 @@ function addA(client, id, title, content, author) {
 }
 
 //查询所有文章
-function findAA(client, callback){
-    client.query("SELECT * FROM `t_magazine_list`", function(err, result){
-        if(err) throw err;
+function findAA(client, callback) {
+    client.query("SELECT * FROM `t_magazine_list`", function(err, result) {
+        if (err) throw err;
         callback(result);
     })
 }
 
 //查询期数
-function findQ(client, id){
-    client.query("SELECT * FROM `t_magazine_program` WHERE magazine_program_id = "+id+" ", function(err, result){
+function findQ(client, id) {
+    client.query("SELECT * FROM `t_magazine_program` WHERE magazine_program_id = " + id + " ", function(err, result) {
         console.log(result);
         return result[0].magazine_journal_no;
     })
@@ -208,9 +202,9 @@ function findV(client, name) {
 //--------反馈管理-----------
 
 //全部反馈查询
-function findF(client, callback){
-    client.query("SELECT * FROM `feedbackinfo`", function(err, result){
-        if(err){
+function findF(client, callback) {
+    client.query("SELECT * FROM `feedbackinfo`", function(err, result) {
+        if (err) {
             throw err;
         }
         callback(result);
@@ -220,7 +214,7 @@ function findF(client, callback){
 //单个反馈查询
 function feedback(client, id, callback) {
     client.query("SELECT * FROM `feedbackinfo` WHERE id = " + id + "", function(err, result) {
-        if(err){
+        if (err) {
             throw err;
         }
         callback(result);

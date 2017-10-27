@@ -92,7 +92,7 @@ export default {
          var that = this;
 
        // e.preventDefault();
-        if(this.videoPoster&&this.video&&this.videoId.number&&this.videoName&&this.videoTitle&&this.videoWords){
+        if(this.videoId.number&&this.videoName&&this.videoTitle&&this.videoWords){
             var imgreg=/.+((\.jpg$)|(\.png$))/g;
             var videoreg=/.+\.mp4$/g
             if(imgreg.test(this.videoPoster.name)&&videoreg.test(this.video.name)){
@@ -112,7 +112,7 @@ export default {
                 }
                 }
 
-                Axios.post(url+'/admin/video/amend', formData, config)
+                axios.post(url+'/admin/video/amend', formData, config)
                 .then(res=>{
                     if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                         data=res.data;
@@ -132,42 +132,7 @@ export default {
         }else{
             this.message='所有内容不能为空！'
         }
-        
-        if(!this.videoPoster&&!this.video&&this.videoId.number&&this.videoName&&this.videoTitle&&this.videoWords){
-
-                this.message='正在上传...';
-                var formData = new FormData();
-                //formData.append('videoPoster', this.videoPoster);
-               // formData.append('video', this.video);
-                formData.append('videoId', this.videoId.number);
-                formData.append('videoName', this.videoName);
-                formData.append('videoTitle', this.videoTitle);
-                formData.append('videoWords', this.videoWords);
-                formData.append('note', this.note);
-
-                let config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-                }
-
-                Axios.post(url+'/admin/video/amend', formData, config)
-                .then(res=>{
-                    if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
-                        data=res.data;
-                    }else{
-                        data=JSON.parse(res.data)
-                    }
-                    this.message='更新成功';
-                    console.log(res.data)
-                })
-                .catch(err=>{
-                    this.message='更新失败';
-                    console.log(err)
-                }); 
-        }else{
-            this.message='所有内容不能为空！'
-        }   
+         
     },
     getVideo(){
        
