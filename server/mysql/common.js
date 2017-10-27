@@ -6,7 +6,7 @@ function upload(req, callback) {
         AVATAR_UPLOAD_FOLDER = '/public/avatar/',
         domain = "http://localhost:3000"
     form.encoding = 'utf-8';
-    form.uploadDir = '../../dist' + AVATAR_UPLOAD_FOLDER;
+    form.uploadDir = '../../dist/' + AVATAR_UPLOAD_FOLDER;
     form.keepExtensions = true;
     form.parse(req, function(err, fields, files) {
         console.log(fields);
