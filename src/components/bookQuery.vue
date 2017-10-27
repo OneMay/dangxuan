@@ -19,7 +19,7 @@
             <td>微众</td>
             <td v-text="item.magazine_journal_no"></td>
             <td v-text="item.magazine_journal_title"></td>
-            <td><span class="btn btn-danger" @click="periodsAmend(item)">修改</span><span class="btn btn-success" @click="previewArticle(item)">预览</span><span class="btn btn-danger" @click="delArticle(item)">删除</span></td>  
+            <td><span class="btn btn-success" @click="periodsAmend(item)">修改</span><span class="btn btn-danger" @click="delArticle(item)">删除</span></td>  
         </tr>
     </table>
        <nav>
