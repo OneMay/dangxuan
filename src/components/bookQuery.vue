@@ -106,7 +106,7 @@ export default {
         })
     },
     delArticle(item){
-        Axios.post(url+'/admin/magazine/delPeriods',{
+        axios.post(url+'/admin/magazine/delPeriods',{
             magazine_journal_no:item.magazine_journal_no
         })
         .then(res=>{

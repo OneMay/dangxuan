@@ -133,7 +133,7 @@ export default {
             this.message='所有内容不能为空！'
         }
         
-        if(!this.videoPoster||!this.video&&this.videoId.number&&this.videoName&&this.videoTitle&&this.videoWords){
+        if((!this.videoPoster||!this.video)&&this.videoId.number&&this.videoName&&this.videoTitle&&this.videoWords){
 
                 this.message='正在上传...';
                 var formData = new FormData();
