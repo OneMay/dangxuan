@@ -69,6 +69,12 @@ export default {
                 this.count=data.count;
                 this.currentPage=data.currentPage;
                 this.page=data.page;
+                data.videoList.forEach(function(val,index){
+                    var reg=/(\d{4}-\d{2}-\d{2})T(.+)\..+/g;
+                    var arr = reg.exec(val.video_timestamp);
+                    var video_timestamp=arr[1]+'  '+arr[2];
+                    val.video_timestamp=video_timestamp;  
+                })
                 this.videoList=data.videoList;
             }
         })
@@ -82,7 +88,15 @@ export default {
             videoName:item.videoName
         })
         .then(res=>{
-            console.log(res.data);
+             var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+              this.getVideoList(this.page) 
+            }
         })
         .catch(err=>{
             console.log(err);
@@ -113,6 +127,12 @@ export default {
                 this.count=data.count;
                 this.currentPage=data.currentPage;
                 this.page=data.page;
+                data.videoList.forEach(function(val,index){
+                    var reg=/(\d{4}-\d{2}-\d{2})T(.+)\..+/g;
+                    var arr = reg.exec(val.video_timestamp);
+                    var video_timestamp=arr[1]+'  '+arr[2];
+                    val.video_timestamp=video_timestamp;  
+                })
                 this.videoList=data.videoList;
             }
         })

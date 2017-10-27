@@ -19,7 +19,7 @@
             <td>微众</td>
             <td v-text="item.magazine_journal_no"></td>
             <td v-text="item.magazine_journal_title"></td>
-            <td><span class="btn btn-danger" @click="periodsAmend(item)">修改</span></td>  
+            <td><span class="btn btn-success" @click="periodsAmend(item)">修改</span><span class="btn btn-danger" @click="delArticle(item)">删除</span></td>  
         </tr>
     </table>
        <nav>
@@ -105,8 +105,27 @@ export default {
             console.log(err);
         })
     },
+    delArticle(item){
+        Axios.post(url+'/admin/magazine/delPeriods',{
+            magazine_journal_no:item.magazine_journal_no
+        })
+        .then(res=>{
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+              this.getPeriodsList(this.page);
+            }
+        })
+        .catch(err=>{
+            console.log(err);
+        })
+    },
     periodsAmend(periods){
-        window.location.href='/admin/bookPeriodsAmend?magazine_journal_no='+magazine_journal_no;
+        window.location.href='/admin/bookPeriodsAmend?magazine_journal_no='+periods.magazine_journal_no;
     },
      getPeriodsList(num){
         if(num>this.currentPage){

@@ -41,6 +41,7 @@ router.post('/admin/login', function(req, res, next) {
 
 //视频添加
 router.post('/admin/video/add', function(req, res) {
+<<<<<<< HEAD
     var showUrl = common.upload(req);
     console.log('dsadas');
     var client = db.connect();
@@ -49,6 +50,28 @@ router.post('/admin/video/add', function(req, res) {
         code: 1,
         message: '成功'
     })
+=======
+    var showUrl = common.upload(req, function(result, showUrl) {
+        var client = db.connect();
+        db.insertVideoFun(client, result.videoId, showUrl, '556', result.title, '2017-09-12T12:25:12.22', '55', function(err) {
+            if (err) {
+                console.log("失败");
+                var message = {
+                    code: 0,
+                    message: '失败'
+                }
+                res.json(message);
+            } else {
+                var message = {
+                    code: 1,
+                    message: '上传成功'
+                }
+                res.json(message);
+            }
+        });
+    });
+
+>>>>>>> b096c056b024dee43166ecce70c94e1c9f56ef6e
 })
 
 
@@ -81,13 +104,13 @@ router.post('/admin/video/find', function(req, res) {
     var num_start = (page - 1) * num; //开始查询位置
     var message = {};
     var count = 0;
-    
+
 
     //计算数据总数
     db.findTo(client, function(result) {
             count = result.length;
         })
-    //返回查询的内容
+        //返回查询的内容
     db.findFun(client, req.body.videoName, str, function(result) {
         if (result[0]) {
             message.code = 1;
@@ -123,7 +146,7 @@ router.post('/admin/video/findAll', function(req, res) {
     var str = "SELECT * FROM `t_television_program_content` limit " + num + " offset " + nun + " ;";
 
     //无模糊查询
-    if(!req.body.videoName){
+    if (!req.body.videoName) {
         console.log('fc');
         db.findAllFun(client, function(result) {
             count = result.length;
@@ -154,7 +177,7 @@ router.post('/admin/video/findAll', function(req, res) {
     }
 
     //存在模糊查询
-    else{
+    else {
         console.log('fn');
         var num = 5; //一页最多显示的条数
         var page = req.body.page; //当前页
@@ -172,8 +195,12 @@ router.post('/admin/video/findAll', function(req, res) {
             if (result[0]) {
                 message.code = 1;
                 message.limit = num;
+<<<<<<< HEAD
                 message.count = count;
                 message.page = page;
+=======
+                message.page = req.body.page;
+>>>>>>> b096c056b024dee43166ecce70c94e1c9f56ef6e
                 message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
                 message.videoList = new Array;
                 for (var i = 0; i < result.length; i++) {
@@ -187,9 +214,8 @@ router.post('/admin/video/findAll', function(req, res) {
                     })
                 }
                 res.json(message);
-            }
-            else{
-                res.json({code: 0, message: '操作失败'})
+            } else {
+                res.json({ code: 0, message: '操作失败' })
             }
         })
     }

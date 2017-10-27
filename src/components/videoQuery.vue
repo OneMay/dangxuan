@@ -21,7 +21,7 @@
             <td v-text="video.videoCategory"></td>
             <td v-text="video.note"><span style="color:#005580;"></span></td>
             <td v-text="video.video_timestamp"></td>
-            <td> <span  class="btn btn-success " @click="watch(video.videoName)">预览</span> <span  class="btn btn-danger" @click="update(video)">修改</span></td>  
+            <td> <span  class="btn btn-success " @click="watch(video)">预览</span> <span  class="btn btn-danger" @click="update(video)">修改</span></td>  
         </tr>
        </table>
        <nav>
@@ -94,8 +94,10 @@ export default {
     watch(item){
         this.modal10= true;
         this.play=true;
+        console.log(item)
          axios.post(url+'/admin/video/preview',{
-                videoName: item,
+                videoName: item.videoName,
+                videoId:item.television_program_content_id
             })
         .then(res=>{
             var data;
@@ -143,6 +145,12 @@ export default {
                     this.count=data.count;
                     this.currentPage=data.currentPage;
                     this.page=data.page;
+                    data.videoList.forEach(function(val,index){
+                        var reg=/(\d{4}-\d{2}-\d{2})T(.+)\..+/g;
+                        var arr = reg.exec(val.video_timestamp);
+                        var video_timestamp=arr[1]+'  '+arr[2];
+                        val.video_timestamp=video_timestamp;  
+                    })
                     this.videoList=data.videoList;
                 }else{
                      this.message=data.message;
@@ -177,7 +185,14 @@ export default {
                 this.count=data.count;
                 this.currentPage=data.currentPage;
                 this.page=data.page;
+                data.videoList.forEach(function(val,index){
+                    var reg=/(\d{4}-\d{2}-\d{2})T(.+)\..+/g;
+                    var arr = reg.exec(val.video_timestamp);
+                    var video_timestamp=arr[1]+'  '+arr[2];
+                    val.video_timestamp=video_timestamp;  
+                })
                 this.videoList=data.videoList;
+
             }
         })
         .catch(err => {
@@ -188,7 +203,7 @@ export default {
         this.$emit('choseItem',item);
     },
     update(item){
-        window.location.href='/admin/videoUpdate?videoName='+item.videoName;
+        window.location.href='/admin/videoUpdate?television_program_content_id='+item.television_program_content_id;
     }
   },
    mounted(){

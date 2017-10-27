@@ -83,15 +83,22 @@ export default {
         });
     },
     previewArticle(item){
-        window.open('/admin/article?list_title='+item.list_title);
+        window.open('/admin/article?magazine_list_id='+item.magazine_list_id);
     },
     delArticle(item){
-        Axios.post(url+'/admin/magazine/delPeriods',{
-            list_title:item.list_title
+        Axios.post(url+'/admin/magazine/delArticle',{
+            magazine_list_id:item.magazine_list_id
         })
         .then(res=>{
-            console.log(res.data);
-            this.getmagazineList(this.page);
+            var data;
+            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
+                data=res.data;
+            }else{
+                data=JSON.parse(res.data)
+            }
+            if(data.code==1){
+              this.getmagazineList(this.page);
+            }
         })
         .catch(err=>{
             console.log(err);
