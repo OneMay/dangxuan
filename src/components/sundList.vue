@@ -1,12 +1,12 @@
 <template>
     <div class="video">
-    <form class="form-inline definewidth m20">
+    <div class="form-inline definewidth m20">
     <font color="#777777"><strong>请输入广播标题：</strong></font>
     <input type="text" class="abc input-default" v-model="program_name">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
     <router-link class="btn btn-success" id="addnew" to="/admin/sundPageAdd">添加广播</router-link>
     <router-link class="btn btn-danger"  id="addnew" to="/admin/sundJpgAdd">首页轮播</router-link>
-</form>
+</div>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
     <tr>

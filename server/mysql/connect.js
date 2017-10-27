@@ -29,9 +29,9 @@ function insertVideoFun(client, id, post_url, url, title, time, note) {
 }
 
 //删除视频
-function deleteVideoFun(client, name, callback){
-    client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_content_id`='"+name+"')", function(err){
-        if(err) throw err;
+function deleteVideoFun(client, name, callback) {
+    client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_content_id`='" + name + "')", function(err) {
+        if (err) throw err;
         callback(err);
     });
 }
@@ -56,9 +56,9 @@ function findFun(client, str, callback) {
 }
 
 //查找一条视频
-function findO(client, id, callback){
-    client.query("SELECT * FROM `t_television_program_content` WHERE television_program_content_id = "+id+"", function(err, result){
-        if(err) throw err;
+function findO(client, id, callback) {
+    client.query("SELECT * FROM `t_television_program_content` WHERE television_program_content_id = " + id + "", function(err, result) {
+        if (err) throw err;
         callback(result);
     })
 }
@@ -97,11 +97,9 @@ function addPeriod(client, magazine_journal_no, magazine_journal_title, path, no
 }
 
 //单个查询期数
-function findM(client, id, callback) {
-    var str = "SELECT * FROM `t_magazine_program` WHERE id = " + id + ""
-    client.query(str, function(err, result) {
+function findM(client, magazine_journal_no, callback) {
+    client.query("SELECT * FROM `t_magazine_program` WHERE magazine_journal_no LIKE '%" + magazine_journal_no + "%' ", function(err, result) {
         if (err) throw err;
-
         callback(result);
     })
 }
@@ -138,10 +136,11 @@ function findAA(client, callback) {
 }
 
 //查询期数
-function findQ(client, id) {
+function findQ(client, id, callback) {
     client.query("SELECT * FROM `t_magazine_program` WHERE magazine_program_id = " + id + " ", function(err, result) {
-        console.log(result);
-        return result[0].magazine_journal_no;
+        //return result[0].magazine_journal_no;
+        if (err) throw err;
+        callback(result);
     })
 }
 

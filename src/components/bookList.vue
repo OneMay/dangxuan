@@ -1,11 +1,11 @@
 <template>
     <div class="video">
-    <form class="form-inline definewidth m20">
+    <div class="form-inline definewidth m20">
     <font color="#777777"><strong>请输入杂志名称：</strong></font>
     <input type="text" class="abc input-default" v-model="list_title">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
     <router-link  to="/admin/bookPageAdd" class="btn btn-success" id="addnew" >添加新文章</router-link>
-</form>
+</div>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
     <tr>
@@ -105,7 +105,7 @@ export default {
         })
     },
     magazineAmend(magazine){
-        window.location.href='/admin/bookPageAmend?list_title='+magazine.list_title;
+        window.location.href='/admin/bookPageAmend?magazine_list_id='+magazine.magazine_list_id;
     },
     reArticle(){
         Axios.post(url+'/admin/magazine/amend',{

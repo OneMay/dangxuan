@@ -1,10 +1,10 @@
 <template>
     <div class="video">
-    <form class="form-inline definewidth m20">
+    <div class="form-inline definewidth m20">
     <font color="#777777"><strong>请输入视频名称：</strong></font>
     <input type="text" class="abc input-default" v-model="videoName">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
-</form>
+</div>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
     <tr>
