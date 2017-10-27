@@ -22,24 +22,16 @@ function selectFun(client, username, password, callback) {
 }
 
 //插入新的视频
-function insertVideoFun(client, id, post_url, url, title, time, note, callback) {
+function insertVideoFun(client, id, post_url, url, title, time, note) {
     client.query("INSERT INTO `t_television_program_content` (`television_program_id`, `thumbnails_url`, `video_url`, `video_introduction`, `video_timestamp`, `note`) VALUES ('" + id + "', '" + post_url + "', '" + url + "', '" + title + "', '" + time + "', '" + note + "')", function(err, result) {
         if (err) throw err;
-        console.log(result)
-        callback(err);
     });
 }
 
 //删除视频
-<<<<<<< HEAD
 function deleteVideoFun(client, name, callback){
     client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_content_id`='"+name+"')", function(err){
         if(err) throw err;
-=======
-function deleteVideoFun(client, name, callback) {
-    client.query("DELETE FROM `t_television_program_content` WHERE (`television_program_id`='" + name + "')", function(err) {
-        if (err) throw err;
->>>>>>> b096c056b024dee43166ecce70c94e1c9f56ef6e
         callback(err);
     });
 }

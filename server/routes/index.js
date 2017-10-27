@@ -41,37 +41,14 @@ router.post('/admin/login', function(req, res, next) {
 
 //视频添加
 router.post('/admin/video/add', function(req, res) {
-<<<<<<< HEAD
-    var showUrl = common.upload(req);
-    console.log('dsadas');
-    var client = db.connect();
-    db.insertVideoFun(client, req.body.videoId, req.body.videoName, showUrl, req.body.title, moment.format(), req.body.note);
-    res.json({
-        code: 1,
-        message: '成功'
-    })
-=======
-    var showUrl = common.upload(req, function(result, showUrl) {
+    common.upload(req, function(fields, showUrl, showUrl_1){
         var client = db.connect();
-        db.insertVideoFun(client, result.videoId, showUrl, '556', result.title, '2017-09-12T12:25:12.22', '55', function(err) {
-            if (err) {
-                console.log("失败");
-                var message = {
-                    code: 0,
-                    message: '失败'
-                }
-                res.json(message);
-            } else {
-                var message = {
-                    code: 1,
-                    message: '上传成功'
-                }
-                res.json(message);
-            }
-        });
+        db.insertVideoFun(client, fields.videoId, showUrl, showUrl_1, fields.videoTitle, moment().format('YYYY-MM-DD HH:mm:ss'), fields.note);
+        res.json({
+            code: 1,
+            message: '成功'
+        })
     });
-
->>>>>>> b096c056b024dee43166ecce70c94e1c9f56ef6e
 })
 
 
@@ -195,12 +172,8 @@ router.post('/admin/video/findAll', function(req, res) {
             if (result[0]) {
                 message.code = 1;
                 message.limit = num;
-<<<<<<< HEAD
                 message.count = count;
                 message.page = page;
-=======
-                message.page = req.body.page;
->>>>>>> b096c056b024dee43166ecce70c94e1c9f56ef6e
                 message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
                 message.videoList = new Array;
                 for (var i = 0; i < result.length; i++) {
@@ -223,23 +196,21 @@ router.post('/admin/video/findAll', function(req, res) {
 
 //视频预览
 router.post('/admin/video/preview', function(req, res) {
-    var str = "SELECT * FROM `t_television_program_content` WHERE video_introduction = " + req.body.videoName + " ";
+    var str = "SELECT * FROM `t_television_program_content` WHERE television_program_content_id = " + req.body.videoId + " ";
     var client = db.connect();
     var message = {};
     db.findFun(client, str, function(result) {
         if (result) {
+            console.log(result[0].video_url);
             message.code = 1;
-            message.video_url = new Array();
-            for (var i = 0; i < result.length; i++) {
-                message.video_url.push(result[i].video_url);
-            }
+            message.video_url = result[0].video_url;
             message.message = '操作成功';
         } else {
             message.code = 0;
             message.message = '操作失败';
         }
+        res.json(message);
     })
-    res.json(message);
 })
 
 
