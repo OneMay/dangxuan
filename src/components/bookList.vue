@@ -83,11 +83,11 @@ export default {
         });
     },
     previewArticle(item){
-        window.open('/admin/article?list_title='+item.list_title);
+        window.open('/admin/article?magazine_list_id='+item.magazine_list_id);
     },
     delArticle(item){
-        Axios.post(url+'/admin/magazine/delPeriods',{
-            list_title:item.list_title
+        Axios.post(url+'/admin/magazine/delArticle',{
+            magazine_list_id:item.magazine_list_id
         })
         .then(res=>{
             var data;

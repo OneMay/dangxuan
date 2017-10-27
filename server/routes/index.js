@@ -146,7 +146,7 @@ router.post('/admin/video/findAll', function(req, res) {
                 message.count = count;
                 message.limit = num;
                 message.page = req.body.page;
-                message.currentPage = count % 5 + 1;
+                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
                 message.videoList = new Array();
                 for (var i = 0; i < result.length; i++) {
                     message.videoList.push({
@@ -182,7 +182,8 @@ router.post('/admin/video/findAll', function(req, res) {
             if (result[0]) {
                 message.code = 1;
                 message.limit = num;
-                message.count = count;
+                message.page = req.body.page;
+                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
                 message.videoList = new Array;
                 for (var i = 0; i < result.length; i++) {
                     message.videoList.push({
