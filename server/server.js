@@ -8,7 +8,16 @@ var session = require('express-session');
 
 var app = express();
 var index = require('./routes/index.js');
+// app.use(function(req, res, next){
 
+//     if(!req.session.user){
+//         console.log(1)
+//         res.redirect('/admin/login');
+//     }
+//     else{
+//         next();
+//     }
+// })
 app.set('views', path.join(path.resolve(__dirname, '..'), 'dist'))
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
@@ -18,11 +27,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/', index);
-app.use('/*', function(req, res){
-    if(!req.session.islogin){
+// app.use('/*', function(req, res){
+//     if(!req.session.islogin){
 
-    }
-})
+//     }
+// })
+
 
 //路径未匹配
 app.use(function(req, res, next) {
@@ -39,6 +49,21 @@ app.use(session({
 }))
 
 app.use(function(err, req, res, next) {
+    // console.log(999);
+    // if(!req.session){
+    //     console.log(1)
+    //     // res.location('/admin/login');
+    //    // res.set(200);
+    //    res.location('/admin/login');
+    //    res.statusCode = 301;
+    //    res.end('响应的内容');
+    //   // res.redirect(302,'/admin/login');
+    //     return;
+    // }
+    // else{
+    //     console.log(2)
+    //     next();
+    // }
     res.locals.messgae = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
     res.status(err.status || 500);

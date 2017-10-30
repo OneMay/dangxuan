@@ -7,6 +7,18 @@ var Path = '../../dist/index.html';
 var moment = require('moment');
 var fiter = require('../filter/filter');
 
+
+// router.post('/**', function(req, res, next){
+//     console.log('sasdasdsadasd');
+//     console.log(req.session.user);
+//     if(!req.session.user){
+//         req.flash('error', '未登陆');
+//         res.redirect('/admin/login');
+//         console.log('sadas');
+//     }
+//     next();
+// })
+
 //登陆
 router.post('/admin/login', function(req, res, next) {
     var username = req.body.username;
@@ -31,7 +43,7 @@ router.post('/admin/login', function(req, res, next) {
                     message: '登陆成功',
                     username: req.body.username
                 }
-                // req.session.user_id = username;
+            req.session.user_id = username;
             res.json(message);
         }
     })
