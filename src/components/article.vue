@@ -19,11 +19,11 @@ export default {
     data(){
         return{
             articleList:[{
-               magazine_journal_no:'第十一期',//期数,
-                list_title:'天天看',//文章标题
-                insert_time:'2017-9-12',//时间
+               magazine_journal_no:'',//期数,
+                list_title:'',//文章标题
+                insert_time:'',//时间
                 list_writer:'admin',//作者，
-                magazine_list_id:'1',
+                magazine_list_id:'',
                 list_content:''
             }]
         }
@@ -34,7 +34,7 @@ export default {
             var reg = /.+=(.+)/gi;
             var article = reg.exec(path)[1];
             axios.post(url+'/admin/magazine/previewArticle',{
-                list_title:article
+                magazine_list_id:article
             })
             .then(res=>{
                  var data;
@@ -44,7 +44,7 @@ export default {
                     data=JSON.parse(res.data)
                 }
                 if(data.code==1){
-                    this.articleList=articleList;
+                    this.articleList=data.articleList;
                     window.document.title=this.articleList[0].list_title
                 }
             })

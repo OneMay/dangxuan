@@ -1,11 +1,11 @@
 <template>
     <div class="video">
-     <form class="form-inline definewidth m20" action="#" method="get">
+     <div class="form-inline definewidth m20">
     <font color="#777777"><strong>视频名称：</strong></font>
     <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="" v-model="videoName">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
 	<span type="button"  class="btn btn-success" id="addnew" ><span><router-link to="/admin/videoAdd" style="color:#fff;text-decoration:none">添加视频</router-link></span></span>
-</form>
+</div>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
     <tr>
@@ -26,7 +26,6 @@
        </table>
        <nav>
           <p style="text-align:center">一共有{{count}}条数据，每页最多显示{{limit}}条数据，共{{currentPage}}页，当前第{{page}}页</p>
-          <p v-text="message"></p>
           <ul class="pager">
               <li class="previous"><span @click="getVideoList(--page)">&larr;上一页</span></li>
               <li class="next"><span @click="getVideoList(++page)">下一页 &rarr;</span></li>

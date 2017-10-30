@@ -1,11 +1,11 @@
 <template>
     <div class="video">
-     <form class="form-inline definewidth m20" action="#" method="get">
+     <div class="form-inline definewidth m20" >
     <font color="#777777"><strong>杂志名称：</strong></font>
     <input type="text" name="menuname" id="menuname"class="abc input-default" placeholder="第一期" v-model="magazine_journal_no">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
 	<span  id="addnew" ><router-link style="color:#fff" class="btn btn-success" to="/admin/bookAdd">添加期数</router-link></span>
-</form>
+</div>
 <table class="table table-bordered table-hover definewidth m10">
     <thead>
     <tr>
@@ -117,7 +117,7 @@ export default {
                 data=JSON.parse(res.data)
             }
             if(data.code==1){
-              this.getPeriodsList(this.page);
+              this.getPeriodsList(1);
             }
         })
         .catch(err=>{

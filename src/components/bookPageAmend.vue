@@ -148,7 +148,7 @@ export default {
         var reg = /.+=(.+)/g;
         var list_title=reg.exec(program)[1];
         Axios.post(url+'/admin/magazine/findArticle',{
-           list_title:list_title
+           magazine_list_id:list_title
         })
         .then(res=>{ 
              var data;
