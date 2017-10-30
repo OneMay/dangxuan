@@ -20,7 +20,7 @@
             </tr>
             <tr>
                 <td class="tableleft">文章标题</td>
-                <td><input type="text" name="words" v-model="list_title" v-text="list_title"/></td>
+                <td><input type="text" name="words" v-model="list_title" /></td>
             </tr>
             <tr>
                 <td class="tableleft">文章内容</td>
