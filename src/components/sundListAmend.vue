@@ -4,7 +4,7 @@
         <table class="table table-bordered table-hover m10" style="margin-left:10px;margin-top:3px;">
             <tr>
                 <td class="tableleft" width="10%">栏目名称</td>
-                <td><input type="text" name="program_name" v-model="program_name" v-text="program_name"/></td>
+                <td><input type="text" name="program_name" v-model="program_name" /></td>
             </tr>
 
              <tr>

@@ -1,6 +1,6 @@
 <template>
     <div class="video">
-        <form action="#" method="post" class="definewidth m20" enctype="multipart/form-data">
+       <div class="definewidth m20" >
         <table class="table table-bordered table-hover m10" style="margin-left:10px;margin-top:3px;">
             <tr>
                 <td width="10%" class="tableleft">类别</td>
@@ -20,12 +20,12 @@
    
             <tr>
                 <td class="tableleft">视频名称</td>
-                <td><input type="text" v-model="videoName" v-text="videoName" name="videosName"/></td>
+                <td><input type="text" v-model="videoName" name="videosName"/></td>
                 
             </tr>
             <tr>
                 <td class="tableleft">视频关键字</td>
-                <td><input type="text" v-model="videoTitle" v-text="videoTitle" name="GoodsNormalPrice"/></td>
+                <td><input type="text" v-model="videoTitle" name="GoodsNormalPrice"/></td>
             </tr>
             <tr>
                 <td class="tableleft">视频海报</td>
@@ -39,7 +39,7 @@
            </tr>
             <tr>
                 <td class="tableleft">视频简介</td>
-                <td><textarea type="text" v-model="videoWords" v-text="videoWords" name="GoodsIntroduce"  rows="3" cols="20"></textarea></td>
+                <td><textarea type="text" v-model="videoWords"  name="GoodsIntroduce"  rows="3" cols="20"></textarea></td>
             </tr>
             <tr>
                 <td class="tableleft"></td>
@@ -49,7 +49,7 @@
                 </td>
             </tr>
         </table>
-    </form>
+    </div>
 
   </div>
 </template>

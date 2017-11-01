@@ -12,11 +12,11 @@
             </tr>
             <tr>
                 <td class="tableleft">期数</td>
-                <td><input type="text" name="bookName" v-model="magazine_journal_no"v-text="magazine_journal_no" /></td>
+                <td><input type="text" name="bookName" v-model="magazine_journal_no" /></td>
             </tr>
             <tr>
                 <td class="tableleft">主题文字</td>
-                <td><input type="text" name="words" v-model="magazine_journal_title" v-text="magazine_journal_title" /></td>
+                <td><input type="text" name="words" v-model="magazine_journal_title"  /></td>
             </tr>
             <tr>
                 <td class="tableleft">封面</td>

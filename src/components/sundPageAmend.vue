@@ -39,7 +39,7 @@
            </tr>
             <tr>
                 <td class="tableleft">广播简介</td>
-                <td><input type="text" name="GoodsIntroduce" style="height: 63px;" v-model="program_introduction" v-text="program_introduction"/></td>
+                <td><input type="text" name="GoodsIntroduce" style="height: 63px;" v-model="program_introduction" /></td>
             </tr>
             <tr>
                 <td class="tableleft"></td>
