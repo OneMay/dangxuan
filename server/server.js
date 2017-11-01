@@ -8,16 +8,17 @@ var session = require('express-session');
 
 var app = express();
 var index = require('./routes/index.js');
-// app.use(function(req, res, next){
 
-//     if(!req.session.user){
-//         console.log(1)
-//         res.redirect('/admin/login');
-//     }
-//     else{
-//         next();
-//     }
-// })
+app.use(function(req, res, next){
+    console.log('adsasd');
+    if(!req.session.user){
+        res.redirect('/admin/login');
+    }
+    else{
+        next();
+    }
+})
+
 app.set('views', path.join(path.resolve(__dirname, '..'), 'dist'))
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
