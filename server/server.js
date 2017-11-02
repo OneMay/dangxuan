@@ -9,15 +9,14 @@ var session = require('express-session');
 var app = express();
 var index = require('./routes/index.js');
 
-app.use(function(req, res, next){
-    console.log('adsasd');
-    if(!req.session.user){
-        res.redirect('/admin/login');
-    }
-    else{
-        next();
-    }
-})
+// app.use(function(req, res, next) {
+//     console.log('adsasd');
+//     if (!req.session.user) {
+//         res.redirect('/admin/login');
+//     } else {
+//         next();
+//     }
+// })
 
 app.set('views', path.join(path.resolve(__dirname, '..'), 'dist'))
 app.engine('html', require('ejs').renderFile);
@@ -28,16 +27,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/', index);
-<<<<<<< HEAD
-app.use('/*', function(req, res) {
-    if (!req.session.islogin) {
-=======
 // app.use('/*', function(req, res){
 //     if(!req.session.islogin){
 
 //     }
 // })
->>>>>>> a02caab74e2535b1ec489fb9018fa9658b0e4a3c
 
 
 //路径未匹配

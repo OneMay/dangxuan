@@ -45,6 +45,12 @@ export default {
                 }
                 if(data.code==1){
                     this.articleList=data.articleList;
+                    this.articleList.forEach(function(val,index){
+                        var reg=/(\d{4}-\d{2}-\d{2})(.*||\s*)(\d{2}:\d{2}:\d{2})/;
+                        var arr = reg.exec(val.insert_time);
+                        var insert_time=arr[1]+'  '+arr[3];
+                        val.insert_time=insert_time;  
+                    })
                     window.document.title=this.articleList[0].list_title
                 }
             })

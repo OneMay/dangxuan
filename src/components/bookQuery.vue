@@ -107,7 +107,7 @@ export default {
     },
     delArticle(item){
         axios.post(url+'/admin/magazine/delPeriods',{
-            magazine_journal_no:item.magazine_journal_no
+            magazine_program_id:item.magazine_program_id
         })
         .then(res=>{
             var data;

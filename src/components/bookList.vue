@@ -1,7 +1,7 @@
 <template>
     <div class="video">
     <div class="form-inline definewidth m20">
-    <font color="#777777"><strong>请输入杂志名称：</strong></font>
+    <font color="#777777"><strong>请输入文章标题：</strong></font>
     <input type="text" class="abc input-default" v-model="list_title">&nbsp;&nbsp; 
     <span  class="btn btn-primary" @click="search">查询</span>&nbsp;&nbsp; 
     <router-link  to="/admin/bookPageAdd" class="btn btn-success" id="addnew" >添加新文章</router-link>
@@ -74,6 +74,12 @@ export default {
                 this.currentPage=data.currentPage;
                 this.page=data.page;
                 this.articleList=data.articleList;
+                this.articleList.forEach(function(val,index){
+                        var reg=/(\d{4}-\d{2}-\d{2})(.*||\s*)(\d{2}:\d{2}:\d{2})/;
+                        var arr = reg.exec(val.insert_time);
+                        var insert_time=arr[1]+'  '+arr[3];
+                        val.insert_time=insert_time;  
+                    })
             }else{
                 this.message=data.message;
             }
@@ -87,7 +93,7 @@ export default {
     },
     delArticle(item){
         Axios.post(url+'/admin/magazine/delArticle',{
-            magazine_program_id:item.magazine_program_id
+            magazine_list_id:item.magazine_list_id
         })
         .then(res=>{
             var data;
@@ -147,6 +153,12 @@ export default {
                 this.currentPage=data.currentPage;
                 this.page=data.page;
                 this.articleList=data.articleList;
+                this.articleList.forEach(function(val,index){
+                        var reg=/(\d{4}-\d{2}-\d{2})(.*||\s*)(\d{2}:\d{2}:\d{2})/;
+                        var arr = reg.exec(val.insert_time);
+                        var insert_time=arr[1]+'  '+arr[3];
+                        val.insert_time=insert_time;  
+                    })
             }else{
                 this.message=data.message;
             }

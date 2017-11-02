@@ -69,7 +69,8 @@ export default {
       magazine_journal_no:'', 
       list_title:'',
       list_content:'',
-      magazine_list_id:''
+      magazine_list_id:'',
+      ed:null
     }
   },
   methods:{
@@ -84,14 +85,17 @@ export default {
         alert(UE.getEditor('editor').getAllHtml())
     },
     setContent(isAppendTo) {
-        UE.getEditor('editor').setContent(isAppendTo);
+        var that = this;
+        this.ed.ready(function(){
+            that.ed.setContent(isAppendTo);
+        })
     },
     getContent(){
         var arr = UE.getEditor('editor').getContent();
         this.list_content=arr;
     },
     createEditor(){
-      UE.getEditor('editor') 
+     this.ed= UE.getEditor('editor') 
     },
     addPage(){
         this.getContent();

@@ -21,7 +21,7 @@
             <tr>
                 <td class="tableleft">封面</td>
                 <td class="tableleft" >
-                    <input type="file" name="GoodsPicture" id="GoodsPicture" @change="getFile" multiple="multiple"/>
+                    <input type="file" name="GoodsPicture" id="GoodsPicture" @change="getFile" multiple="multiple" accept=".jpg,.png" />
                 </td>
         <!--         <td class="tableleft">图片预览</td> -->
         <!--         <td><img name="showimg" id="showimg" src="" style="display:none;" alt="预览图片" /> </td> -->
