@@ -92,8 +92,12 @@ function findY(client, callback) {
 }
 
 //添加期数
-function addPeriod(client, magazine_journal_no, magazine_journal_title, path, note) {
-    client.query('INSERT INTO `t_magazine_program` (`magazine_journal_no`, `magazine_journal_title`, `magazine_journal_picture`, `note`) VALUES (' + magazine_journal_no + ', ' + magazine_journal_title + ', ' + path + ', ' + note + ')"')
+function addPeriod(client, magazine_journal_no, magazine_journal_title, path, note, callback) {
+    client.query("INSERT INTO `t_magazine_program` (`magazine_journal_no`, `magazine_journal_title`, `magazine_journal_picture_url`, `note`) VALUES (' "+ magazine_journal_no +" ',  ' "+ magazine_journal_title + " ', ' " + path + " ', '" + note + "')" ,function(err, result, fields) {
+        if (err) throw err;
+
+        callback(result);
+    })
 }
 
 //单个查询期数
@@ -114,7 +118,7 @@ function findMA(client, id, callback) {
 
 //期数删除
 function deleteM(client, id, callback) {
-    client.query("DELETE FROM `t_magazine_program` WHERE (`magazine_journal_no`='" + name + "')", function(err) {
+    client.query("DELETE FROM `t_magazine_program` WHERE (`magazine_journal_no`='" + id + "')", function(err) {
         if (err) throw err;
     })
 }
@@ -123,8 +127,10 @@ function deleteM(client, id, callback) {
 //---------文章模块------------
 
 //文章添加
-function addA(client, id, title, content, author) {
-    client.query("INSERT INTO `t_television_program_content` (`television_program_id`, `thumbnails_url`, `video_url`, `video_introduction`, `video_introduction`, `video_timestamp`, `note`) VALUES ('" + id + "', '" + post_url + "', '" + url + "', '" + title + "', '" + time + "', '" + note + "')")
+function addA(client, id, title, content, author, time, note) {
+    client.query("INSERT INTO `t_magazine_list` (`magazine_list_id`, `list_title`, `magazine_program_id`, `list_content`, `list_writer`, `insert_time`, `note`) VALUES ('" + id + "', '"+ title +"', '" + content + "', '" + author + "', '" + time + "', '" + note + "')", function(err){
+        if(err) throw err;
+    })
 }
 
 //查询所有文章
@@ -138,9 +144,10 @@ function findAA(client, callback) {
 //查询期数
 function findQ(client, id, callback) {
     client.query("SELECT * FROM `t_magazine_program` WHERE magazine_program_id = " + id + " ", function(err, result) {
-        //return result[0].magazine_journal_no;
         if (err) throw err;
         callback(result);
+        console.log(result[0].magazine_journal_no);        
+        return result[0].magazine_journal_no;
     })
 }
 
@@ -152,8 +159,17 @@ function findAR(client, id, callback) {
     })
 }
 
+//删除文章
+function delA(client, id, callback){
+    client.query("DELETE FROM `t_magazine_list` WHERE (`magazine_list_id`='" + id + "')", function(err){
+        if(err) throw err;
+        callback(err);
+    })
+}
 
-//--------广播台模块
+
+
+//--------广播台模块----------
 
 //添加栏目
 function addC(client, name, date) {
@@ -241,12 +257,14 @@ exports.findM = findM;
 exports.findMA = findMA;
 exports.findY = findY;
 exports.deleteM = deleteM;
+exports.delA = delA;
 exports.addC = addC;
 exports.findL = findL;
 exports.updateL = updateL;
 exports.deleteL = deleteL;
 exports.addP = addP;
 exports.addV = addV;
+exports.addA = addA;
 exports.feedback = feedback;
 exports.findF = findF;
 exports.findO = findO;
