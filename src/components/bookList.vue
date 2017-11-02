@@ -87,7 +87,7 @@ export default {
     },
     delArticle(item){
         Axios.post(url+'/admin/magazine/delArticle',{
-            magazine_list_id:item.magazine_list_id
+            magazine_program_id:item.magazine_program_id
         })
         .then(res=>{
             var data;

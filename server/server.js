@@ -18,8 +18,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/', index);
-app.use('/*', function(req, res){
-    if(!req.session.islogin){
+app.use('/*', function(req, res) {
+    if (!req.session.islogin) {
 
     }
 })
@@ -35,7 +35,7 @@ app.use(function(req, res, next) {
 app.use(session({
     secret: 'secret',
     resave: false,
-    cookie: {maxAge: 60*1000*30} //设置过期时间
+    cookie: { maxAge: 60 * 1000 * 30 } //设置过期时间
 }))
 
 app.use(function(err, req, res, next) {
