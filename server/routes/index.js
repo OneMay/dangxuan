@@ -27,7 +27,7 @@ router.post('/admin/login', function(req, res, next) {
     var client = db.connect();
     var result = null;
     var message = {};
-    db.select(client, username, password, function(result) {
+    db.selectFun(client, username, password, function(result) {
         if (result[0] === undefined) {
             message = {
                 code: 0,

@@ -16,7 +16,6 @@ function connectServer() {
 function selectFun(client, username, password, callback) {
     client.query('select * from t_user where user_no="' + username + '" and password="' + password + '"', function(err, result, fields) {
         if (err) throw err;
-
         callback(result);
     })
 }
@@ -275,7 +274,7 @@ function feedback(client, id, callback) {
 }
 
 exports.connect = connectServer;
-exports.select = selectFun;
+exports.selectFun = selectFun;
 exports.insertVideoFun = insertVideoFun;
 exports.deleteVideoFun = deleteVideoFun;
 exports.findFun = findFun;
