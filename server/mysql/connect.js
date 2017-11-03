@@ -99,8 +99,8 @@ function findY(client, callback) {
 }
 
 //添加期数
-function addPeriod(client, magazine_journal_no, magazine_journal_title, path, note, callback) {
-    client.query("INSERT INTO `t_magazine_program` (`magazine_journal_no`, `magazine_journal_title`, `magazine_journal_picture_url`, `note`) VALUES (' " + magazine_journal_no + " ',  ' " + magazine_journal_title + " ', ' " + path + " ', '" + note + "')", function(err, result, fields) {
+function addPeriod(client, magazine_journal_no, magazine_journal_title, path, time, note, callback) {
+    client.query("INSERT INTO `t_magazine_program` (`magazine_journal_no`, `magazine_journal_title`, `magazine_journal_picture_url`,`magazine_journal_timestamp`, `note`) VALUES (' " + magazine_journal_no + " ',  ' " + magazine_journal_title + " ', ' " + path + " ', ' " + time + " ', '" + note + "')", function(err, result, fields) {
         if (err) throw err;
 
         callback(result);
@@ -131,7 +131,15 @@ function deleteM(client, id, callback) {
     })
 }
 
+////期数修改
+function updateP(client, magazine_journal_no, magazine_journal_title, path, note, magazine_program_id, time, callback) {
+    console.log("UPDATE `t_magazine_program` SET `magazine_journal_no`=" + '"' + magazine_journal_no + '"' + "," + `magazine_journal_title` + "=" + '"' + magazine_journal_title + '"' + "," + `magazine_journal_picture_url` + "=" + '"' + path + '"' + "," + `note` + "=" + '"' + note + '"' + "WHERE (`magazine_program_id`=" + magazine_program_id + ")")
+    client.query("UPDATE `t_magazine_program` SET `magazine_journal_no`=" + '"' + magazine_journal_no + '"' + "," + `magazine_journal_title` + "=" + '"' + magazine_journal_title + '"' + "," + `magazine_journal_picture_url` + "=" + '"' + path + '"' + "," + `magazine_journal_timestamp` + "=" + '"' + time + '"' + "," + `note` + "=" + '"' + note + '"' + "WHERE (`magazine_program_id`=" + magazine_program_id + ")", function(err) {
+        if (err) throw err;
+        callback();
+    })
 
+}
 //---------文章模块------------
 
 //文章添加
@@ -150,7 +158,13 @@ function findAA(client, callback) {
         callback(result);
     })
 }
-
+//模糊查询文章
+function findAllA(client, list_title, callback) {
+    client.query("SELECT * FROM `t_magazine_list` WHERE list_title LIKE '%" + list_title + "%' ", function(err, result) {
+        if (err) throw err;
+        callback(result);
+    })
+}
 //查询期数
 function findQ(client, id, callback) {
     client.query("SELECT * FROM `t_magazine_program` WHERE magazine_program_id = " + id + " ", function(err, result) {
@@ -177,8 +191,16 @@ function delA(client, id, callback) {
     })
 }
 
+//文章修改
+function updateA(client, id, listId, title, content, author, time, callback) {
+    var note = '';
+    //console.log(content.toString())
+    client.query("UPDATE `t_magazine_list` SET `list_title`=" + '"' + title + '"' + "," + `magazine_program_id` + "=" + '"' + id + '"' + "," + `list_content` + "=" + "'" + content + "'" + "," + `list_writer` + "=" + '"' + author + '"' + "," + `insert_time` + "=" + '"' + time + '"' + "," + `note` + "=" + '"' + note + '"' + "WHERE (`magazine_list_id`=" + listId + ")", function(err) {
+        if (err) throw err;
+        callback();
+    })
 
-
+}
 //--------广播台模块----------
 
 //添加栏目
@@ -279,3 +301,6 @@ exports.feedback = feedback;
 exports.findF = findF;
 exports.findO = findO;
 exports.findC = findC;
+exports.updateA = updateA;
+exports.updateP = updateP;
+exports.findAllA = findAllA;

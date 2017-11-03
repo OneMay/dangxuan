@@ -69,8 +69,9 @@ export default {
 
 <style scoped>
 .trazition {
-    font-size: 16px;
+    font-size: 14px;
     color: #f36228;
+    margin-bottom: 5px;
 }
 .trazition span{
     margin-right:20px;
