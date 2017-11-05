@@ -83,6 +83,7 @@ export default {
                 }
                 Axios.post(url+'/admin/magazine/addPeriods', formData, config)
                 .then(res=>{
+                    var data;
                     if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                         data=res.data;
                     }else{

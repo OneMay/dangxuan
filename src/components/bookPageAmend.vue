@@ -69,7 +69,8 @@ export default {
       magazine_journal_no:'', 
       list_title:'',
       list_content:'',
-      magazine_list_id:''
+      magazine_list_id:'',
+      d:null,
     }
   },
   methods:{
@@ -84,14 +85,20 @@ export default {
         alert(UE.getEditor('editor').getAllHtml())
     },
     setContent(isAppendTo) {
-        UE.getEditor('editor').setContent(isAppendTo);
+         console.log(5)
+         var that = this;
+        //UE.getEditor('editor').setContent(isAppendTo);
+        this.d.ready(function() { 
+that.d.setContent('str'); 
+});
+        console.log(4)
     },
     getContent(){
         var arr = UE.getEditor('editor').getContent();
         this.list_content=arr;
     },
     createEditor(){
-      UE.getEditor('editor') 
+      this.d= UE.getEditor('editor') 
     },
     addPage(){
         this.getContent();
@@ -176,7 +183,9 @@ export default {
       this.$nextTick(()=>{
            document.getElementById('right').style.overflowY= 'scroll';
          UE.delEditor('editor');
+         console.log(2)
           this.createEditor();
+          console.log(3)
           this.getmagazinePeriods();
       })
   }
