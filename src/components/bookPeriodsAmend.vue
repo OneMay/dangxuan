@@ -21,7 +21,7 @@
             <tr>
                 <td class="tableleft">封面</td>
                 <td class="tableleft" >
-                    <input type="file" name="GoodsPicture" id="GoodsPicture" @change="getFile" multiple="multiple"/>
+                    <input type="file" name="GoodsPicture" id="GoodsPicture" @change="getFile" multiple="multiple" accept=".jpg,.png" />
                 </td>
         <!--         <td class="tableleft">图片预览</td> -->
         <!--         <td><img name="showimg" id="showimg" src="" style="display:none;" alt="预览图片" /> </td> -->
@@ -56,7 +56,8 @@ export default {
       megazinePeriods:[],
       magazine_journal_no:'',
       magazine_journal_title:'',
-      magazine_journal_picture:''
+      magazine_journal_picture:'',
+      magazine_program_id:''
     }
   },
   methods:{
@@ -78,6 +79,7 @@ export default {
                 formData.append('magazine_journal_picture', this.magazine_journal_picture);
                 formData.append('magazine_journal_no', this.magazine_journal_no);
                 formData.append('magazine_journal_title', this.magazine_journal_title);
+                formData.append('magazine_program_id', this.magazine_program_id);
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -85,13 +87,16 @@ export default {
                 }
                 Axios.post(url+'/admin/magazine/amend', formData, config)
                 .then(res=>{
+                    var data;
                     if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                         data=res.data;
                     }else{
                         data=JSON.parse(res.data)
                     }
-                    this.message='更新成功';
-                    console.log(res.data)
+                    if(data.code==1){
+                        this.message='更新成功';
+                    }
+                    //console.log(res.data)
                 })
                 .catch(err=>{
                     this.message='更新失败';
@@ -121,6 +126,7 @@ export default {
             if(data.code==1){
                 this.magazine_journal_no=data.magazine_journal_no;
                 this.magazine_journal_title=data.magazine_journal_title;
+                this.magazine_program_id=data.magazine_program_id
             }else{
                 this.message=data.message;
             }

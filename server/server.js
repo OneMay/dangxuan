@@ -9,6 +9,7 @@ var session = require('express-session');
 var app = express();
 var index = require('./routes/index.js');
 
+<<<<<<< HEAD
 /*app.use(function(req, res, next){
     console.log('adsasd');
     if(!req.session.user){
@@ -18,6 +19,16 @@ var index = require('./routes/index.js');
         next();
     }
 })*/
+=======
+// app.use(function(req, res, next) {
+//     console.log('adsasd');
+//     if (!req.session.user) {
+//         res.redirect('/admin/login');
+//     } else {
+//         next();
+//     }
+// })
+>>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
 
 app.set('views', path.join(path.resolve(__dirname, '..'), 'dist'))
 app.engine('html', require('ejs').renderFile);
@@ -27,6 +38,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+//配置用户验证
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    cookie: { maxAge: 60 * 1000 * 30 } //设置过期时间
+}))
 app.use('/', index);
 // app.use('/*', function(req, res){
 //     if(!req.session.islogin){
@@ -42,12 +59,15 @@ app.use(function(req, res, next) {
     next(err);
 })
 
+<<<<<<< HEAD
 //配置用户验证
 app.use(session({
     secret: 'secret',
     resave: false,
     cookie: { maxAge: 60 * 1000 * 30 } //设置过期时间
 }))
+=======
+>>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
 
 app.use(function(err, req, res, next) {
     // console.log(999);

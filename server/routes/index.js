@@ -27,7 +27,11 @@ router.post('/admin/login', function(req, res, next) {
     var client = db.connect();
     var result = null;
     var message = {};
+<<<<<<< HEAD
     db.select(client, username, password, function(result) {
+=======
+    db.selectFun(client, username, password, function(result) {
+>>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
         if (result[0] === undefined) {
             message = {
                 code: 0,
@@ -142,14 +146,23 @@ router.post('/admin/video/findAll', function(req, res) {
                         videoName: result[i].video_introduction,
                         video_timestamp: result[i].video_timestamp,
                         television_program_content_id: result[i].television_program_content_id,
-                        note: result[i].note
+                        television_program_id: result[i].television_program_id,
+                        note: result[i].note || 'admin'
                     })
                 }
-                message.message = '操作成功';
+
+                message.videoList.forEach(function(value, index, array) {
+                    array[index].videoCategory = db.findC(client, array[index].television_program_id, function(result) {
+                        array[index].videoCategory = result[0].television_title;
+                        if (message.videoList.length == index + 1) {
+                            message.message = '操作成功';
+                            return res.json(message);
+                        }
+                    });
+                });
             } else {
-                message.code = 0;
+                res.json({ code: 1, message: '操作失败', videoList: null })
             }
-            res.json(message);
         })
     }
 
@@ -179,16 +192,24 @@ router.post('/admin/video/findAll', function(req, res) {
                 for (var i = 0; i < result.length; i++) {
                     message.videoList.push({
                         videoName: result[i].video_introduction,
-                        videoCategory: result[i].television_program_id,
                         videoUrl: result[i].video_url,
                         video_timestamp: result[i].video_timestamp,
                         television_program_content_id: result[i].television_program_content_id,
-                        note: result[i].note
+                        television_program_id: result[i].television_program_id,
+                        note: result[i].note || 'admin'
                     })
                 }
-                res.json(message);
+                message.videoList.forEach(function(value, index, array) {
+                    array[index].videoCategory = db.findC(client, array[index].television_program_id, function(result) {
+                        array[index].videoCategory = result[0].television_title;
+                        if (message.videoList.length == index + 1) {
+                            message.message = '操作成功';
+                            return res.json(message);
+                        }
+                    });
+                });
             } else {
-                res.json({ code: 0, message: '操作失败' })
+                res.json({ code: 1, message: '操作失败', videoList: null })
             }
         })
     }
@@ -218,7 +239,8 @@ router.post('/admin/video/preview', function(req, res) {
 router.post('/admin/video/amend', function(req, res) {
     common.upload(req, function(fields, showUrl, showUrl_1) {
         var client = db.connect();
-        db.update(client, fields.videoId, showUrl, showUrl_1, fields.videoTitle, moment().format('YYYY-MM-DD HH:mm:ss'), fields.note);
+
+        db.update(client, fields.videoId, fields.television_program_content_id, showUrl, showUrl_1, fields.videoTitle, moment().format('YYYY-MM-DD HH:mm:ss'), fields.note);
         res.json({
             code: 1,
             message: '更新成功！'
@@ -232,7 +254,11 @@ router.post('/admin/video/amend', function(req, res) {
 router.post('/admin/magazine/addPeriods', function(req, res) {
     common.upload_2(req, function(fields, showUrl) {
         var client = db.connect();
+<<<<<<< HEAD
         db.addPeriod(client, fields.magazine_journal_no, fields.magazine_journal_title, showUrl, " ", function() {
+=======
+        db.addPeriod(client, fields.magazine_journal_no, fields.magazine_journal_title, showUrl, moment().format('YYYY-MM-DD HH:mm:ss'), " ", function() {
+>>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
             res.json({ code: 1, message: '操作成功' })
         });
     })
@@ -356,6 +382,7 @@ router.post('/admin/magazine/findAllPeriods', function(req, res) {
 
 //期数删除
 router.post('/admin/magazine/delPeriods', function(req, res) {
+<<<<<<< HEAD
     var client = db.connect();
     db.deleteM(client, req.body.magazine_journal_no, function() {
         res.json({
@@ -364,15 +391,50 @@ router.post('/admin/magazine/delPeriods', function(req, res) {
         })
     });
 })
+=======
+        var client = db.connect();
+        db.deleteM(client, req.body.magazine_program_id, function() {
+            res.json({
+                message: '操作成功',
+                code: 1
+            })
+        });
+    })
+    //期数修改
+router.post('/admin/magazine/amend', function(req, res) {
+    common.upload_2(req, function(fields, showUrl) {
+        var client = db.connect();
+        db.updateP(client, fields.magazine_journal_no, fields.magazine_journal_title, showUrl, " ", fields.magazine_program_id, moment().format('YYYY-MM-DD HH:mm:ss'), function() {
+            res.json({ code: 1, message: '修改成功' })
+        });
+    })
+>>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
 
+})
 
 //文章添加
 router.post('/admin/magazine/addArticle', function(req, res) {
     var client = db.connect();
+<<<<<<< HEAD
     db.addA(client, req.body.magazine_journal_no, req.body.list_title, req.body.list_content, req.body.list_writer, function() {
         res.json({
             code: 1,
             message: '操作成功'
+=======
+    var list_writer = 'admin';
+    db.findM(client, req.body.magazine_journal_no, function(result) {
+        if (!result) {
+            res.json({ code: 0, message: '查询失败' })
+            return;
+        }
+        var magazine_program_id = result[0].magazine_program_id;
+        console.log(magazine_program_id)
+        db.addA(client, magazine_program_id, req.body.list_title, req.body.list_content, list_writer, moment().format('YYYY-MM-DD HH:mm:ss'), function() {
+            res.json({
+                code: 1,
+                message: '操作成功'
+            })
+>>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
         })
     })
 })
@@ -439,7 +501,11 @@ router.post('/admin/magazine/findAllArticle', function(req, res) {
         var message = {};
         var count = 0;
         var str = "select * from `t_magazine_list` WHERE list_title LIKE '%" + req.body.list_title + "%' limit " + num_start + "," + num_end + " ";
+<<<<<<< HEAD
         db.findMA(client, req.body.list_title, function(result) {
+=======
+        db.findAllA(client, req.body.list_title, function(result) {
+>>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
             console.log(result);
             count = result.length;
         })
@@ -555,16 +621,43 @@ router.post('/admin/magazine/previewArticle', function(req, res) {
 
 //文章删除
 router.post('/admin/magazine/delArticle', function(req, res) {
+<<<<<<< HEAD
     var client = db.connect();
     db.delA(client, req.body.magazine_list_id, function() {
         res.json({
             message: '操作成功',
             code: 1
+=======
+        var client = db.connect();
+        db.delA(client, req.body.magazine_list_id, function() {
+            res.json({
+                message: '操作成功',
+                code: 1
+            })
+        });
+    })
+    //文章修改
+router.post('/admin/magazine/amendArticle', function(req, res) {
+        var client = db.connect();
+        var list_writer = 'admin';
+        db.findM(client, req.body.magazine_journal_no, function(result) {
+            if (!result) {
+                res.json({ code: 0, message: '查询失败' })
+                return;
+            }
+            var magazine_program_id = result[0].magazine_program_id;
+            console.log(magazine_program_id)
+            db.updateA(client, magazine_program_id, req.body.magazine_list_id, req.body.list_title, req.body.list_content, list_writer, moment().format('YYYY-MM-DD HH:mm:ss'), function() {
+                res.json({
+                    code: 1,
+                    message: '操作成功'
+                })
+            })
+>>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
         })
-    });
-})
 
-//--------------广播台----------------
+    })
+    //--------------广播台----------------
 
 //栏目添加
 router.post('/admin/radio/columnAdd', function(req, res) {
@@ -589,6 +682,7 @@ router.post('/admin/radio/columnFindAll', function(req, res) {
     }
 
     //没有关键字查询
+<<<<<<< HEAD
     if (!req.body.magazine_journal_no) {
         var nun = (current_page - 1) * num;
         var str = "SELECT * FROM `t_magazine_list` limit " + num + " offset " + nun + " ";
@@ -663,6 +757,82 @@ router.post('/admin/radio/columnFindAll', function(req, res) {
             }
         })
     }
+=======
+    /* if (!req.body.magazine_journal_no) {
+         var nun = (current_page - 1) * num;
+         var str = "SELECT * FROM `t_magazine_list` limit " + num + " offset " + nun + " ";
+         db.findAA(client, function(result) {
+             count = result.length;
+         })
+         db.findFun(client, str, function(result) {
+             if (result) {
+                 var message = {};
+                 message.code = 1;
+                 message.limit = 5;
+                 message.count = count;
+                 message.page = req.body.page;
+                 message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
+                 message.articleList = new Array();
+                 for (var i = 0; i < result.length; i++) {
+                     message.articleList.push({
+                         list_title: result[i].list_title,
+                         insert_time: result[i].insert_time,
+                         list_writer: result[i].list_writer,
+                         magazine_list_id: result[i].magazine_list_id,
+                         magazine_program_id: result[i].magazine_program_id
+                     })
+                 }
+                 console.log('fuck ass');
+                 message.articleList.forEach(function(value, index, array) {
+                     array[index].magazine_journal_no = db.findQ(client, array[index].magazine_program_id);
+                     // console.log(db.findQ(client, array[index].magazine_program_id));
+                 });
+                 message.message = '操作成功';
+                 res.json(message);
+             } else {
+                 res.json({ code: 1, megazineList: null });
+             }
+         })
+     }
+
+     //模糊查询
+     else {
+         console.log('kk');
+         var num = 5; //一页最多显示的条数
+         var page = req.body.page; //当前页
+         var num_end = page * num; //结束查询位置
+         var num_start = (page - 1) * num; //开始查询位置
+         var message = {};
+         var count = 0;
+         var str = "select * from `t_magazine_program` WHERE magazine_journal_no LIKE '%" + req.body.list_title + "%' limit " + num_start + "," + num_end + " ";
+         db.findMA(client, req.body.magazine_journal_no, function(result) {
+             console.log(result);
+             count = result.length;
+         })
+         db.findFun(client, str, function(result) {
+             if (result[0]) {
+                 message.code = 1;
+                 message.limit = num;
+                 message.count = count;
+                 message.page = req.body.page;
+                 message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
+                 message.megazineList = new Array;
+                 for (var i = 0; i < result.length; i++) {
+                     message.megazineList.push({
+                         magazine_journal_no: result[i].magazine_journal_no,
+                         magazine_journal_title: result[i].magazine_journal_title,
+                         magazine_journal_timestamp: result[i].magazine_journal_timestamp,
+                         magazine_program_id: result[i].magazine_program_id,
+                         note: result[i].note
+                     })
+                 }
+                 res.json(message);
+             } else {
+                 res.json({ code: 1, megazineList: null })
+             }
+         })
+     }*/
+>>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
 })
 
 //栏目修改

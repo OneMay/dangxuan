@@ -16,7 +16,6 @@ function connectServer() {
 function selectFun(client, username, password, callback) {
     client.query('select * from t_user where user_no="' + username + '" and password="' + password + '"', function(err, result, fields) {
         if (err) throw err;
-
         callback(result);
     })
 }
@@ -62,7 +61,14 @@ function findO(client, id, callback) {
         callback(result);
     })
 }
-
+//查询视频分类
+function findC(client, id, callback) {
+    client.query("SELECT * FROM `t_television_program` WHERE television_program_id = " + id + " ", function(err, result) {
+        if (err) throw err;
+        callback(result);
+        return result[0].television_title;
+    })
+}
 
 //查找所有视频
 function findAllFun(client, callback) {
@@ -74,11 +80,11 @@ function findAllFun(client, callback) {
 }
 
 //更新视频
-function update(client, id, videoName, callback) {
-    client.query('UPDATE `t_television_program_content` SET `video_introduction`=' + videoName + ' WHERE (`television_program_content_id`=' + videoName + ')', function(err) {
+function update(client, programid, id, showUrl, showUrl_1, videoName, date, note) {
+    note = note || 'admin';
+    console.log("UPDATE `t_television_program_content` SET `video_introduction`=" + '"' + videoName + '"' + "," + `television_program_id` + "=" + '"' + programid + '"' + "," + `thumbnails_url` + "=" + '"' + showUrl + '"' + "," + `video_url` + "=" + '"' + showUrl_1 + '"' + "," + `video_introduction` + "=" + '"' + videoName + '"' + "," + `video_timestamp` + "=" + '"' + date + '"' + "," + `note` + "=" + '"' + note + '"' + "WHERE (`television_program_content_id`=" + id + ")")
+    client.query("UPDATE `t_television_program_content` SET `video_introduction`=" + '"' + videoName + '"' + "," + `television_program_id` + "=" + '"' + programid + '"' + "," + `thumbnails_url` + "=" + '"' + showUrl + '"' + "," + `video_url` + "=" + '"' + showUrl_1 + '"' + "," + `video_introduction` + "=" + '"' + videoName + '"' + "," + `video_timestamp` + "=" + '"' + date + '"' + "," + `note` + "=" + '"' + note + '"' + "WHERE (`television_program_content_id`=" + id + ")", function(err) {
         if (err) throw err;
-
-        callback(result);
     })
 }
 
@@ -92,8 +98,8 @@ function findY(client, callback) {
 }
 
 //添加期数
-function addPeriod(client, magazine_journal_no, magazine_journal_title, path, note, callback) {
-    client.query("INSERT INTO `t_magazine_program` (`magazine_journal_no`, `magazine_journal_title`, `magazine_journal_picture_url`, `note`) VALUES (' "+ magazine_journal_no +" ',  ' "+ magazine_journal_title + " ', ' " + path + " ', '" + note + "')" ,function(err, result, fields) {
+function addPeriod(client, magazine_journal_no, magazine_journal_title, path, time, note, callback) {
+    client.query("INSERT INTO `t_magazine_program` (`magazine_journal_no`, `magazine_journal_title`, `magazine_journal_picture_url`,`magazine_journal_timestamp`, `note`) VALUES (' " + magazine_journal_no + " ',  ' " + magazine_journal_title + " ', ' " + path + " ', ' " + time + " ', '" + note + "')", function(err, result, fields) {
         if (err) throw err;
 
         callback(result);
@@ -118,18 +124,29 @@ function findMA(client, id, callback) {
 
 //期数删除
 function deleteM(client, id, callback) {
-    client.query("DELETE FROM `t_magazine_program` WHERE (`magazine_journal_no`='" + id + "')", function(err) {
+    client.query("DELETE FROM `t_magazine_program` WHERE (`magazine_program_id`='" + id + "')", function(err) {
         if (err) throw err;
+        callback();
     })
 }
 
+////期数修改
+function updateP(client, magazine_journal_no, magazine_journal_title, path, note, magazine_program_id, time, callback) {
+    console.log("UPDATE `t_magazine_program` SET `magazine_journal_no`=" + '"' + magazine_journal_no + '"' + "," + `magazine_journal_title` + "=" + '"' + magazine_journal_title + '"' + "," + `magazine_journal_picture_url` + "=" + '"' + path + '"' + "," + `note` + "=" + '"' + note + '"' + "WHERE (`magazine_program_id`=" + magazine_program_id + ")")
+    client.query("UPDATE `t_magazine_program` SET `magazine_journal_no`=" + '"' + magazine_journal_no + '"' + "," + `magazine_journal_title` + "=" + '"' + magazine_journal_title + '"' + "," + `magazine_journal_picture_url` + "=" + '"' + path + '"' + "," + `magazine_journal_timestamp` + "=" + '"' + time + '"' + "," + `note` + "=" + '"' + note + '"' + "WHERE (`magazine_program_id`=" + magazine_program_id + ")", function(err) {
+        if (err) throw err;
+        callback();
+    })
 
+}
 //---------文章模块------------
 
 //文章添加
-function addA(client, id, title, content, author, time, note) {
-    client.query("INSERT INTO `t_magazine_list` (`magazine_list_id`, `list_title`, `magazine_program_id`, `list_content`, `list_writer`, `insert_time`, `note`) VALUES ('" + id + "', '"+ title +"', '" + content + "', '" + author + "', '" + time + "', '" + note + "')", function(err){
-        if(err) throw err;
+function addA(client, id, title, content, author, time, callback) {
+    var note = '';
+    client.query("INSERT INTO `t_magazine_list` ( `list_title`, `magazine_program_id`, `list_content`, `list_writer`, `insert_time`, `note`) VALUES ('" + title + "', '" + id + "', '" + content + "', '" + author + "', '" + time + "', '" + note + "')", function(err) {
+        if (err) throw err;
+        callback();
     })
 }
 
@@ -140,13 +157,19 @@ function findAA(client, callback) {
         callback(result);
     })
 }
-
+//模糊查询文章
+function findAllA(client, list_title, callback) {
+    client.query("SELECT * FROM `t_magazine_list` WHERE list_title LIKE '%" + list_title + "%' ", function(err, result) {
+        if (err) throw err;
+        callback(result);
+    })
+}
 //查询期数
 function findQ(client, id, callback) {
     client.query("SELECT * FROM `t_magazine_program` WHERE magazine_program_id = " + id + " ", function(err, result) {
         if (err) throw err;
         callback(result);
-        console.log(result[0].magazine_journal_no);        
+        console.log(result[0].magazine_journal_no);
         return result[0].magazine_journal_no;
     })
 }
@@ -160,15 +183,23 @@ function findAR(client, id, callback) {
 }
 
 //删除文章
-function delA(client, id, callback){
-    client.query("DELETE FROM `t_magazine_list` WHERE (`magazine_list_id`='" + id + "')", function(err){
-        if(err) throw err;
+function delA(client, id, callback) {
+    client.query("DELETE FROM `t_magazine_list` WHERE (`magazine_list_id`='" + id + "')", function(err) {
+        if (err) throw err;
         callback(err);
     })
 }
 
+//文章修改
+function updateA(client, id, listId, title, content, author, time, callback) {
+    var note = '';
+    //console.log(content.toString())
+    client.query("UPDATE `t_magazine_list` SET `list_title`=" + '"' + title + '"' + "," + `magazine_program_id` + "=" + '"' + id + '"' + "," + `list_content` + "=" + "'" + content + "'" + "," + `list_writer` + "=" + '"' + author + '"' + "," + `insert_time` + "=" + '"' + time + '"' + "," + `note` + "=" + '"' + note + '"' + "WHERE (`magazine_list_id`=" + listId + ")", function(err) {
+        if (err) throw err;
+        callback();
+    })
 
-
+}
 //--------广播台模块----------
 
 //添加栏目
@@ -243,7 +274,7 @@ function feedback(client, id, callback) {
 }
 
 exports.connect = connectServer;
-exports.select = selectFun;
+exports.selectFun = selectFun;
 exports.insertVideoFun = insertVideoFun;
 exports.deleteVideoFun = deleteVideoFun;
 exports.findFun = findFun;
@@ -268,3 +299,7 @@ exports.addA = addA;
 exports.feedback = feedback;
 exports.findF = findF;
 exports.findO = findO;
+exports.findC = findC;
+exports.updateA = updateA;
+exports.updateP = updateP;
+exports.findAllA = findAllA;

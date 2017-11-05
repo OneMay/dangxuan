@@ -176,6 +176,7 @@ export default {
             pathname='/admin/bookQuery'
         }
         if(pathname=='/admin/bookPageAdd'||pathname=='/admin/bookPageAmend'){
+             document.getElementById('right').style.overflowY= 'scroll'; 
             pathname='/admin/bookList'
         }
         if(pathname=='/admin/sundListAdd'||pathname=='/admin/sundListAmend'){

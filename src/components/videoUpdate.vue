@@ -35,7 +35,7 @@
             </tr>
             <tr>
                 <td class="tableleft">选择视频</td>
-                <td class="tableleft" style="width: 196px; "><input type="file" @change="getVideo" name="GoodsPicture" id="GoodsPicture" multiple="multiple" accept=".mp4" /></td>
+                <td class="tableleft" style="width: 196px; "><input type="file" @change="getVideos" name="GoodsPicture" id="GoodsPicture" multiple="multiple" accept=".mp4" /></td>
            </tr>
             <tr>
                 <td class="tableleft">视频简介</td>
@@ -83,18 +83,17 @@ export default {
     },
     getFile(e){
         this.videoPoster = e.target.files[0];
-
     },
-    getVideo(e){
-        this.video = e.target.files[0];
+    getVideos(e){
+        this.video = e.target.files[0]
     },
     addVideo(e){
          var that = this;
 
        // e.preventDefault();
         if(this.videoPoster&&this.video&&this.videoId.number&&this.videoName&&this.videoTitle&&this.videoWords){
-            var imgreg=/.+((\.jpg$)|(\.png$))/g;
-            var videoreg=/.+\.mp4$/g
+            var imgreg=/.+((\.jpg$)|(\.png$))/gi;
+            var videoreg=/.+\.mp4$/gi;
             if(imgreg.test(this.videoPoster.name)&&videoreg.test(this.video.name)){
                 this.message='正在上传...';
                 var formData = new FormData();
@@ -114,13 +113,17 @@ export default {
 
                 axios.post(url+'/admin/video/amend', formData, config)
                 .then(res=>{
+                    var data;
                     if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
                         data=res.data;
                     }else{
                         data=JSON.parse(res.data)
                     }
-                    this.message='更新成功';
-                    console.log(res.data)
+                    if(data.code==1){
+                     this.message='更新成功';
+                    }else{
+                       this.message='更新失败'; 
+                    }
                 })
                 .catch(err=>{
                     this.message='更新失败';
@@ -132,42 +135,7 @@ export default {
         }else{
             this.message='所有内容不能为空！'
         }
-        
-        if((!this.videoPoster||!this.video)&&this.videoId.number&&this.videoName&&this.videoTitle&&this.videoWords){
-
-                this.message='正在上传...';
-                var formData = new FormData();
-                //formData.append('videoPoster', this.videoPoster);
-               // formData.append('video', this.video);
-                formData.append('videoId', this.videoId.number);
-                formData.append('videoName', this.videoName);
-                formData.append('videoTitle', this.videoTitle);
-                formData.append('videoWords', this.videoWords);
-                formData.append('note', this.note);
-
-                let config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-                }
-
-                axios.post(url+'/admin/video/amend', formData, config)
-                .then(res=>{
-                    if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
-                        data=res.data;
-                    }else{
-                        data=JSON.parse(res.data)
-                    }
-                    this.message='更新成功';
-                    console.log(res.data)
-                })
-                .catch(err=>{
-                    this.message='更新失败';
-                    console.log(err)
-                }); 
-        }else{
-            this.message='所有内容不能为空！'
-        }   
+         
     },
     getVideo(){
        
