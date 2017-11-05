@@ -70,11 +70,7 @@ export default {
       list_title:'',
       list_content:'',
       magazine_list_id:'',
-<<<<<<< HEAD
-      d:null,
-=======
       ed:null
->>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
     }
   },
   methods:{
@@ -89,31 +85,17 @@ export default {
         alert(UE.getEditor('editor').getAllHtml())
     },
     setContent(isAppendTo) {
-<<<<<<< HEAD
-         console.log(5)
-         var that = this;
-        //UE.getEditor('editor').setContent(isAppendTo);
-        this.d.ready(function() { 
-that.d.setContent('str'); 
-});
-        console.log(4)
-=======
         var that = this;
         this.ed.ready(function(){
             that.ed.setContent(isAppendTo);
         })
->>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
     },
     getContent(){
         var arr = UE.getEditor('editor').getContent();
         this.list_content=arr;
     },
     createEditor(){
-<<<<<<< HEAD
-      this.d= UE.getEditor('editor') 
-=======
      this.ed= UE.getEditor('editor') 
->>>>>>> ce515ea1c818f705c467bcb2cde34e65c12f035e
     },
     addPage(){
         this.getContent();
