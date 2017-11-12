@@ -73,14 +73,14 @@ export default {
     font-size: 14px;
     color: #f36228;
     margin-bottom: 5px;
-    margin: 0px 35px 0 35px;
+    margin: 0px 30px 0 30px;
 }
 .trazition span{
     font-size: 12px;
 }
 .contents {
-    margin: 0 23px 0 33px;
-    height: 500px;
+    margin: 0 10px 0 18px;
+    height: 615px;
     overflow-y: auto;
     /*三角箭头的颜色*/
     scrollbar-arrow-color: #fff;
@@ -94,17 +94,16 @@ export default {
     scrollbar-track-color: #fff;
 }
 h1 {
-    padding-top: 155px;
+    padding-top: 70px;
     /* position: relative; */
-    margin: 0 35px 0 35px;
+    margin: 0 30px 0 30px;
 }
 #article{
-    width: 432px;
+    width: 442px;
     margin: 0 auto;
     background: url(/static/images/phone.jpg) no-repeat;
-    height: 810px;
-    overflow: hidden;
-    background-size: 432px 810px;
+    height: 800px;
+    background-size: 450px 800px;
     overflow: auto;
     
 }

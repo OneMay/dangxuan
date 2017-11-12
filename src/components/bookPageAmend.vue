@@ -27,7 +27,7 @@
                 <td class="tableleft" >
             
                         <!-- <h1>完整demo</h1> -->
-                        <script id="editor" type="text/plain" style="width:375px;height:400px;offsetWidth:0px"></script>
+                        <script id="editor" type="text/plain" style="width:414px;height:400px;offsetWidth:0px"></script>
                  
                     <div id="btns">
                         <div>
