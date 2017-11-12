@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import 'babel-polyfill'
 import login from './components/login'
 import index from './components/index'
 export default {

@@ -1,6 +1,6 @@
 <template>
 <div id="article">
-    <h1 style="fontSize:35px;" v-text="articleList[0].list_title"></h1>
+    <h1 v-text="articleList[0].list_title"></h1>
     <div class="trazition">
         <span class="magazine_journal_no">期数：{{articleList[0].magazine_journal_no}}</span>
         <span class="insert_time">时间：{{articleList[0].insert_time}}</span>
@@ -52,6 +52,7 @@ export default {
                         val.insert_time=insert_time;  
                     })
                     window.document.title=this.articleList[0].list_title
+                    $('#supersized').remove();
                 }
             })
         }
@@ -72,8 +73,62 @@ export default {
     font-size: 14px;
     color: #f36228;
     margin-bottom: 5px;
+    margin: 0px 35px 0 35px;
 }
 .trazition span{
-    margin-right:20px;
+    font-size: 12px;
+}
+.contents {
+    margin: 0 23px 0 33px;
+    height: 500px;
+    overflow-y: auto;
+    /*三角箭头的颜色*/
+    scrollbar-arrow-color: #fff;
+    /*滚动条滑块按钮的颜色*/
+    scrollbar-face-color: #fff;
+    /*滚动条整体颜色*/
+    scrollbar-highlight-color: #fff;
+    /*滚动条阴影*/
+    scrollbar-shadow-color: rgba(0,0,0,0.3);
+    /*滚动条轨道颜色*/
+    scrollbar-track-color: #fff;
+}
+h1 {
+    padding-top: 155px;
+    /* position: relative; */
+    margin: 0 35px 0 35px;
+}
+#article{
+    width: 432px;
+    margin: 0 auto;
+    background: url(/static/images/phone.jpg) no-repeat;
+    height: 810px;
+    overflow: hidden;
+    background-size: 432px 810px;
+    overflow: auto;
+    
+}
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/  
+::-webkit-scrollbar  
+{  
+    width: 16px;  
+    height: 16px; 
+    background-color: #ffffff;  
+}  
+  
+/*定义滚动条轨道 内阴影+圆角*/  
+::-webkit-scrollbar-track  
+{  
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);  
+    border-radius: 10px;  
+    background-color: #ffffff;  
+}  
+  
+/*定义滑块 内阴影+圆角*/  
+::-webkit-scrollbar-thumb  
+{  
+    border-radius: 10px;  
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
+    background-color: #ffffff;  
 }
 </style>

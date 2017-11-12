@@ -120,7 +120,7 @@ router.post('/admin/video/findAll', function(req, res) {
         current_page = parseInt(req.body.page);
     }
     var nun = (current_page - 1) * num;
-    var str = "SELECT * FROM `t_television_program_content` limit " + num + " offset " + nun + " ;";
+    var str = "SELECT * FROM `t_television_program_content` order by video_timestamp desc limit " + num + " offset " + nun + " ;";
 
     //无模糊查询
     if (!req.body.videoName) {
@@ -171,7 +171,7 @@ router.post('/admin/video/findAll', function(req, res) {
         var num_start = (page - 1) * num; //开始查询位置
         var message = {};
         var count = 0;
-        var str = "select * from `t_television_program_content` WHERE video_introduction LIKE '%" + req.body.videoName + "%' limit " + num_start + "," + num_end + " ";
+        var str = "select * from `t_television_program_content` WHERE video_introduction LIKE '%" + req.body.videoName + "%' order by video_timestamp desc limit " + num_start + "," + num_end + " ";
         console.log(str);
         db.findTo(client, req.body.videoName, function(result) {
             console.log(result);
@@ -299,7 +299,7 @@ router.post('/admin/magazine/findAllPeriods', function(req, res) {
     //没有关键字查询
     if (!req.body.magazine_journal_no) {
         var nun = (current_page - 1) * num;
-        var str = "SELECT * FROM `t_magazine_program` limit " + num + " offset " + nun + " ";
+        var str = "SELECT * FROM `t_magazine_program` order by magazine_journal_timestamp desc limit " + num + " offset " + nun + " ";
         db.findY(client, function(result) {
             count = result.length;
             result.forEach(function(value, index) {
@@ -342,7 +342,7 @@ router.post('/admin/magazine/findAllPeriods', function(req, res) {
         var num_start = (page - 1) * num; //开始查询位置
         var message = {};
         var count = 0;
-        var str = "select * from `t_magazine_program` WHERE magazine_journal_no LIKE '%" + req.body.magazine_journal_no + "%' limit " + num_start + "," + num_end + " ";
+        var str = "select * from `t_magazine_program` WHERE magazine_journal_no LIKE '%" + req.body.magazine_journal_no + "%' order by magazine_journal_timestamp desc limit " + num_start + "," + num_end + " ";
         db.findMA(client, req.body.magazine_journal_no, function(result) {
             console.log(result);
             count = result.length;
@@ -427,7 +427,7 @@ router.post('/admin/magazine/findAllArticle', function(req, res) {
     //没有关键字查询
     if (!req.body.list_title) {
         var nun = (current_page - 1) * num;
-        var str = "SELECT * FROM `t_magazine_list` limit " + num + " offset " + nun + " ";
+        var str = "SELECT * FROM `t_magazine_list`  order by insert_time desc limit " + num + " offset " + nun + " ";
         db.findAA(client, function(result) {
             count = result.length;
         })
@@ -474,7 +474,7 @@ router.post('/admin/magazine/findAllArticle', function(req, res) {
         var num_start = (page - 1) * num; //开始查询位置
         var message = {};
         var count = 0;
-        var str = "select * from `t_magazine_list` WHERE list_title LIKE '%" + req.body.list_title + "%' limit " + num_start + "," + num_end + " ";
+        var str = "select * from `t_magazine_list` WHERE list_title LIKE '%" + req.body.list_title + "%' order by insert_time desc limit " + num_start + "," + num_end + " ";
         db.findAllA(client, req.body.list_title, function(result) {
             console.log(result);
             count = result.length;
