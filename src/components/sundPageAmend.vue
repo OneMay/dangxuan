@@ -15,11 +15,11 @@
                 <td class="tableleft">时间</td>
                 <td>
                     <select name="bigTypeId" v-model="program_date">
-                        <option value="1">周一</option>
-                        <option value="2">周二</option>
-                        <option value="3">周三</option>
-                        <option value="4">周四</option>
-                        <option value="5">周五</option>
+                        <option >周一</option>
+                        <option >周二</option>
+                        <option >周三</option>
+                        <option >周四</option>
+                        <option >周五</option>
                     </select>
                 </td>
             </tr>
