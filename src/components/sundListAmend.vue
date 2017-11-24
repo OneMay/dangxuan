@@ -8,18 +8,21 @@
             </tr>
 
              <tr>
-                <td class="tableleft">时间</td>
+                <td class="tableleft">日期</td>
                 <td>
                     <select name="bigTypeId" v-model="program_date">
-                        <option value="1">周一</option>
-                        <option value="2">周二</option>
-                        <option value="3">周三</option>
-                        <option value="4">周四</option>
-                        <option value="5">周五</option>
+                        <option >周一</option>
+                        <option >周二</option>
+                        <option >周三</option>
+                        <option >周四</option>
+                        <option >周五</option>
                     </select>
                 </td>
             </tr>
-            
+            <tr>
+                <td class="tableleft" width="10%">时间</td>
+                <td><input type="text" name="program_timestamp" v-model="program_timestamp" /></td>
+            </tr>
             <tr>
                 <td class="tableleft"></td>
                 <td>
@@ -45,17 +48,19 @@ export default {
       message:'',
       program_name:'',
       program_date:'',
+      program_timestamp:'',
       columnList:[],
       program_id:null
     }
   },
   methods:{
     columnAdd(){
-        if(this.program_name&&this.program_date){
+        if(this.program_name&&this.program_date&&this.program_timestamp){
             axios.post(url+'/admin/radio/columnAmend',{
                 program_id:this.program_id,
                 program_name:this.program_name,
-                program_date:this.program_date
+                program_date:this.program_date,
+                program_timestamp:this.program_timestamp
             })
             .then(res=>{
                 var data;
@@ -80,11 +85,12 @@ export default {
     },
     getcolumn(){
         var getcolumn=decodeURI(window.location.search.substring(1));
-        var reg = /.+=(.+)&.+=(.+)/g;
+        var reg = /.+=(.+)&.+=(.+)&.+=(.+)/g;
         var column = reg.exec(getcolumn);
         axios.post(url+'/admin/radio/columnFind',{
            program_name:column[2],
-           program_date:column[1]
+           program_date:column[1],
+           program_timestamp:column[3]
         })
         .then(res=>{
             var data;
@@ -98,6 +104,7 @@ export default {
                 this.program_id=this.this.columnList[0].program_id;
                 this.program_name=this.columnList[0].program_name;
                 this.program_date=this.columnList[0].program_date;
+                this.program_timestamp=this.columnList[0].program_timestamp;
             }
         })
         .catch(err => {

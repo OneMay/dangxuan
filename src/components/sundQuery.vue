@@ -12,12 +12,14 @@
         <th>栏目名称</th>
         <th>音频个数</th>
         <th>时间</th>
+        <th>日期</th>
         <th>管理菜单</th>
     </tr>
     </thead>
         <tr v-for="item in columnList">
             <td v-text="item.program_name">微众</td>
             <td v-text="item.program_number"></td>
+            <td v-text="item.program_timestamp"></td>
             <td v-text="item.program_date"></td>
             <td><span class="btn btn-success" @click="columnAmend(item)">修改</span><span class="btn btn-danger" @click="columnDel(item)">删除</span></td>  
         </tr>
@@ -80,8 +82,7 @@ export default {
     },
     columnDel(item){
         axios.post(url+'/admin/radio/columnFindAll',{
-           program_date:item.program_date,
-           program_name:item.program_name
+           program_id:item.program_id
         })
         .then(res=>{
             var data;
@@ -101,7 +102,7 @@ export default {
         });
     },
     columnAmend(item){
-        window.location.href='/admin/sundListAmend?program_date='+item.program_date+'&program_name='+item.program_name;
+        window.location.href='/admin/sundListAmend?program_date='+item.program_date+'&program_name='+item.program_name+'&program_timestamp='+item.program_timestamp;
     },
      getcolumnList(num){
         if(num>this.currentPage){

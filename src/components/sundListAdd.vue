@@ -8,18 +8,23 @@
             </tr>
 
              <tr>
-                <td class="tableleft">时间</td>
+                <td class="tableleft">日期</td>
                 <td>
                     <select name="bigTypeId" v-model="program_date">
-                        <option value="1">周一</option>
-                        <option value="2">周二</option>
-                        <option value="3">周三</option>
-                        <option value="4">周四</option>
-                        <option value="5">周五</option>
+                        <option>周一</option>
+                        <option >周二</option>
+                        <option >周三</option>
+                        <option >周四</option>
+                        <option >周五</option>
                     </select>
                 </td>
             </tr>
-            
+            <tr>
+                <td class="tableleft">时间</td>
+                <td>
+                    <input type="date" name="datel" class="form-control" id="temperatureDom" v-model="program_timestamp" >
+                </td>
+            </tr>
             <tr>
                 <td class="tableleft"></td>
                 <td>
@@ -44,15 +49,17 @@ export default {
       password:"",
       message:'',
       program_name:'',
-      program_date:''
+      program_date:'',
+      program_timestamp:''
     }
   },
   methods:{
     columnAdd(){
-        if(this.program_name&&this.program_date){
+        if(this.program_name&&this.program_date&&this.program_timestamp){
             axios.post(url+'/admin/radio/columnAdd',{
                 program_name:this.program_name,
-                program_date:this.program_date
+                program_date:this.program_date,
+                program_timestamp:this.program_timestamp
             })
             .then(res=>{
                 var data;

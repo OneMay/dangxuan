@@ -24,6 +24,12 @@
                 </td>
             </tr>
             <tr>
+                <td class="tableleft">时间</td>
+                <td>
+                    <input type="date" name="datel" class="form-control" id="temperatureDom" v-model="program_timestamp" >
+                </td>
+            </tr>
+            <tr>
                 <td class="tableleft">音频大小</td>
                 <td><input type="text" name="videosNumber" readonly="readonly"/>小于10M</td>
             </tr>
@@ -67,6 +73,7 @@ export default {
       radioPoster:'',
       radioInfo:'',
       program_name:'',
+      program_timestamp:'',
       program_introduction:'',
       column_program_name:['hjuajd','ikhkhugy'],
       program_date:''
@@ -84,7 +91,7 @@ export default {
          var that = this;
 
        // e.preventDefault();
-        if(this.radioPoster&&this.radioInfo&&this.program_name&&this.program_introduction&&this.program_date){
+        if(this.radioPoster&&this.radioInfo&&this.program_name&&this.program_introduction&&this.program_date&&this.program_timestamp){
             var imgreg=/.+((\.jpg$)|(\.png$))/gi;
             var videoreg=/.+((\.mp3$)|(\.mp4$))/gi;
             if(imgreg.test(this.radioPoster.name)&&videoreg.test(this.radioInfo.name)){
@@ -95,6 +102,7 @@ export default {
                 formData.append('program_name', this.program_name);
                 formData.append('program_introduction', this.program_introduction);
                 formData.append('program_date', this.program_date);
+                formData.append('program_timestamp', this.program_timestamp);
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -110,7 +118,7 @@ export default {
                         data=JSON.parse(res.data)
                     }
                     if(data.code==1){
-                        this.message='上传成功';
+                        this.message=data.message;
                     }else{
                         this.message='上传失败';
                     }

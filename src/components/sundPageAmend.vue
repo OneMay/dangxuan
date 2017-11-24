@@ -24,6 +24,12 @@
                 </td>
             </tr>
             <tr>
+                <td class="tableleft">时间</td>
+                <td>
+                    <input type="date" name="datel" class="form-control" id="temperatureDom" v-model="program_timestamp" >
+                </td>
+            </tr>
+            <tr>
                 <td class="tableleft">音频大小</td>
                 <td><input type="text" name="videosNumber" readonly="readonly"/>小于10M</td>
             </tr>
@@ -67,6 +73,7 @@ export default {
       radioPoster:'',
       radioInfo:'',
       program_name:'',
+      program_timestamp:'',
       program_introduction:'',
       column_program_name:[],
       program_date:'',
@@ -86,7 +93,7 @@ export default {
          var that = this;
 
        // e.preventDefault();
-        if(this.program_name&&this.program_introduction&&this.program_date){
+        if(this.program_name&&this.program_introduction&&this.program_date&&this.program_timestamp){
             var imgreg=/.+((\.jpg$)|(\.png$))/gi;
             var videoreg=/.+((\.mp3$)|(\.mp4$))/gi;
             if(imgreg.test(this.radioPoster.name)&&videoreg.test(this.radioInfo.name)){
@@ -97,6 +104,8 @@ export default {
                 formData.append('program_name', this.program_name);
                 formData.append('program_introduction', this.program_introduction);
                 formData.append('program_date', this.program_date);
+                formData.append('program_timestamp', this.program_timestamp);
+                formData.append('program_content_id', this.program_content_id);
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data'
@@ -170,6 +179,7 @@ export default {
                 this.program_date=this.radioList[0].program_date;
                 this.program_introduction=this.radioList[0].program_introduction;
                 this.program_content_id=this.radioList[0].program_content_id;
+                this.program_timestamp=this.radioList[0].program_timestamp;
             }
         })
         .catch(err=>{

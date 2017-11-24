@@ -20,7 +20,7 @@
         <tr v-for="item in radioList">
             <td v-text="item.program_name"></td>
             <td v-text="item.program_date"></td>
-            <td v-text="item.program_timestamp"></td>               
+            <td v-text="item.program_audio_timestamp"></td>               
             <td> <span class="btn btn-danger" @click="radioDel(item)">删除</span><span class="btn btn-primary" @click="radioAmend(item)">修改</span><span class="btn btn-success"  @click="watch(item.program_content_id)">音频预览</span></td>
                
         </tr>    
