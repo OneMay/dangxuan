@@ -26,6 +26,10 @@
                 </td>
             </tr>
             <tr>
+                <td class="tableleft" width="15%">封面</td>
+                <td class="tableleft" style="width: 196px; "><input type="file" name="GoodsPicture" id="GoodsPicture" multiple="multiple" @change="getFile" accept=".jpg,.png"/></td>
+            </tr>
+            <tr>
                 <td class="tableleft"></td>
                 <td>
                     <span style="margin-left:5px;" class="btn btn-primary" @click="columnAdd">保存</span> &nbsp;&nbsp;<router-link class="btn btn-success" name="backid" id="backid" to="/admin/sundQuery">返回列表</router-link>
@@ -50,17 +54,30 @@ export default {
       message:'',
       program_name:'',
       program_date:'',
-      program_timestamp:''
+      program_timestamp:'',
+      pictureInfo:''
     }
   },
   methods:{
+      getFile(e){
+        this.pictureInfo = e.target.files[0];
+    },
     columnAdd(){
-        if(this.program_name&&this.program_date&&this.program_timestamp){
-            axios.post(url+'/admin/radio/columnAdd',{
-                program_name:this.program_name,
-                program_date:this.program_date,
-                program_timestamp:this.program_timestamp
-            })
+        if(this.program_name&&this.program_date&&this.program_timestamp&&this.pictureInfo){
+             var imgreg=/.+((\.jpg$)|(\.png$))/gi;
+            if(imgreg.test(this.pictureInfo.name)){
+                this.message='正在上传...';
+                var formData = new FormData();
+                formData.append('program_picture_url', this.pictureInfo);
+                formData.append('program_name', this.program_name);
+                formData.append('program_date', this.program_date);
+                formData.append('program_timestamp', this.program_timestamp);
+                let config = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            axios.post(url+'/admin/radio/columnAdd', formData, config)
             .then(res=>{
                 var data;
                 if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
@@ -77,6 +94,9 @@ export default {
             .catch(err => {
                 console.log(err);
             });
+            }else{
+              this.message='图片格式错误'  
+            }
         }else{
             this.message='所有内容不能为空！'
         }

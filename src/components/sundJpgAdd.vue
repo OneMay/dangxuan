@@ -47,7 +47,7 @@ export default {
             if(imgreg.test(this.pictureInfo.name)){
                 this.message='正在上传...';
                 var formData = new FormData();
-                formData.append('magazine_journal_picture', this.pictureInfo);
+                formData.append('pictureInfo', this.pictureInfo);
                 let config = {
                     headers: {
                         'Content-Type': 'multipart/form-data'
