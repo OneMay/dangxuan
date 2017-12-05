@@ -72,6 +72,14 @@ export default {
                 this.currentPage=data.currentPage;
                 this.page=data.page;
                 this.columnList=data.columnList;
+                if(this.columnList){
+                        this.columnList.forEach(function(val,index){
+                            var reg=/(\d{4}-\d{2}-\d{2})(.*||\s*)(\d{2}:\d{2}:\d{2})/;
+                            var arr = reg.exec(val.program_timestamp);
+                            var program_timestamp=arr[1];
+                            val.program_timestamp=program_timestamp;  
+                        })
+                    }
             }else{
                 this.message=data.message;
             }
@@ -81,7 +89,7 @@ export default {
         });
     },
     columnDel(item){
-        axios.post(url+'/admin/radio/columnFindAll',{
+        axios.post(url+'/admin/radio/columnDel',{
            program_id:item.program_id
         })
         .then(res=>{
@@ -130,6 +138,14 @@ export default {
                 this.currentPage=data.currentPage;
                 this.page=data.page;
                 this.columnList=data.columnList;
+                if(this.columnList){
+                        this.columnList.forEach(function(val,index){
+                            var reg=/(\d{4}-\d{2}-\d{2})(.*||\s*)(\d{2}:\d{2}:\d{2})/;
+                            var arr = reg.exec(val.program_timestamp);
+                            var program_timestamp=arr[1];
+                            val.program_timestamp=program_timestamp;  
+                        })
+                    }
             }else{
                 this.message=data.message;
             }

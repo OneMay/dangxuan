@@ -8,7 +8,7 @@ function upload(req, callback) {
     form.encoding = 'utf-8';
     form.uploadDir = '../../dist/' + AVATAR_UPLOAD_FOLDER;
     form.keepExtensions = true;
-    form.parse(req, function (err, fields, files) {
+    form.parse(req, function(err, fields, files) {
         console.log(fields);
         if (err) {
             res.locals.error = err;
@@ -64,7 +64,7 @@ function upload_2(req, callback) {
     form.encoding = 'utf-8';
     form.uploadDir = '../../dist/' + AVATAR_UPLOAD_FOLDER;
     form.keepExtensions = true;
-    form.parse(req, function (err, fields, files) {
+    form.parse(req, function(err, fields, files) {
         if (err) {
             res.locals.error = err;
             return;
@@ -109,7 +109,7 @@ function upload_3(req, callback) {
     form.encoding = 'utf-8';
     form.uploadDir = '../../dist/' + AVATAR_UPLOAD_FOLDER;
     form.keepExtensions = true;
-    form.parse(req, function (err, fields, files) {
+    form.parse(req, function(err, fields, files) {
         if (err) {
             res.locals.error = err;
             return;
@@ -153,7 +153,7 @@ function upload_4(req, callback) {
     form.encoding = 'utf-8';
     form.uploadDir = '../../dist/' + AVATAR_UPLOAD_FOLDER;
     form.keepExtensions = true;
-    form.parse(req, function (err, fields, files) {
+    form.parse(req, function(err, fields, files) {
         console.log(fields);
         if (err) {
             res.locals.error = err;
@@ -162,7 +162,7 @@ function upload_4(req, callback) {
 
         var extName = ''; //后缀名
         var extName_1 = '';
-        switch (files.videoPoster.type) {
+        switch (files.radioPoster.type) {
             case 'image/pjpeg':
                 extName = 'jpg';
                 break;
@@ -182,7 +182,7 @@ function upload_4(req, callback) {
             return;
         }
 
-        switch (files.video.type) {
+        switch (files.radioInfo.type) {
             case 'video/mp4':
                 extName_1 = 'mp4';
                 break;
@@ -209,7 +209,7 @@ function upload_5(req, callback) {
     form.encoding = 'utf-8';
     form.uploadDir = '../../dist/' + AVATAR_UPLOAD_FOLDER;
     form.keepExtensions = true;
-    form.parse(req, function (err, fields, files) {
+    form.parse(req, function(err, fields, files) {
         if (err) {
             res.locals.error = err;
             return;

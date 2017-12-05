@@ -205,7 +205,7 @@ function updateA(client, id, listId, title, content, author, time, callback) {
 
 //添加栏目
 function addC(client, name, date, time, url) {
-    client.query("INSERT INTO `t_radio_program` (`program_name`, `program_date`, `program_timestamp`, `program_picture_url`) VALUES ('" + name +  "', ' " + date + " ', ' "+ time +" ', ' "+ url +" ')", function(err) {
+    client.query("INSERT INTO `t_radio_program` (`program_name`, `program_date`, `program_timestamp`, `program_picture_url`) VALUES ('" + name + "', ' " + date + " ', ' " + time + " ', ' " + url + " ')", function(err) {
         if (err) throw err;
     })
 }
@@ -233,9 +233,10 @@ function updateL(client, id, name, date) {
 }
 
 //栏目删除
-function deleteL(client, name, date) {
-    client.query("DELETE FROM `t_radio_program` WHERE (`program_name`='" + name + "')", function(err) {
+function deleteL(client, name, callback) {
+    client.query("DELETE FROM `t_radio_program` WHERE (`program_id`='" + name + "')", function(err) {
         if (err) throw err;
+        callback()
     })
 }
 
@@ -252,11 +253,20 @@ function addV(client, r_url, url, intro) {
         if (err) throw err;
     })
 }
-
+//栏目
+function findAQ(client, id, callback) {
+    client.query("SELECT * FROM `t_radio_program` WHERE program_id = " + id + " ", function(err, result) {
+        if (err) throw err;
+        callback(result);
+        // console.log(result[0].magazine_journal_no);
+        //return result[0].magazine_journal_no;
+    })
+}
 //广播查询
-function findV(client) {
-    client.query("SELECT * FROM `t_radio_content`", function(err){
-        if(err) throw err;
+function findV(client, callback) {
+    client.query("SELECT * FROM `t_radio_content`", function(err, result) {
+        if (err) throw err;
+        callback(result)
     })
 }
 
@@ -325,3 +335,4 @@ exports.findL = findL;
 exports.updateA = updateA;
 exports.updateP = updateP;
 exports.findAllA = findAllA;
+exports.findAQ = findAQ;
