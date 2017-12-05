@@ -130,7 +130,7 @@ function deleteM(client, id, callback) {
     })
 }
 
-////期数修改
+//期数修改
 function updateP(client, magazine_journal_no, magazine_journal_title, path, note, magazine_program_id, time, callback) {
     console.log("UPDATE `t_magazine_program` SET `magazine_journal_no`=" + '"' + magazine_journal_no + '"' + "," + `magazine_journal_title` + "=" + '"' + magazine_journal_title + '"' + "," + `magazine_journal_picture_url` + "=" + '"' + path + '"' + "," + `note` + "=" + '"' + note + '"' + "WHERE (`magazine_program_id`=" + magazine_program_id + ")")
     client.query("UPDATE `t_magazine_program` SET `magazine_journal_no`=" + '"' + magazine_journal_no + '"' + "," + `magazine_journal_title` + "=" + '"' + magazine_journal_title + '"' + "," + `magazine_journal_picture_url` + "=" + '"' + path + '"' + "," + `magazine_journal_timestamp` + "=" + '"' + time + '"' + "," + `note` + "=" + '"' + note + '"' + "WHERE (`magazine_program_id`=" + magazine_program_id + ")", function(err) {
@@ -157,6 +157,7 @@ function findAA(client, callback) {
         callback(result);
     })
 }
+
 //模糊查询文章
 function findAllA(client, list_title, callback) {
     client.query("SELECT * FROM `t_magazine_list` WHERE list_title LIKE '%" + list_title + "%' ", function(err, result) {
@@ -203,16 +204,24 @@ function updateA(client, id, listId, title, content, author, time, callback) {
 //--------广播台模块----------
 
 //添加栏目
-function addC(client, name, date) {
-    client.query("INSERT INTO `t_radio_program` (`program_name`, `program_date`) VALUES ('" + name + "', '" + post_url + ")", function(err) {
+function addC(client, name, date, time, url) {
+    client.query("INSERT INTO `t_radio_program` (`program_name`, `program_date`, `program_timestamp`, `program_picture_url`) VALUES ('" + name +  "', ' " + date + " ', ' "+ time +" ', ' "+ url +" ')", function(err) {
         if (err) throw err;
     })
 }
 
-//栏目查询
-function findL(client, name) {
-    client.query("select * FROM `t_radio_program` WHERE program_name LIKE '%" + name + "%' ", function(err) {
+//全部栏目查询
+function findAL(client, callback) {
+    client.query("SELECT * FROM `t_radio_program`", function(err, result) {
         if (err) throw err;
+        callback(result);
+    })
+}
+//栏目查询
+function findL(client, name, callback) {
+    client.query("select * FROM `t_radio_program` WHERE program_name LIKE '%" + name + "%' ", function(err, result) {
+        if (err) throw err;
+        callback(result);
     })
 }
 
@@ -245,10 +254,19 @@ function addV(client, r_url, url, intro) {
 }
 
 //广播查询
-function findV(client, name) {
-    client.query("SELECT")
+function findV(client) {
+    client.query("SELECT * FROM `t_radio_content`", function(err){
+        if(err) throw err;
+    })
 }
 
+//广播单个查询
+function findVL(client, name, callback) {
+    client.query("select * FROM `t_radio_content` WHERE program_name LIKE '%" + name + "%' ", function(err, result) {
+        if (err) throw err;
+        callback(result);
+    })
+}
 
 
 //--------反馈管理-----------
@@ -291,6 +309,9 @@ exports.deleteM = deleteM;
 exports.delA = delA;
 exports.addC = addC;
 exports.findL = findL;
+exports.findAL = findAL;
+exports.findV = findV;
+exports.findVL = findVL;
 exports.updateL = updateL;
 exports.deleteL = deleteL;
 exports.addP = addP;
@@ -300,6 +321,7 @@ exports.feedback = feedback;
 exports.findF = findF;
 exports.findO = findO;
 exports.findC = findC;
+exports.findL = findL;
 exports.updateA = updateA;
 exports.updateP = updateP;
 exports.findAllA = findAllA;
