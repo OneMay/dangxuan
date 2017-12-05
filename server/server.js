@@ -17,21 +17,10 @@ var index = require('./routes/index.js');
 //         next();
 //     }
 // })
-
 app.set('views', path.join(path.resolve(__dirname, '..'), 'dist'))
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
-app.use(express.static(path.join(path.resolve(__dirname, '..'), 'dist')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-//配置用户验证
-app.use(session({
-    secret: 'secret',
-    resave: false,
-    cookie: { maxAge: 60 * 1000 * 30 } //设置过期时间
-}))
+var history = require('connect-history-api-fallback');
 app.use("/editor/ue", ueditor(path.join(__dirname, '../dist'), function(req, res, next) {
     // ueditor 客户发起上传图片请求
     if (req.query.action === 'uploadimage') {
@@ -62,6 +51,20 @@ app.use("/editor/ue", ueditor(path.join(__dirname, '../dist'), function(req, res
         res.redirect('/static/Editor/jsp/config.json')
     }
 }));
+app.use(history()) // 这里千万要注意，要在static静态资源上面
+app.use(express.static(path.join(path.resolve(__dirname, '..'), 'dist')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+//配置用户验证
+app.use(session({
+    secret: 'secret',
+    resave: false,
+    cookie: { maxAge: 60 * 1000 * 30 } //设置过期时间
+}))
+
+
 app.use('/', index);
 // app.use('/*', function(req, res){
 //     if(!req.session.islogin){

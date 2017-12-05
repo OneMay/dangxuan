@@ -28,44 +28,185 @@ Vue.use(Router)
 
 export default new Router({
     mode: 'history',
+    hashbang: true,
+    history: false, //这个参数改为false就可以了
+    saveScrollPosition: true,
+    suppressTransitionError: true,
     routes: [{
         path: '/admin/login',
         name: 'login',
-        component: login
+        component: login,
+        meta: {
+            requiresAuth: true
+        }
     }, {
         path: '/admin',
         name: 'admin',
         component: index,
         redirect: '/admin/index',
-        children: [
-            { path: '/admin/index', component: welcome },
-            { path: '/admin/videoQuery', component: videoQuery },
-            { path: '/admin/videoList', component: videoList },
-            { path: '/admin/bookQuery', component: bookQuery },
-            { path: '/admin/bookList', component: bookList },
-            { path: '/admin/sundQuery', component: sundQuery },
-            { path: '/admin/sundList', component: sundList },
-            { path: '/admin/feedbackList', component: feedbackList },
-            { path: '/admin/videoAdd', component: videoAdd },
-            { path: '/admin/bookAdd', component: bookAdd },
-            { path: '/admin/bookPageAdd', component: bookPageAdd },
-            { path: '/admin/sundListAdd', component: sundListAdd },
-            { path: '/admin/sundPageAdd', component: sundPageAdd },
-            { path: '/admin/sundJpgAdd', component: sundJpgAdd },
-            { path: '/admin/feedbackDetail', component: feedbackDetail },
-            { path: '/admin/adminList', component: adminList },
-            { path: '/admin/videoUpdate', component: videoUpdate },
-            { path: '/admin/bookPeriodsAmend', component: bookPeriodsAmend },
-            { path: '/admin/bookPageAmend', component: bookPageAmend },
-            { path: '/admin/sundListAmend', component: sundListAmend },
-            { path: '/admin/sundPageAmend', component: sundPageAmend }
+        meta: {
+            requiresAuth: true
+        },
+        children: [{
+                path: '/admin/index',
+                component: welcome,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/videoQuery',
+                component: videoQuery,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/videoList',
+                component: videoList,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/bookQuery',
+                component: bookQuery,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/bookList',
+                component: bookList,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/sundQuery',
+                component: sundQuery,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/sundList',
+                component: sundList,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/feedbackList',
+                component: feedbackList,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/videoAdd',
+                component: videoAdd,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/bookAdd',
+                component: bookAdd,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/bookPageAdd',
+                component: bookPageAdd,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/sundListAdd',
+                component: sundListAdd,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/sundPageAdd',
+                component: sundPageAdd,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/sundJpgAdd',
+                component: sundJpgAdd,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/feedbackDetail',
+                component: feedbackDetail,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/adminList',
+                component: adminList,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/videoUpdate',
+                component: videoUpdate,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/bookPeriodsAmend',
+                component: bookPeriodsAmend,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/bookPageAmend',
+                component: bookPageAmend,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/sundListAmend',
+                component: sundListAmend,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: '/admin/sundPageAmend',
+                component: sundPageAmend,
+                meta: {
+                    requiresAuth: true
+                }
+            }
         ]
     }, {
         path: '/',
-        redirect: '/admin/login'
+        redirect: '/admin/login',
+        meta: {
+            requiresAuth: true
+        }
     }, {
         path: '/admin/article',
         name: 'article',
-        component: article
+        component: article,
+        meta: {
+            requiresAuth: true
+        }
     }]
 })
