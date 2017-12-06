@@ -70,14 +70,6 @@ export default {
                 this.currentPage=data.currentPage;
                 this.page=data.page;
                 this.videoList=data.videoList;
-                if(this.videoList){
-                    this.videoList.forEach(function(val,index){
-                        var reg=/(\d{4}-\d{2}-\d{2})(.*||\s*)(\d{2}:\d{2}:\d{2})/;
-                        var arr = reg.exec(val.video_timestamp);
-                        var video_timestamp=arr[1]+'  '+arr[3];
-                        val.video_timestamp=video_timestamp;  
-                    })
-                }
             }
         })
         .catch(err=>{
@@ -129,12 +121,6 @@ export default {
                 this.count=data.count;
                 this.currentPage=data.currentPage;
                 this.page=data.page;
-                data.videoList.forEach(function(val,index){
-                    var reg=/(\d{4}-\d{2}-\d{2})T(.+)\..+/g;
-                    var arr = reg.exec(val.video_timestamp);
-                    var video_timestamp=arr[1]+'  '+arr[2];
-                    val.video_timestamp=video_timestamp;  
-                })
                 this.videoList=data.videoList;
             }
         })

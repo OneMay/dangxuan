@@ -160,7 +160,7 @@ export default {
     },
     getItemSund(){
         var itemRadio=decodeURI(window.location.search.substring(1));
-        var reg = /.+=(.+)&.+=()/g; 
+        var reg = /.+=(.+)&.+=(.+)/g; 
         var radio = reg.exec(itemRadio);
         axios.post(url+'/admin/radio/Find',{
             program_name:radio[1],

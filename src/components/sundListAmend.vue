@@ -105,12 +105,10 @@ export default {
     },
     getcolumn(){
         var getcolumn=decodeURI(window.location.search.substring(1));
-        var reg = /.+=(.+)&.+=(.+)&.+=(.+)/g;
+        var reg = /.+=(.+)/g;
         var column = reg.exec(getcolumn);
         axios.post(url+'/admin/radio/columnFind',{
-           program_name:column[2],
-           program_date:column[1],
-           program_timestamp:column[3]
+           program_id:column[1],
         })
         .then(res=>{
             var data;
@@ -121,7 +119,7 @@ export default {
             }
             if(data.code==1){
                 this.columnList=data.columnList;
-                this.program_id=this.this.columnList[0].program_id;
+                this.program_id=this.columnList[0].program_id;
                 this.program_name=this.columnList[0].program_name;
                 this.program_date=this.columnList[0].program_date;
                 this.program_timestamp=this.columnList[0].program_timestamp;
