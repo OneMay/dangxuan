@@ -164,7 +164,8 @@ export default {
                // console.log(this.textContent.trim()=='电视台');
                 
         });
-        var pathname=window.location.pathname;
+        //var pathname=window.location.pathname;
+        var pathname=window.location.hash.split('#')[1];
         var video=/\/admin\/video.+/g
         var book=/\/admin\/book.+/g
         var sund=/\/admin\/sund.+/g
@@ -213,7 +214,7 @@ export default {
     logout(){
         this.$store.dispatch('clearMenu',''); 
         this.$store.dispatch('change','islogin');
-        window.location.href="/admin/login";
+        window.location.href="#/admin/login";
     },
     choseItem(item){
         this.showItem=item;

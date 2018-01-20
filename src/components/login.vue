@@ -37,7 +37,7 @@ export default {
       }else if(this.username=='admin'&&this.password=='password'){
            this.message="登录成功";
             this.$store.dispatch('change','logined') ;
-            window.location.href="/admin/index";
+            window.location.href="#/admin/index";
       }
       else{
           let params={
