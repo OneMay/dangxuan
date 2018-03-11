@@ -3,7 +3,8 @@
 > A Vue.js project
 
 ## Build Setup
-
+注意：需要在dist目录下新建一个文件夹：upload
+      在\node_modules\ueditor\lib\index.js中把类似与'title': req.body && req.body.pictitle || filename,的3个title注释掉！！
 ``` bash
 # install dependencies
 npm install

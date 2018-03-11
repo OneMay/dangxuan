@@ -669,7 +669,41 @@ router.post('/admin/radio/columnAdd', function(req, res) {
     });
 })
 
-//栏目查询
+//单个栏目查询
+router.post('/admin/radio/columnFind', function(req, res) {
+        var client = db.connect();
+        //没有关键字查询
+
+        var str = "SELECT * FROM `t_radio_program` WHERE program_id = " + req.body.program_id + " ";
+        db.findFun(client, str, function(result) {
+            if (result) {
+                var message = {};
+                message.code = 1;
+                message.columnList = new Array();
+                for (var i = 0; i < result.length; i++) {
+                    message.columnList.push({
+                        program_name: result[i].program_name,
+                        program_number: result[i].program_number,
+                        program_date: result[i].program_date,
+                        program_timestamp: new Date(result[i].program_timestamp).Format("yyyy-MM-dd"),
+                        program_id: result[i].program_id
+                    })
+                }
+                console.log('fuck ass');
+                //  message.articleList.forEach(function(value, index, array) {
+                //      array[index].magazine_journal_no = db.findQ(client, array[index].magazine_program_id);
+                //      // console.log(db.findQ(client, array[index].magazine_program_id));
+                //  });
+                message.message = '操作成功';
+                res.json(message);
+            } else {
+                res.json({ code: 0 });
+            }
+        })
+
+
+    })
+    //栏目查询
 router.post('/admin/radio/columnFindAll', function(req, res) {
     var client = db.connect();
     var current_page = 1; //当前页面
@@ -759,7 +793,7 @@ router.post('/admin/radio/columnFindAll', function(req, res) {
                 }
                 res.json(message);
             } else {
-                res.json({ code: 0 })
+                res.json({ code: 1, columnList: [] })
             }
         })
     }
@@ -767,13 +801,16 @@ router.post('/admin/radio/columnFindAll', function(req, res) {
 
 //栏目修改
 router.post('/admin/radio/columnAmend', function(req, res) {
-    var client = db.connect();
-    db.updateL(client, req.body.program_id, req.body.program_name, req.body.program_date, function() {
-        res.json({ code: 1, message: '操作成功' })
+        common.upload_3(req, function(fields, showUrl) {
+            var client = db.connect();
+            db.updateL(client, fields.program_id, fields.program_name, fields.program_date, fields.program_timestamp, showUrl);
+            res.json({
+                code: 1,
+                message: '更新成功！'
+            })
+        });
     })
-})
-
-//栏目删除
+    //栏目删除
 router.post('/admin/radio/columnDel', function(req, res) {
     var client = db.connect();
     db.deleteL(client, req.body.program_id, function() {
@@ -784,68 +821,76 @@ router.post('/admin/radio/columnDel', function(req, res) {
     })
 })
 
-//首页轮播添加
-router.post('/admin/radio/carouselAdd', function(req, res) {
-    var showUrl = common.upload(req);
-    var client = db.connect();
-    db.addP(client, showUrl, function() {
-        res.json({
-            code: 1,
-            message: '操作成功'
-        })
-    })
-})
 
 //广播添加
 router.post('/admin/radio/Add', function(req, res) {
-    common.upload_4(req, function(fields, showUrl, showUrl1) {
+        common.upload_4(req, function(fields, showUrl, showUrl1) {
+            var client = db.connect();
+            var str = "SELECT * FROM `t_radio_program` WHERE  program_name = '" + fields.program_name + "'and program_date = '" + fields.program_date + "' ";
+            console.log(str)
+            client.query(str, function(err, result) {
+                if (err) throw err;
+                console.log(result);
+                if (result[0]) {
+                    db.addV(client, showUrl, showUrl1, fields.program_introduction, moment().format('YYYY-MM-DD HH:mm:ss'), result[0].program_id);
+                    res.json({
+                        code: 1,
+                        message: '上传成功！'
+                    })
+                } else {
+                    res.json({
+                        code: 0,
+                        message: '上传失败，请注意输入内容是否正确。'
+                    })
+                }
+            })
+        });
+    })
+    //广播修改
+router.post('/admin/radio/Amend', function(req, res) {
+        common.upload_4(req, function(fields, showUrl, showUrl1) {
+            var client = db.connect();
+            var str = "SELECT * FROM `t_radio_program` WHERE  program_name = '" + fields.program_name + "'and program_date = '" + fields.program_date + "' ";
+            client.query(str, function(err, result) {
+                if (err) throw err;
+                console.log(result);
+                if (result[0]) {
+                    db.updateV(client, showUrl, showUrl1, fields.program_introduction, moment().format('YYYY-MM-DD HH:mm:ss'), result[0].program_id, fields.program_content_id);
+                    res.json({
+                        code: 1,
+                        message: '上传成功！'
+                    })
+                } else {
+                    res.json({
+                        code: 0,
+                        message: '上传失败，请注意输入内容是否正确。'
+                    })
+                }
+            })
+        });
+    })
+    //单个广播查询
+router.post('/admin/radio/Find', function(req, res) {
         var client = db.connect();
+        //没有关键字查询
 
-        db.addC(client, fields.program_name, fields.program_date, fields.program_timestamp, showUrl);
-        res.json({
-            code: 1,
-            message: '上传成功！'
-        })
-    });
-})
-
-//广播查询
-router.post('/admin/radio/FindAll', function(req, res) {
-    var client = db.connect();
-    var current_page = 1; //当前页面
-    var num = 5;
-    var message = {};
-    var count;
-    if (req.body.page) {
-        current_page = parseInt(req.body.page);
-    }
-
-    //没有关键字查询
-    if (!req.body.program_name) {
-        var nun = (current_page - 1) * num;
-        var str = "SELECT * FROM `t_radio_content` order by program_audio_timestamp desc limit " + num + " offset " + nun + " ";
-        console.log(str);
-        db.findV(client, function(result) {
-            count = result.length;
-            console.log(count)
-        })
-
+        var str = "SELECT * FROM `t_radio_content` WHERE program_content_id = " + req.body.program_content_id + " ";
         db.findFun(client, str, function(result) {
-            console.log('sadsadasdasdasdasd');
             if (result) {
                 var message = {};
                 message.code = 1;
-                message.limit = 5;
-                message.count = count;
-                message.page = req.body.page;
-                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
                 message.radioList = new Array();
                 for (var i = 0; i < result.length; i++) {
                     message.radioList.push({
+<<<<<<< HEAD
                         program_audio_timestamp: new Date(result[i].audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                         program_content_id: result[i].program_content_id,
                         program_introduction: result[i].program_introduction,
                         program_audio_timestamp: new Date(result[i].program_audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
+=======
+                        program_content_id: result[i].program_content_id,
+                        program_introduction: result[i].program_introduction,
+>>>>>>> 447a1c747f1e2d9d7ec119aba351bd0064487444
                         program_id: result[i].program_id,
                     })
                 }
@@ -853,6 +898,7 @@ router.post('/admin/radio/FindAll', function(req, res) {
                 message.radioList.forEach(function(value, index, array) {
                     db.findAQ(client, array[index].program_id, function(result) {
                         if (result[0]) {
+                            array[index].program_timestamp = new Date(result[0].program_timestamp).Format("yyyy-MM-dd") || '';
                             array[index].program_name = result[0].program_name || '';
                             array[index].program_date = result[0].program_date || '';
                         }
@@ -867,16 +913,16 @@ router.post('/admin/radio/FindAll', function(req, res) {
                 res.json({ code: 0 });
             }
         })
-    }
 
-    //模糊查询
-    else {
-        console.log('kk');
-        var num = 5; //一页最多显示的条数
-        var page = req.body.page; //当前页
-        var num_end = page * num; //结束查询位置
-        var num_start = (page - 1) * num; //开始查询位置
+
+    })
+    //广播查询
+router.post('/admin/radio/FindAll', function(req, res) {
+        var client = db.connect();
+        var current_page = 1; //当前页面
+        var num = 5;
         var message = {};
+<<<<<<< HEAD
         var count = 0;
         var str = "select * from `t_radio_content` WHERE program_name LIKE '%" + req.body.program_name + "%'  limit " + num_start + "," + num_end + " ";
         db.findVL(client, req.body.program_name, function(result) {
@@ -899,37 +945,147 @@ router.post('/admin/radio/FindAll', function(req, res) {
                         program_audio_timestamp: new Date(result[i].program_audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                         program_id: result[i].program_id,
                     })
-                }
+=======
+        var count;
+        if (req.body.page) {
+            current_page = parseInt(req.body.page);
+        }
 
-                message.radioList.forEach(function(value, index, array) {
-                    db.findAQ(client, array[index].program_id, function(result) {
-                        if (result[0]) {
-                            array[index].program_name = result[0].program_name || '';
-                            array[index].program_date = result[0].program_date || '';
-                        }
-                        if (message.radioList.length == index + 1) {
-                            message.code = 1;
-                            message.message = '操作成功';
-                            return res.json(message);
-                        }
+        //没有关键字查询
+        if (!req.body.program_name) {
+            var nun = (current_page - 1) * num;
+            var str = "SELECT * FROM `t_radio_content` order by program_audio_timestamp desc limit " + num + " offset " + nun + " ";
+            console.log(str);
+            db.findV(client, function(result) {
+                count = result.length;
+                console.log(count)
+            })
+
+            db.findFun(client, str, function(result) {
+                console.log('sadsadasdasdasdasd');
+                if (result) {
+                    var message = {};
+                    message.code = 1;
+                    message.limit = 5;
+                    message.count = count;
+                    message.page = req.body.page;
+                    message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
+                    message.radioList = new Array();
+                    for (var i = 0; i < result.length; i++) {
+                        message.radioList.push({
+                            program_audio_timestamp: new Date(result[i].program_audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
+                            program_content_id: result[i].program_content_id,
+                            program_introduction: result[i].program_introduction,
+                            program_id: result[i].program_id,
+                        })
+                    }
+
+                    message.radioList.forEach(function(value, index, array) {
+                        db.findAQ(client, array[index].program_id, function(result) {
+                            if (result[0]) {
+                                array[index].program_name = result[0].program_name || '';
+                                array[index].program_date = result[0].program_date || '';
+                            }
+                            if (message.radioList.length == index + 1) {
+                                message.code = 1;
+                                message.message = '操作成功';
+                                return res.json(message);
+                            }
+                        });
                     });
-                });
+                } else {
+                    res.json({ code: 0 });
+>>>>>>> 447a1c747f1e2d9d7ec119aba351bd0064487444
+                }
+            })
+        }
+
+        //模糊查询
+        else {
+            console.log('kk');
+            var num = 5; //一页最多显示的条数
+            var page = req.body.page; //当前页
+            var num_end = page * num; //结束查询位置
+            var num_start = (page - 1) * num; //开始查询位置
+            var message = {};
+            var count = 0;
+            var str = "select * from `t_radio_content` WHERE program_name LIKE '%" + req.body.program_name + "%'  limit " + num_start + "," + num_end + " ";
+            db.findVL(client, req.body.program_name, function(result) {
+                console.log(result);
+                count = result.length;
+            })
+            db.findFun(client, str, function(result) {
+                if (result[0]) {
+                    message.code = 1;
+                    message.limit = num;
+                    message.count = count;
+                    message.page = req.body.page;
+                    message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
+                    message.radioList = new Array;
+                    for (var i = 0; i < result.length; i++) {
+                        message.radioList.push({
+                            program_content_id: result[i].program_content_id,
+                            program_introduction: result[i].program_introduction,
+                            program_audio_timestamp: new Date(result[i].program_audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
+                            program_id: result[i].program_id,
+                        })
+                    }
+
+                    message.radioList.forEach(function(value, index, array) {
+                        db.findAQ(client, array[index].program_id, function(result) {
+                            if (result[0]) {
+                                array[index].program_name = result[0].program_name || '';
+                                array[index].program_date = result[0].program_date || '';
+                            }
+                            if (message.radioList.length == index + 1) {
+                                message.code = 1;
+                                message.message = '操作成功';
+                                return res.json(message);
+                            }
+                        });
+                    });
+                } else {
+                    res.json({ code: 0 })
+                }
+            })
+        }
+    })
+    //广播删除
+router.post('/admin/radio/del', function(req, res) {
+        var client = db.connect();
+        db.deleteAL(client, req.body.program_content_id, function() {
+            res.json({
+                code: 1,
+                message: '操作成功'
+            })
+        })
+    })
+    //广播预览
+router.post('/admin/radio/Preview', function(req, res) {
+        var client = db.connect();
+
+        var str = "SELECT * FROM `t_radio_content` WHERE program_content_id = " + req.body.program_content_id + " ";
+        db.findFun(client, str, function(result) {
+            if (result) {
+                var message = {};
+                message.code = 1;
+                message.program_audio_url = result[0].program_audio_url;
+                message.message = '操作成功';
+                return res.json(message);
             } else {
-                res.json({ code: 0 })
+                res.json({ code: 0 });
             }
         })
-    }
-})
 
-
-//-----------轮播添加----------------
+    })
+    //-----------轮播添加----------------
 router.post('/admin/radio/carouselAdd', function(req, res) {
     common.upload_5(req, function(fields, showUrl) {
         var client = db.connect();
-        db.addP(client, showUrl);
+        db.addP(client, showUrl, moment().format('YYYY-MM-DD HH:mm:ss'));
         res.json({
             code: 1,
-            message: '更新成功！'
+            message: '上传成功！'
         })
     });
 })

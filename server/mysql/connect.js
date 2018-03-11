@@ -226,8 +226,8 @@ function findL(client, name, callback) {
 }
 
 //栏目修改
-function updateL(client, id, name, date) {
-    client.query('UPDATE `t_radio_program` SET `program_name` = ' + name + ', `program_date` = ' + date + ' WHERE (`program_id`="' + id + '") ', function(err) {
+function updateL(client, id, name, date, time, url) {
+    client.query('UPDATE `t_radio_program` SET `program_name` = "' + name + '", `program_date` = "' + date + '", `program_timestamp` = "' + time + '", `program_picture_url` = "' + url + '" WHERE (`program_id`="' + id + '") ', function(err) {
         if (err) throw err;
     })
 }
@@ -239,17 +239,29 @@ function deleteL(client, name, callback) {
         callback()
     })
 }
-
+//广播删除
+function deleteAL(client, id, callback) {
+    client.query("DELETE FROM `t_radio_content` WHERE (`program_content_id`='" + id + "')", function(err) {
+        if (err) throw err;
+        callback()
+    })
+}
 //首页轮播添加
-function addP(client, url) {
-    client.query("INSERT INTO `t_radio_carousel` (`picture_url`) VALUES ('" + url + "')", function(err) {
+function addP(client, url, time) {
+    client.query("INSERT INTO `t_radio_carousel` (`picture_url`, `picture_timestamp`) VALUES ('" + url + "', '" + time + "')", function(err) {
         if (err) throw err;
     })
 }
 
 //广播添加
-function addV(client, r_url, url, intro) {
-    client.query("INSERT INTO `t_radio_content` (`program_picture_url`, `program_audio_url`, `program_introduction`) VALUES ('" + r_url + "', '" + url + ", " + intro + ")", function(err) {
+function addV(client, r_url, url, intro, time, id) {
+    client.query("INSERT INTO `t_radio_content` (`program_picture_url`, `program_audio_url`, `program_introduction`, `program_audio_timestamp`, `program_id`) VALUES ('" + r_url + "', '" + url + "', '" + intro + "', '" + time + "', '" + id + "')", function(err) {
+        if (err) throw err;
+    })
+}
+//广播修改
+function updateV(client, r_url, url, intro, time, id, cid) {
+    client.query('UPDATE `t_radio_content` SET `program_picture_url` = "' + r_url + '", `program_audio_url` = "' + url + '", `program_introduction` = "' + intro + '", `program_audio_timestamp` = "' + time + '", `program_id` = "' + id + '" WHERE (`program_content_id`="' + cid + '") ', function(err) {
         if (err) throw err;
     })
 }
@@ -336,3 +348,5 @@ exports.updateA = updateA;
 exports.updateP = updateP;
 exports.findAllA = findAllA;
 exports.findAQ = findAQ;
+exports.deleteAL = deleteAL;
+exports.updateV = updateV;

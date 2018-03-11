@@ -147,7 +147,7 @@ export default {
         });
     },
     radioDel(item){
-        axios.post(url+'/admin/radio/FindAll',{
+        axios.post(url+'/admin/radio/del',{
            program_content_id:item.program_content_id
         })
         .then(res=>{
