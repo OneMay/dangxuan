@@ -192,7 +192,7 @@
                 this.$emit('choseItem', item);
             },
             update(item) {
-                window.location.href = '/admin/videoUpdate?television_program_content_id=' + item.television_program_content_id;
+                window.location.href = '/#/admin/videoUpdate?television_program_content_id=' + item.television_program_content_id;
             }
         },
         mounted() {

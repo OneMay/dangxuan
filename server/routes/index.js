@@ -477,7 +477,7 @@ router.post('/admin/magazine/findAllArticle', function(req, res) {
                 for (var i = 0; i < result.length; i++) {
                     message.articleList.push({
                         list_title: result[i].list_title,
-                        insert_time: result[i].insert_time,
+                        insert_time: new Date(result[i].insert_time).Format("yyyy-MM-dd HH:mm:ss"),
                         list_writer: result[i].list_writer,
                         magazine_list_id: result[i].magazine_list_id,
                         magazine_program_id: result[i].magazine_program_id
@@ -524,7 +524,7 @@ router.post('/admin/magazine/findAllArticle', function(req, res) {
                 for (var i = 0; i < result.length; i++) {
                     message.articleList.push({
                         list_title: result[i].list_title,
-                        insert_time: result[i].insert_time,
+                        insert_time: new Date(result[i].insert_time).Format("yyyy-MM-dd HH:mm:ss"),
                         list_writer: result[i].list_writer,
                         magazine_list_id: result[i].magazine_list_id,
                         magazine_program_id: result[i].magazine_program_id
@@ -558,7 +558,7 @@ router.post('/admin/magazine/findArticle', function(req, res) {
                 message.articleList.push({
                     magazine_journal_no: result[i].magazine_journal_no,
                     list_title: result[i].list_title,
-                    insert_time: result[i].insert_time,
+                    insert_time: new Date(result[i].insert_time).Format("yyyy-MM-dd HH:mm:ss"),
                     list_writer: result[i].list_writer,
                     list_content: result[i].list_content,
                     magazine_list_id: result[i].magazine_list_id,
@@ -597,7 +597,7 @@ router.post('/admin/magazine/previewArticle', function(req, res) {
                 message.articleList.push({
                     magazine_journal_no: result[i].magazine_journal_no,
                     list_title: result[i].list_title,
-                    insert_time: result[i].insert_time,
+                    insert_time: new Date(result[i].insert_time).Format("yyyy-MM-dd HH:mm:ss"),
                     list_writer: result[i].list_writer,
                     list_content: result[i].list_content,
                     magazine_program_id: result[i].magazine_program_id
@@ -882,15 +882,10 @@ router.post('/admin/radio/Find', function(req, res) {
                 message.radioList = new Array();
                 for (var i = 0; i < result.length; i++) {
                     message.radioList.push({
-<<<<<<< HEAD
                         program_audio_timestamp: new Date(result[i].audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                         program_content_id: result[i].program_content_id,
                         program_introduction: result[i].program_introduction,
                         program_audio_timestamp: new Date(result[i].program_audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
-=======
-                        program_content_id: result[i].program_content_id,
-                        program_introduction: result[i].program_introduction,
->>>>>>> 447a1c747f1e2d9d7ec119aba351bd0064487444
                         program_id: result[i].program_id,
                     })
                 }
@@ -922,30 +917,6 @@ router.post('/admin/radio/FindAll', function(req, res) {
         var current_page = 1; //当前页面
         var num = 5;
         var message = {};
-<<<<<<< HEAD
-        var count = 0;
-        var str = "select * from `t_radio_content` WHERE program_name LIKE '%" + req.body.program_name + "%'  limit " + num_start + "," + num_end + " ";
-        db.findVL(client, req.body.program_name, function(result) {
-            console.log(result);
-            count = result.length;
-        })
-        db.findFun(client, str, function(result) {
-            if (result[0]) {
-                message.code = 1;
-                message.limit = num;
-                message.count = count;
-                message.page = req.body.page;
-                message.currentPage = count % 5 ? parseInt(count / 5) + 1 : count / 5;
-                message.radioList = new Array;
-                for (var i = 0; i < result.length; i++) {
-                    message.radioList.push({
-                        program_audio_timestamp: new Date(result[i].audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
-                        program_content_id: result[i].program_content_id,
-                        program_introduction: result[i].program_introduction,
-                        program_audio_timestamp: new Date(result[i].program_audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
-                        program_id: result[i].program_id,
-                    })
-=======
         var count;
         if (req.body.page) {
             current_page = parseInt(req.body.page);
@@ -995,7 +966,6 @@ router.post('/admin/radio/FindAll', function(req, res) {
                     });
                 } else {
                     res.json({ code: 0 });
->>>>>>> 447a1c747f1e2d9d7ec119aba351bd0064487444
                 }
             })
         }

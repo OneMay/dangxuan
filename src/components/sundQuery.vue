@@ -103,7 +103,7 @@
                     });
             },
             columnAmend(item) {
-                window.location.href = '/admin/sundListAmend?program_date=' + item.program_date + '&program_name=' + item.program_name + '&program_timestamp=' + item.program_timestamp;
+                window.location.href = '/#/admin/sundListAmend?program_id=' + item.program_id;
             },
             getcolumnList(num) {
                 if (num > this.currentPage) {

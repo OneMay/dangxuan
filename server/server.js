@@ -64,7 +64,7 @@ app.use(session({
 }))
 
 
-app.use('/getAdmin', index);
+app.use('/', index);
 // app.use('/*', function(req, res){
 //     if(!req.session.islogin){
 
