@@ -131,7 +131,7 @@ router.post('/admin/video/find', function(req, res) {
                     videoName: result[i].video_introduction,
                     videoCategory: result[i].television_program_id,
                     videoUrl: result[i].video_url,
-                    video_timestamp: result[i].video_timestamp,
+                    video_timestamp: new Date(result[i].video_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                     television_program_content_id: result[i].television_program_content_id,
                     note: result[i].note
                 })
@@ -173,7 +173,7 @@ router.post('/admin/video/findAll', function(req, res) {
                 for (var i = 0; i < result.length; i++) {
                     message.videoList.push({
                         videoName: result[i].video_introduction,
-                        video_timestamp: result[i].video_timestamp,
+                        video_timestamp: new Date(result[i].video_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                         television_program_content_id: result[i].television_program_content_id,
                         television_program_id: result[i].television_program_id,
                         note: result[i].note || 'admin'
@@ -222,7 +222,7 @@ router.post('/admin/video/findAll', function(req, res) {
                     message.videoList.push({
                         videoName: result[i].video_introduction,
                         videoUrl: result[i].video_url,
-                        video_timestamp: result[i].video_timestamp,
+                        video_timestamp: new Date(result[i].video_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                         television_program_content_id: result[i].television_program_content_id,
                         television_program_id: result[i].television_program_id,
                         note: result[i].note || 'admin'
@@ -303,7 +303,7 @@ router.post('/admin/magazine/findPeriods', function(req, res) {
         message.code = 1;
         message.magazine_journal_no = result[0].magazine_journal_no;
         message.magazine_journal_title = result[0].magazine_journal_title;
-        message.magazine_journal_timestamp = result[0].magazine_journal_timestamp;
+        message.magazine_journal_timestamp = new Date(result[0].magazine_journal_timestamp).Format("yyyy-MM-dd HH:mm:ss");
         message.magazine_program_id = result[0].magazine_program_id;
         message.note = result[0].note;
         message.message = '操作成功';
@@ -353,7 +353,7 @@ router.post('/admin/magazine/findAllPeriods', function(req, res) {
                     message.megazineList.push({
                         magazine_journal_no: result[i].magazine_journal_no,
                         magazine_journal_title: result[i].magazine_journal_title,
-                        magazine_journal_timestamp: result[i].magazine_journal_timestamp,
+                        magazine_journal_timestamp: new Date(result[i].magazine_journal_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                         magazine_program_id: result[i].magazine_program_id,
                         note: result[i].note
                     })
@@ -392,7 +392,7 @@ router.post('/admin/magazine/findAllPeriods', function(req, res) {
                     message.megazineList.push({
                         magazine_journal_no: result[i].magazine_journal_no,
                         magazine_journal_title: result[i].magazine_journal_title,
-                        magazine_journal_timestamp: result[i].magazine_journal_timestamp,
+                        magazine_journal_timestamp: new Date(result[i].magazine_journal_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                         magazine_program_id: result[i].magazine_program_id,
                         note: result[i].note
                     })
@@ -842,10 +842,10 @@ router.post('/admin/radio/FindAll', function(req, res) {
                 message.radioList = new Array();
                 for (var i = 0; i < result.length; i++) {
                     message.radioList.push({
-                        program_audio_timestamp: result[i].audio_timestamp,
+                        program_audio_timestamp: new Date(result[i].audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                         program_content_id: result[i].program_content_id,
                         program_introduction: result[i].program_introduction,
-                        program_audio_timestamp: result[i].program_audio_timestamp,
+                        program_audio_timestamp: new Date(result[i].program_audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                         program_id: result[i].program_id,
                     })
                 }
@@ -893,10 +893,10 @@ router.post('/admin/radio/FindAll', function(req, res) {
                 message.radioList = new Array;
                 for (var i = 0; i < result.length; i++) {
                     message.radioList.push({
-                        program_audio_timestamp: result[i].audio_timestamp,
+                        program_audio_timestamp: new Date(result[i].audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                         program_content_id: result[i].program_content_id,
                         program_introduction: result[i].program_introduction,
-                        program_audio_timestamp: result[i].program_audio_timestamp,
+                        program_audio_timestamp: new Date(result[i].program_audio_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                         program_id: result[i].program_id,
                     })
                 }
@@ -963,7 +963,7 @@ router.post('/admin/feedback/findAll', function(req, res) {
             for (var i = 0; i < result.length; i++) {
                 message.feedbackList.push({
                     FeedbackTitle: result[i].FeedbackTitle,
-                    Feedback_timestamp: result[i].feedback_timestamp,
+                    Feedback_timestamp: new Date(result[i].feedback_timestamp).Format("yyyy-MM-dd HH:mm:ss"),
                     UserName: result[i].UserName,
                     Feedback_state: result[i].Feedback_state,
                     id: result[i].Id

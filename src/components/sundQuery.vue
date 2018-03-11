@@ -35,145 +35,133 @@
 </template>
 
 <script>
-import axios from "axios"
-const url = '/getAdmin'
-export default {
-  name: 'sundQuery',
-  data () {
-    return {
-      username:"",
-      password:"",
-      message:'',
-      page:1,
-      count:null,
-      currentPage:null,
-      limit:null,
-      columnList:[],
-      program_name:''
-    }
-  },
-  methods:{
-    search(){
-         this.page=1;
-         axios.post(url+'/admin/radio/columnFindAll',{
-           page:this.page,
-           program_name:this.program_name
-        })
-        .then(res=>{
-            var data;
-            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
-                data=res.data;
-            }else{
-                data=JSON.parse(res.data)
+    import axios from "axios"
+    const url = '/getAdmin'
+    export default {
+        name: 'sundQuery',
+        data() {
+            return {
+                username: "",
+                password: "",
+                message: '',
+                page: 1,
+                count: null,
+                currentPage: null,
+                limit: null,
+                columnList: [],
+                program_name: ''
             }
-            if(data.code==1){
-                this.limit=data.limit;
-                this.count=data.count;
-                this.currentPage=data.currentPage;
-                this.page=data.page;
-                this.columnList=data.columnList;
-                if(this.columnList){
-                        this.columnList.forEach(function(val,index){
-                            var reg=/(\d{4}-\d{2}-\d{2})(.*||\s*)(\d{2}:\d{2}:\d{2})/;
-                            var arr = reg.exec(val.program_timestamp);
-                            var program_timestamp=arr[1];
-                            val.program_timestamp=program_timestamp;  
-                        })
-                    }
-            }else{
-                this.message=data.message;
+        },
+        methods: {
+            search() {
+                this.page = 1;
+                axios.post(url + '/admin/radio/columnFindAll', {
+                        page: this.page,
+                        program_name: this.program_name
+                    })
+                    .then(res => {
+                        var data;
+                        if (typeof(res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length) {
+                            data = res.data;
+                        } else {
+                            data = JSON.parse(res.data)
+                        }
+                        if (data.code == 1) {
+                            this.limit = data.limit;
+                            this.count = data.count;
+                            this.currentPage = data.currentPage;
+                            this.page = data.page;
+                            this.columnList = data.columnList;
+
+                        } else {
+                            this.message = data.message;
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            },
+            columnDel(item) {
+                axios.post(url + '/admin/radio/columnDel', {
+                        program_id: item.program_id
+                    })
+                    .then(res => {
+                        var data;
+                        if (typeof(res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length) {
+                            data = res.data;
+                        } else {
+                            data = JSON.parse(res.data)
+                        }
+                        if (data.code == 1) {
+                            this.getcolumnList(1);
+                        } else {
+                            this.message = data.message;
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+            },
+            columnAmend(item) {
+                window.location.href = '/admin/sundListAmend?program_date=' + item.program_date + '&program_name=' + item.program_name + '&program_timestamp=' + item.program_timestamp;
+            },
+            getcolumnList(num) {
+                if (num > this.currentPage) {
+                    num = this.currentPage;
+                    this.page = this.currentPage;
+                }
+                if (num <= 1) {
+                    num = 1;
+                    this.page = 1;
+                }
+                axios.post(url + '/admin/radio/columnFindAll', {
+                        page: this.page,
+                        program_name: this.program_name
+                    })
+                    .then(res => {
+                        var data;
+                        if (typeof(res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length) {
+                            data = res.data;
+                        } else {
+                            data = JSON.parse(res.data)
+                        }
+                        if (data.code == 1) {
+                            this.limit = data.limit;
+                            this.count = data.count;
+                            this.currentPage = data.currentPage;
+                            this.page = data.page;
+                            this.columnList = data.columnList;
+
+                        } else {
+                            this.message = data.message;
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
             }
-        })
-        .catch(err => {
-            console.log(err);
-        });
-    },
-    columnDel(item){
-        axios.post(url+'/admin/radio/columnDel',{
-           program_id:item.program_id
-        })
-        .then(res=>{
-            var data;
-            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
-                data=res.data;
-            }else{
-                data=JSON.parse(res.data)
-            }
-            if(data.code==1){
-                this.getcolumnList(1);
-            }else{
-                this.message=data.message;
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
-    },
-    columnAmend(item){
-        window.location.href='/admin/sundListAmend?program_date='+item.program_date+'&program_name='+item.program_name+'&program_timestamp='+item.program_timestamp;
-    },
-     getcolumnList(num){
-        if(num>this.currentPage){
-            num=this.currentPage;
-            this.page=this.currentPage;
+        },
+        mounted() {
+            this.$nextTick(function() {
+                this.getcolumnList(this.page);
+            })
         }
-        if(num<=1){
-            num=1;
-            this.page=1;
-        }
-        axios.post(url+'/admin/radio/columnFindAll',{
-           page:this.page,
-           program_name:this.program_name
-        })
-        .then(res=>{
-            var data;
-            if(typeof (res.data) == "object" && Object.prototype.toString.call(res.data).toLowerCase() == "[object object]" && !res.data.length){
-                data=res.data;
-            }else{
-                data=JSON.parse(res.data)
-            }
-            if(data.code==1){
-                this.limit=data.limit;
-                this.count=data.count;
-                this.currentPage=data.currentPage;
-                this.page=data.page;
-                this.columnList=data.columnList;
-                if(this.columnList){
-                        this.columnList.forEach(function(val,index){
-                            var reg=/(\d{4}-\d{2}-\d{2})(.*||\s*)(\d{2}:\d{2}:\d{2})/;
-                            var arr = reg.exec(val.program_timestamp);
-                            var program_timestamp=arr[1];
-                            val.program_timestamp=program_timestamp;  
-                        })
-                    }
-            }else{
-                this.message=data.message;
-            }
-        })
-        .catch(err => {
-            console.log(err);
-        });
     }
-  },
-  mounted(){
-        this.$nextTick(function(){
-            this.getcolumnList(this.page);
-        })
-    }
-}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-body {font-size: 20px;
-    font-size: 20px;
+    body {
+        font-size: 20px;
+        font-size: 20px;
         padding-bottom: 40px;
-        background-color:#e9e7ef;
+        background-color: #e9e7ef;
     }
+    
     .sidebar-nav {
         padding: 9px 0;
     }
-
+    
     @media (max-width: 980px) {
         /* Enable use of floated navbar text */
         .navbar-text.pull-right {
@@ -182,134 +170,198 @@ body {font-size: 20px;
             padding-right: 5px;
         }
     }
-
-@charset "utf-8";
-body{
-    font-size: 13px;
-}
-select, textarea, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input {
-    padding: 1px;
-}
-
-select {
-    height: 24px;
-}
-
-.radio{
-    font-size: 11px;
-    margin-bottom: 4px;
-}
-
-.nav{
-    margin-bottom: 5px;
-}
-
-form{
-    margin: 0 0 5px;
-}
-
-.page{
-    text-align: right;margin-right:25px;margin-top:5px;
-}
-
-.page a{
-    margin-left: 5px;
-}
-
-.page .current{
-    margin-left: 5px;
-    color: red;
-}
-/*1*/
-.table td input[type="checkbox"]{
-    padding: 0;
-    margin: 0;
-}
-
-.table th input[type="checkbox"]{
-    padding: 0;
-    margin: 0;
-}
-
-.table td, .table th{
-    padding-top: 8px;
-    padding-bottom: 4px;
-	line-height:20ppx;
-	
-}
-.table th{
-	background-color:#eaeaea;
-}
-.tableleft{
-	text-align:right;
-	padding-left:5px;
-	background-color:#f5f5f5;
-
-}
-.definewidth{
-	width:96%;
-	margin:auto;		
-}
-
-/*2*/
-.table2 td input[type="checkbox"]{
-    padding: 0;
-    margin: 0;
-}
-
-.table2 th input[type="checkbox"]{
-    padding: 0;
-    margin: 0;
-}
-
-.table2 td, .table2 th{
-    padding-top: 10px;
-    padding-bottom: 4px;
-	line-height:50ppx;
-	
-}
-.table2 th{
-	background-color:#eaeaea;
-}
-.table2left{
-	text-align:center;
-	padding-left:10px;
-	background-color:#f5f5f5;
-
-}
-.definewidth2{
-	width:50%;
-	margin:auto;
-}
-
-
-
-.m10{
-	margin-top:10px;
-}
-.m20{
-	padding-top:20px;
-}
-.m30{
-	padding-top:50px;
-}
-
-
-
-
-
-/*formValidator�?��֤*/
-.onShow,.onFocus,.onError,.onCorrect,.onLoad,.onTime{display:inline-block;display:-moz-inline-stack;zoom:1;*display:inline; vertical-align:middle;	color:#444;line-height:18px;padding:2px 10px 2px 23px; margin-left:10px;_margin-left:5px}
-.onShow{background-position:3px -147px;border-color:#40B3FF;color:#959595}
-.onFocus{background-position:3px -147px;border-color:#40B3FF;}
-.onError{background-position:3px -47px;border-color:#40B3FF; color:red}
-.onCorrect{background-position:3px -247px;border-color:#40B3FF;}
-.onLamp{background-position:3px -200px}
-.onTime{background-position:3px -1356px}
-.previous,.next{
-    cursor: pointer;
-}
-.previous:hover,.next:hover{
-    color:red;
-}
+    
+    @charset "utf-8";
+    body {
+        font-size: 13px;
+    }
+    
+    select,
+    textarea,
+    input[type="text"],
+    input[type="password"],
+    input[type="datetime"],
+    input[type="datetime-local"],
+    input[type="date"],
+    input[type="month"],
+    input[type="time"],
+    input[type="week"],
+    input[type="number"],
+    input[type="email"],
+    input[type="url"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="color"],
+    .uneditable-input {
+        padding: 1px;
+    }
+    
+    select {
+        height: 24px;
+    }
+    
+    .radio {
+        font-size: 11px;
+        margin-bottom: 4px;
+    }
+    
+    .nav {
+        margin-bottom: 5px;
+    }
+    
+    form {
+        margin: 0 0 5px;
+    }
+    
+    .page {
+        text-align: right;
+        margin-right: 25px;
+        margin-top: 5px;
+    }
+    
+    .page a {
+        margin-left: 5px;
+    }
+    
+    .page .current {
+        margin-left: 5px;
+        color: red;
+    }
+    /*1*/
+    
+    .table td input[type="checkbox"] {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .table th input[type="checkbox"] {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .table td,
+    .table th {
+        padding-top: 8px;
+        padding-bottom: 4px;
+        line-height: 20ppx;
+    }
+    
+    .table th {
+        background-color: #eaeaea;
+    }
+    
+    .tableleft {
+        text-align: right;
+        padding-left: 5px;
+        background-color: #f5f5f5;
+    }
+    
+    .definewidth {
+        width: 96%;
+        margin: auto;
+    }
+    /*2*/
+    
+    .table2 td input[type="checkbox"] {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .table2 th input[type="checkbox"] {
+        padding: 0;
+        margin: 0;
+    }
+    
+    .table2 td,
+    .table2 th {
+        padding-top: 10px;
+        padding-bottom: 4px;
+        line-height: 50ppx;
+    }
+    
+    .table2 th {
+        background-color: #eaeaea;
+    }
+    
+    .table2left {
+        text-align: center;
+        padding-left: 10px;
+        background-color: #f5f5f5;
+    }
+    
+    .definewidth2 {
+        width: 50%;
+        margin: auto;
+    }
+    
+    .m10 {
+        margin-top: 10px;
+    }
+    
+    .m20 {
+        padding-top: 20px;
+    }
+    
+    .m30 {
+        padding-top: 50px;
+    }
+    /*formValidator�?��֤*/
+    
+    .onShow,
+    .onFocus,
+    .onError,
+    .onCorrect,
+    .onLoad,
+    .onTime {
+        display: inline-block;
+        display: -moz-inline-stack;
+        zoom: 1;
+        *display: inline;
+        vertical-align: middle;
+        color: #444;
+        line-height: 18px;
+        padding: 2px 10px 2px 23px;
+        margin-left: 10px;
+        _margin-left: 5px
+    }
+    
+    .onShow {
+        background-position: 3px -147px;
+        border-color: #40B3FF;
+        color: #959595
+    }
+    
+    .onFocus {
+        background-position: 3px -147px;
+        border-color: #40B3FF;
+    }
+    
+    .onError {
+        background-position: 3px -47px;
+        border-color: #40B3FF;
+        color: red
+    }
+    
+    .onCorrect {
+        background-position: 3px -247px;
+        border-color: #40B3FF;
+    }
+    
+    .onLamp {
+        background-position: 3px -200px
+    }
+    
+    .onTime {
+        background-position: 3px -1356px
+    }
+    
+    .previous,
+    .next {
+        cursor: pointer;
+    }
+    
+    .previous:hover,
+    .next:hover {
+        color: red;
+    }
 </style>
