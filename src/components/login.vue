@@ -31,6 +31,7 @@
         },
         methods: {
             login() {
+
                 var that = this;
                 if (this.username == '' || this.password == '') {
                     this.message = '账号和密码不能为空！';
@@ -68,6 +69,14 @@
                         //this.$store.dispatch('change','logined') 
                 }
             }
+        },
+        mounted() {
+            this.$nextTick(function() {
+
+                if (window.JSON.parse(window.localStorage.getItem('menu'))) {
+                    window.location.href = "/#/admin/index";
+                }
+            })
         }
     }
 </script>
