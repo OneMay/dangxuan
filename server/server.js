@@ -47,7 +47,7 @@ app.use("/getAdmin/editor/ue", ueditor(path.join(__dirname, '../dist'), function
     else {
 
         res.setHeader('Content-Type', 'application/json');
-        res.redirect('/static/Editor/jsp/config.json')
+        res.redirect(302, '/static/Editor/jsp/config.json')
     }
 }));
 app.use(history()) // 这里千万要注意，要在static静态资源上面
